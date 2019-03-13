@@ -53,15 +53,25 @@ document build for javascript (maven will do it for us for the war)
 
 Run Gem install bundler.
 
+```bazaar
+gem install bundler
+```
+
 From rails root do a (For the full build maven will do this):
 ```bazaar
 bundle install
+```
+
+Run the following:
+```
+yarn install
 ```
 
 Also install (this is not in the gemfile as it is not needed for the build, but you need it to run outside Tomcat.):
 ```bazaar
 gem install trinidad --pre
 ```
+
 
 Setup your database.  We will use postgres, so install that on your system.
 Create a user: 
