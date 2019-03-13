@@ -1,5 +1,1 @@
-begin
-  #ActiveRecord::Migrator.migrate 'db/migrate'
-rescue => ex
-  puts "Migration failed. #{ex.message}"
-end
+WINDOWS ||= (java.lang.System.getProperties['os.name'] =~ /win/i)

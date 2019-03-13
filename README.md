@@ -119,6 +119,14 @@ Try:
 
 http://localhost:3000/dsbpa/comments
 
+To build a war:
+
+```bazaar
+mvn clean package
+```
+
+Look in the target directory when done for dsbpa-1.00-SNAPSHOT.war.
+
 
 
 

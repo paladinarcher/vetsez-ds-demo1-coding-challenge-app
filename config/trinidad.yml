@@ -7,28 +7,7 @@ http: # HTTP connector setup
   acceptCount: 100
   maxThreads: 200
   maxKeepAliveRequests: 100
-  #  https:
-  #    port: 443
-  #generated via:
-  #keytool -genkeypair -alias myRSAKey -keyalg RSA -keysize 1024 -keystore test.p12 -storepass criscris -storetype pkcs12
-  #SSLCertificateFile: C:/temp/ssl/server.crt
-  #SSLCertificateKeyFile: C:/temp/ssl/server.key
-  #keystoreFile: C:/temp/ssl/test.p12
-  #keystorePass: criscris
-  #keystoreType: pkcs12
-  # @see https://github.com/trinidad/trinidad/wiki/HTTP-Connector
-  #<% unless ENV['SSL_PORT'].nil? %>
-  #  ssl: # SSL configuration
-  #    port: <%= "#{ENV['SSL_PORT']}"%>
-  #    #@see https://github.com/trinidad/trinidad/wiki/Secure-Socket-Layer
-  #    #keystore: c:\temp$trin/etc/trinidad/default.keystore
-  #    #keystorePass: somepassword
-  #<% end %>
-  #ajp: # AJP configuration
-  #port: 8009
-  # @see https://github.com/trinidad/trinidad/wiki/AJP-Configuration
-#apps_base: # directory where several applications are located
-#
+
 # Begin: Configuration options that can be overrided per web-application
 #
 threadsafe: false # overrides config.threadsafe! detection
