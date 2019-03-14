@@ -31,7 +31,7 @@ namespace :devops do
   $maven_version = env('PROJECT_VERSION', $UNVERSIONED)
   ENV['RAILS_RELATIVE_URL_ROOT'] = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
   ENV['RAILS_ENV'] = version_to_rails_mode(ENV['PROJECT_VERSION'])
-  ENV['NODE_ENV'] = ENV['RAILS_ENV']
+  ENV['NODE_ENV'] = 'production'
 
   slash = java.io.File.separator #or FILE::ALT_SEPARATOR
   src_war = "#{Utilities::MAVEN_TARGET_DIRECTORY}#{slash}#{Rails.application.class.parent_name.to_s.downcase}.war"
