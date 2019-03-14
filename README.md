@@ -94,6 +94,12 @@ Run:
 rake db:migrate
 ```
 
+There is a bat file to bring up the webpack dev server for development.   Convert it to bash if on a Mac.
+$ wds.bat
+
+```bazaar
+wds.bat
+```
 
 There is a startup.bat file to bring up the webserver outside of Tomcat.  Convert it to bash if on a Mac.
 $ startup.bat
