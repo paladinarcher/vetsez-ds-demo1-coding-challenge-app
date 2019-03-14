@@ -3,7 +3,7 @@ module RouteHelper
   include ActionView::Helpers::AssetUrlHelper
 
   IMAGE_EXTENSIONS = %w(.jpeg .jpg .png .gif).freeze
-  IMAGE_ROOT_PATH = 'packs/uts_dif/assets/images/'
+  IMAGE_ROOT_PATH = 'media/images/'
 
   def setup_routes
     original_verbosity = $VERBOSE
@@ -55,7 +55,7 @@ module RouteHelper
     h[:urls][:images] = {}
     h[:paths][:images] = {}
     Webpacker.instance.manifest.refresh.each_pair do |k,v|
-      unless k =~ /map$/
+      unless (k =~ /map$/ || k.eql?('entrypoints'))
         url = asset_pack_url k
         path = asset_pack_path k
         h[:urls][k] = url
