@@ -58,7 +58,7 @@
     <dependency>
       <groupId>org.jruby</groupId>
       <artifactId>jruby-complete</artifactId>
-      <version>9.2.6.0</version>
+      <version>9.2.8.0</version>
     </dependency>
     <dependency>
       <groupId>rubygems</groupId>
@@ -120,6 +120,19 @@
         <artifactId>jruby9-exec-maven-plugin</artifactId>
         <version>0.3.1</version>
         <executions>
+          <execution>
+            <id>install bundler</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <command>gem</command>
+              <args>install bundler</args>
+            </configuration>
+          </execution>
           <execution>
             <id>bundle install</id>
             <phase>compile</phase>

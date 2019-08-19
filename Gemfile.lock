@@ -66,7 +66,7 @@ GEM
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
     jdbc-postgres (42.1.4)
-    jruby-jars (9.2.6.0)
+    jruby-jars (9.2.8.0)
     jruby-rack (1.1.21)
     loofah (2.2.3)
       crass (~> 1.0.2)
@@ -180,4 +180,4 @@ RUBY VERSION
    ruby 2.5.3p0 (jruby 9.2.6.0)
 
 BUNDLED WITH
-   2.0.1
+   2.0.2
