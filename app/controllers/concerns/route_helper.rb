@@ -55,7 +55,7 @@ module RouteHelper
     h[:urls][:images] = {}
     h[:paths][:images] = {}
     Webpacker.instance.manifest.refresh.each_pair do |k,v|
-      unless (k =~ /map$/ || k.eql?('entrypoints'))
+      unless k =~ /map$|entrypoints$/
         url = asset_pack_url k
         path = asset_pack_path k
         h[:urls][k] = url
