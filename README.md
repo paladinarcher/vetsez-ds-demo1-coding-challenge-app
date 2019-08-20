@@ -130,6 +130,7 @@ mvn clean package
 ```
 
 Look in the target directory when done for dsbpa-1.00-SNAPSHOT.war.
+When deploying to Tomcat rename the war file to 'dsbpa.war' so the initial context is only 'dsbpa'
 
 
 
