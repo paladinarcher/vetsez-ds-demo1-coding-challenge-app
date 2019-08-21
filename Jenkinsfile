@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Initialize Database Schema') {
             steps {
-                sh "rake db:migrate ENV=test"
+                sh "rake db:migrate RAILS_ENV=test"
             }
         }
         stage('Building Application') {
