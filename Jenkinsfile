@@ -20,10 +20,14 @@ pipeline {
             }
         }
         stage('Source Code Analysis') {
-            echo "TDB..."
+            steps {
+                echo "TDB..."
+            }
         }
         stage("Build Containers") {
-            echo "TDB..."
+            steps {
+                echo "TDB..."
+            }
         }
     }
 }
