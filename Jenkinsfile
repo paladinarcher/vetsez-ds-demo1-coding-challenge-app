@@ -9,6 +9,11 @@ pipeline {
         string(name: 'developmentVersion', defaultValue: '', description: 'Provide the next development version (leave blank for no release):')
     }
     stages {
+        stage('Initialize Database Schema') {
+            steps {
+                sh "rake db:migrate ENV=test"
+            }
+        }
         stage('Building Application') {
             steps {
                 sh "mvn clean install"
