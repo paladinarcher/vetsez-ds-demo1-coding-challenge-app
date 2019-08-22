@@ -40,10 +40,11 @@ pipeline {
             steps {
                 unstash 'mavenOutput'
                 //sh 'docker build -t meetveracity/coding-challenge-app .'
-
-                docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                    image = docker.build("meetveracity/coding-challenge-app")
-                    image.push("latest")
+                script {
+                    docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
+                        image = docker.build("meetveracity/coding-challenge-app")
+                        image.push("latest")
+                    }
                 }
             }
         }
