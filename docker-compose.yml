@@ -1,6 +1,12 @@
 version: "3.3"
 
 services:
+  dsbpa:
+    image: meetveracity/coding-challenge-app
+    build: 
+      context: .
+    ports:
+      - "8080:8080"
   
   postgres:
     image: library/postgres:12-alpine
