@@ -18,12 +18,13 @@ pipeline {
         stage('Building Application') {
             steps {
                 sh "mvn clean install"
+                stash name: 'mavenOutput', includes: '**/target/*'
             }
-            post {
-                always {
-                    junit '**/target/surefire-reports/*.xml'
-                }
-            }
+            // post {
+            //     always {
+            //         junit '**/target/surefire-reports/*.xml'
+            //     }
+            // }
         }
         stage('Source Code Analysis') {
             steps {
@@ -31,8 +32,19 @@ pipeline {
             }
         }
         stage("Build Containers") {
+            agent {
+                node {
+                    label 'docker'
+                }
+            }
             steps {
-                echo "TDB..."
+                unstash 'mavenOutput'
+                //sh 'docker build -t meetveracity/coding-challenge-app .'
+
+                docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
+                    image = docker.build("meetveracity/coding-challenge-app")
+                    image.push("latest")
+                }
             }
         }
     }
