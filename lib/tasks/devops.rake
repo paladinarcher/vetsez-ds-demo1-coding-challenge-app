@@ -65,7 +65,7 @@ namespace :devops do
   task :migrations do |task|
     p task.comment
     puts "Running migrations for #{ENV['RAILS_ENV']}"
-    Rake::Task['db:migrate'].invoke
+    Rake::Task['db:migrate'].invoke("RAILS_ENV=#{ENV['RAILS_ENV']}") #rake db:migrate RAILS_ENV=test
   end
 
   desc 'Build war file'
