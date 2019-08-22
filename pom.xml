@@ -35,7 +35,7 @@
   </developers>
 
   <scm>
-    <url>https://bitbucket.vetsez.net/scm/dsbps/dsbpa.git</url>
+    <url>https://github.com/meetveracity/coding-challenge-app.git</url>
   </scm>
 
   <repositories>
@@ -146,7 +146,20 @@
               <args>install</args>
             </configuration>
           </execution>
-
+          <execution>
+            <id>run migrations</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <command>rake</command>
+              <execArgs>PROJECT_VERSION=${project.version} RAILS_RELATIVE_URL_ROOT=/dsbpa </execArgs>
+              <args>devops:migrations</args>
+            </configuration>
+          </execution>
           <execution>
             <id>run tests</id>
             <phase>compile</phase>
@@ -156,6 +169,7 @@
             <configuration>
               <jrubyVerbose>true</jrubyVerbose>
               <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <execArgs>PROJECT_VERSION=${project.version} RAILS_RELATIVE_URL_ROOT=/dsbpa </execArgs>
               <command>rake</command>
             </configuration>
           </execution>
@@ -169,7 +183,7 @@
             <configuration>
               <jrubyVerbose>true</jrubyVerbose>
               <jrubyJvmArgs>-Djava.awt.headless=true</jrubyJvmArgs>
-              <execArgs>PROJECT_VERSION=${project.version} RAILS_RELATIVE_URL_ROOT=/dsbpa PROJECT_VERSION=${project.version}</execArgs>
+              <execArgs>PROJECT_VERSION=${project.version} RAILS_RELATIVE_URL_ROOT=/dsbpa </execArgs>
               <command>rake</command>
               <args>devops:build_war</args> <!--//Used only during a build on windows. This must be the last argument.-->
             </configuration>
