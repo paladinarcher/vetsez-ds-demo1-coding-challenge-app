@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  
+  # Fill this out once the dev team has their app code into the repo
+  postgres:
+    image: library/postgres:12-alpine
+    environment:
+      - POSTGRES_PASSWORD=dsbpa
+      - POSTGRES_USER=dsbpa
+      - POSTGRES_DB=dsbpa_test
+    ports:
+      - "5432:5432"
