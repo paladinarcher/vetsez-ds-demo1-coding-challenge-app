@@ -1,0 +1,44 @@
+pattern = [%l][%d][%F][%L] %m\n
+#Do not give absolute paths for filename and file_name_rails.  The relative path is base on catalina.home
+#filename is the name of the log file that contains developer logs and third party logs (such as faraday)
+filename = dsbp.log
+#filename_admin is the log where certain administrative events may be logged.
+#filename_admin = uts_dif_admin.log
+filename_error = dsbp_err.log
+#valid values for roll_by are 'number' and 'date'
+roll_by = number
+#caller_tracing values are true or false.  If set to true the file and line number data is logged
+caller_tracing = true
+#if true, we add a console appender
+append_stdout = false
+#force log color on in production mode by hostname (comma separated)
+color_hosts = <%=['MSI'].join(',')%>
+########################################################################################################################
+# environment specific setup (development, test, or production)
+########################################################################################################################
+<%
+   env_hash = {}
+   environment = Rails.env.to_sym
+   case environment
+     when :development
+       #log levels are DEBUG,INFO, WARN, ERROR, FATAL
+       env_hash[:level] = 'DEBUG'
+       #valid values for age are daily and weekly. This determines how often we roll our log.
+       env_hash[:age] = 'daily'
+       #how many rolled log files we keep
+       env_hash[:keep] = 3
+       #the presence of this will cause stdout logging to occur.
+       env_hash[:append_stdout] = 'yes'
+     when :test
+       env_hash[:level] = 'INFO'
+       env_hash[:age] = 'daily'
+       env_hash[:keep] = 7
+     else #production
+       env_hash[:level] = 'INFO'
+       env_hash[:age] = 'weekly'
+       env_hash[:keep] = 12
+   end
+%>
+<% env_hash.each_pair do |k,v| %>
+    <%= "#{k.to_s}=#{v.to_s}" %>
+<%end%>
