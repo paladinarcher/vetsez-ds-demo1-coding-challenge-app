@@ -15,7 +15,7 @@ namespace :devops do
   end
 
   def version_to_rails_mode(version)
-    p "The version is #{version}"
+    p "The version is #{version}" if version
     mode = 'production'
     if (version =~ /snapshot/i)
       mode = 'test'
@@ -65,7 +65,8 @@ namespace :devops do
   task :migrations do |task|
     p task.comment
     puts "Running migrations for #{ENV['RAILS_ENV']}"
-    Rake::Task['db:migrate'].invoke("RAILS_ENV=#{ENV['RAILS_ENV']}") #rake db:migrate RAILS_ENV=test
+    Rails.env = ENV['RAILS_ENV']
+    Rake::Task['db:migrate'].invoke() #rake db:migrate RAILS_ENV=test
   end
 
   desc 'Build war file'
