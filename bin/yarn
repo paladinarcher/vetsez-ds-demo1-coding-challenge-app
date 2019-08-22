@@ -1,4 +1,4 @@
-#!/usr/bin/env jruby.exe
+#!/usr/bin/env jruby
 APP_ROOT = File.expand_path('..', __dir__)
 Dir.chdir(APP_ROOT) do
   begin

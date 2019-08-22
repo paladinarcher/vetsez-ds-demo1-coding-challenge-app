@@ -1,4 +1,4 @@
-#!/usr/bin/env jruby.exe
+#!/usr/bin/env jruby
 require 'fileutils'
 include FileUtils
 
