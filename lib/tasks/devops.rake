@@ -20,7 +20,7 @@ namespace :devops do
     if (version =~ /snapshot/i)
       mode = 'test'
     end
-    p "Setting rails war to use #{mode}" unless version.empty? #no chatter when outside a maven build
+    p "Setting rails war to use #{mode}" unless (version.nil? || version.empty?) #no chatter when outside a maven build
     mode
   end
 

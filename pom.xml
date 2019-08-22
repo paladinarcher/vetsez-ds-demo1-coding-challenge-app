@@ -147,6 +147,19 @@
             </configuration>
           </execution>
           <execution>
+            <id>check yarn</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <command>rake</command>
+              <args>webpacker:check_yarn</args>
+            </configuration>
+          </execution>
+          <execution>
             <id>run migrations</id>
             <phase>compile</phase>
             <goals>
