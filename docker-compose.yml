@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  
+  postgres:
+    image: library/postgres:12-alpine
+    environment:
+      - POSTGRES_PASSWORD=dsbpa
+      - POSTGRES_USER=dsbpa
+      - POSTGRES_DB=dsbpa_test
+    ports:
+      - "5432:5432"
