@@ -17,10 +17,10 @@ namespace :devops do
   def version_to_rails_mode(version)
     p "The version is #{version}"
     mode = 'production'
-    if (version =~ /snapshot$/i)
+    if (version =~ /snapshot/i)
       mode = 'test'
     end
-    p "Setting rails war to use #{mode}"
+    p "Setting rails war to use #{mode}" unless (version.nil? || version.empty?) #no chatter when outside a maven build
     mode
   end
 
@@ -58,6 +58,14 @@ namespace :devops do
     p task.comment
     p "version is #{$maven_version}"
     File.open("version.txt", 'w') {|f| f.write($maven_version)}
+  end
+
+  #running in devops.rake ensures the rails environment is test for snapshost builds and production for releases
+  desc 'run migrations'
+  task :migrations do |task|
+    p task.comment
+    puts "Running migrations for #{ENV['RAILS_ENV']}"
+    Rake::Task['db:migrate'].invoke("RAILS_ENV=#{ENV['RAILS_ENV']}") #rake db:migrate RAILS_ENV=test
   end
 
   desc 'Build war file'
