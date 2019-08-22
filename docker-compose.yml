@@ -2,7 +2,6 @@ version: "3.3"
 
 services:
   
-  # Fill this out once the dev team has their app code into the repo
   postgres:
     image: library/postgres:12-alpine
     environment:
