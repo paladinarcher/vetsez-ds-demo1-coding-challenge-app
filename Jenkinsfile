@@ -8,6 +8,10 @@ pipeline {
         string(name: 'releaseVersion', defaultValue: '', description: 'Provide the release version (leave blank for no release):')
         string(name: 'developmentVersion', defaultValue: '', description: 'Provide the next development version (leave blank for no release):')
     }
+    environment {
+        DSBPA_TEST_USER = 'dsbpa'
+        DSBPA_TEST_PASSWORD = 'dsbpa'
+    }
     stages {
         stage('Building Application') {
             steps {
