@@ -67,6 +67,10 @@ GEM
     jdbc-postgres (42.2.6)
     jruby-jars (9.2.8.0)
     jruby-rack (1.1.21)
+    little-plugger (1.1.4)
+    logging (2.2.2)
+      little-plugger (~> 1.1)
+      multi_json (~> 1.10)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -171,6 +175,7 @@ DEPENDENCIES
   activerecord-jdbcpostgresql-adapter
   gon
   jbuilder (~> 2.5)
+  logging
   rails (~> 5.2.2)
   sass-rails (~> 5.0)
   therubyrhino

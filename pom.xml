@@ -169,8 +169,22 @@
               <jrubyVerbose>true</jrubyVerbose>
               <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
               <command>rake</command>
-              <execArgs>PROJECT_VERSION=${project.version} RAILS_RELATIVE_URL_ROOT=/dsbpa </execArgs>
+              <execArgs>PROJECT_VERSION=${project.version}</execArgs>
               <args>devops:migrations</args>
+            </configuration>
+          </execution>
+          <execution>
+            <id>run seeds</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <command>rake</command>
+              <execArgs>PROJECT_VERSION=${project.version}</execArgs>
+              <args>devops:seed</args>
             </configuration>
           </execution>
           <execution>

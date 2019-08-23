@@ -24,7 +24,7 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 gem 'trinidad', '~> 1.5.0.B2', require: nil, group: :development
-
+gem 'logging'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

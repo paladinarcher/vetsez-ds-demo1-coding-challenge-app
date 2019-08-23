@@ -12,11 +12,13 @@ class CommentsController < ApplicationController
     # pull the comment out of the request
     c = Comment.new()
     c.comment = params[:comment]
-
-    if c.save
+    begin
+      c.save!
+      $log.debug("Comment  #{c.comment} saved to the database!")
       render :json => {success: true, comment: c}
-    else
-        render :json => {success: false}
+    rescue => ex
+      $log.error(LEX("comment save #{c.comment} failed", ex))
+      render :json => {success: false}
     end
   end
 
