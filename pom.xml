@@ -147,7 +147,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>check yarn</id>
+            <id>jest tests</id>
             <phase>compile</phase>
             <goals>
               <goal>exec</goal>
@@ -156,7 +156,7 @@
               <jrubyVerbose>true</jrubyVerbose>
               <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
               <command>rake</command>
-              <args>webpacker:check_yarn</args>
+              <args>devops:jest_tests</args>
             </configuration>
           </execution>
           <execution>

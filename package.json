@@ -12,6 +12,27 @@
     "react-dom": "^16.9.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.5.5",
+    "babel-jest": "^24.9.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "jest": "^24.9.0",
+    "jest-enzyme": "^7.1.0",
+    "react-test-renderer": "^16.9.0",
     "webpack-dev-server": "^3.8.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "test-watch": "jest --watch"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
+    "roots": [
+      "test/javascript"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "app/frontend/packs/components"
+    ]
   }
 }

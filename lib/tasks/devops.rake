@@ -60,6 +60,16 @@ namespace :devops do
     File.open("version.txt", 'w') {|f| f.write($maven_version)}
   end
 
+  desc 'run Jest tests'
+  task :jest_tests do |task|
+    p task.comment
+    node_env = ENV['NODE_ENV']
+    ENV['NODE_ENV']=nil #leave production, force all dev packages for test
+    sh 'yarn install' #during the build war phase webpacker's yarn install will clobber this cruft before the war is produced, but the tests need it.
+    sh 'yarn test'
+    ENV['NODE_ENV'] = node_env
+  end
+
   #running in devops.rake ensures the rails environment is test for snapshost builds and production for releases
   desc 'run migrations'
   task :migrations do |task|
