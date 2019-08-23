@@ -5,6 +5,9 @@ services:
     image: meetveracity/coding-challenge-app
     build: 
       context: .
+    environment:
+      - DSBPA_TEST_USER=dsbpa
+      - DSBPA_TEST_PASSWORD=dsbpa
     ports:
       - "8080:8080"
   
