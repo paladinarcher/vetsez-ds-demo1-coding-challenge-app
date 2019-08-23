@@ -98,6 +98,11 @@ pipeline {
             }
         }
         stage("Promote to Development") {
+            when {
+                not {
+                    changeRequest()
+                }
+            }
             agent {
                 node {
                     label 'docker'
