@@ -64,7 +64,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                        image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}").pull()
+                        image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}")
+                        image.pull()
                         image.push("development")
                     }
                 }
