@@ -17,6 +17,6 @@ test('Comment label exists and text', () => {
     console.log("in test...");
     const wrapper = shallow(<Comment />);
     console.log("wrapper", wrapper.debug());
-    expect(wrapper.find('#lblComment').exists()).toBe(false);
+    expect(wrapper.find('#lblComment').exists()).toBe(true);
     expect(wrapper.find('#lblComment').text()).toBe('Add a Comment');
 });
