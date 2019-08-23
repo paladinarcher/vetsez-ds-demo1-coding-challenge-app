@@ -12,49 +12,49 @@ pipeline {
         DSBPA_TEST_USER = 'dsbpa'
         DSBPA_TEST_PASSWORD = 'dsbpa'
     }
-    stage('Create Release') {
-        when {
-            expression {
-                return params.releaseVersion != ''
-            }
-        }
-        steps {
-            //Set release version
-            sh "mvn org.codehaus.mojo:versions-maven-plugin:2.5:set -DnewVersion=${params.releaseVersion} -DgenerateBackupPoms=false -DprocessAllModules=true"
-
-            //Update SNAPSHOT dependencies to their release versions if available
-            sh "mvn org.codehaus.mojo:versions-maven-plugin:2.5::use-releases -DprocessParent=true"
-
-            //Check for any snapshot versions remaining
-            sh "mvn compile validate"
-
-            //Commit changes locally
-            sh "git commit -a -m \"Releasing version ${params.releaseVersion}\""
-
-            //Tag release
-            sh "git tag -a v${params.releaseVersion} -m \"Release version ${params.releaseVersion}\""
-
-            //Set the next dev version
-            sh "${cmd} org.codehaus.mojo:versions-maven-plugin:2.5::set -DnewVersion=${params.developmentVersion}  -DgenerateBackupPoms=false -DprocessAllModules=true"
-            //Commit changes locally
-            sh "git commit -a -m \"Preparing POMs for next development version ${params.developmentVersion}\""
-
-            script {
-                def url = sh(returnStdout: true, script: 'git config remote.origin.url').trim()
-                def repo = url.substring(url.indexOf('://')+3)
-                withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    //Push the branch to the remote
-                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} ${env.BRANCH_NAME}"
-                    //Push the tag to the remote
-                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} --tags"
+    stages {
+        stage('Create Release') {
+            when {
+                expression {
+                    return params.releaseVersion != ''
                 }
             }
+            steps {
+                //Set release version
+                sh "mvn org.codehaus.mojo:versions-maven-plugin:2.5:set -DnewVersion=${params.releaseVersion} -DgenerateBackupPoms=false -DprocessAllModules=true"
 
-            //Checkout the tag
-            sh "git checkout tags/v${releaseVersion}"
+                //Update SNAPSHOT dependencies to their release versions if available
+                sh "mvn org.codehaus.mojo:versions-maven-plugin:2.5::use-releases -DprocessParent=true"
+
+                //Check for any snapshot versions remaining
+                sh "mvn compile validate"
+
+                //Commit changes locally
+                sh "git commit -a -m \"Releasing version ${params.releaseVersion}\""
+
+                //Tag release
+                sh "git tag -a v${params.releaseVersion} -m \"Release version ${params.releaseVersion}\""
+
+                //Set the next dev version
+                sh "${cmd} org.codehaus.mojo:versions-maven-plugin:2.5::set -DnewVersion=${params.developmentVersion}  -DgenerateBackupPoms=false -DprocessAllModules=true"
+                //Commit changes locally
+                sh "git commit -a -m \"Preparing POMs for next development version ${params.developmentVersion}\""
+
+                script {
+                    def url = sh(returnStdout: true, script: 'git config remote.origin.url').trim()
+                    def repo = url.substring(url.indexOf('://')+3)
+                    withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        //Push the branch to the remote
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} ${env.BRANCH_NAME}"
+                        //Push the tag to the remote
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} --tags"
+                    }
+                }
+
+                //Checkout the tag
+                sh "git checkout tags/v${releaseVersion}"
+            }
         }
-    }
-    stages {
         stage('Building Application') {
             steps {
                 sh "mvn clean install"
