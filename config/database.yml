@@ -44,6 +44,8 @@ development:
 test:
   <<: *default
   database: dsbpa_test
+  username:  <%= ENV['DSBPA_TEST_USER'])%>
+  password: <%= ENV['DSBPA_TEST_PASSWORD'])%>
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -67,4 +69,6 @@ test:
 production:
   <<: *default
   database: dsbpa_production
+  username: <%= ENV['DSBPA_PRODUCTION_USER'])%>
+  password: <%= ENV['DSBPA_PRODUCTION_PASSWORD'])%>
 
