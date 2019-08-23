@@ -33,11 +33,34 @@ pipeline {
             }
             steps {
                 unstash 'mavenOutput'
-                //sh 'docker build -t meetveracity/coding-challenge-app .'
                 script {
                     docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
                         image = docker.build("meetveracity/coding-challenge-app")
-                        image.push("latest")
+                        image.push("${env.BRANCH_NAME}")
+                    }
+                }
+            }
+        }
+        stage("Functional Testing") {
+            steps {
+                echo "TDB..."
+            }
+        }
+        stage("Performance Testing") {
+            steps {
+                echo "TDB..."
+            }
+        }
+        stage("Promote to Development") {
+            agent {
+                node {
+                    label 'docker'
+                }
+            }
+            steps {
+                script {
+                    docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
+                        docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}").push("development")
                     }
                 }
             }
