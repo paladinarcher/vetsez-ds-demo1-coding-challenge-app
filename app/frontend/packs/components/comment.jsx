@@ -41,7 +41,7 @@ class Comment extends React.Component {
         return (
             <div>
                 <div>
-                    <label>Add a Comment</label><br/>
+                    <label id='lblComment'>Add a Comment</label><br/>
                     <input
                         onChange={(ev) => this.handleChangeField('comment', ev)}
                         value={comment}
