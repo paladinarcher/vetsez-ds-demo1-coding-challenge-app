@@ -2,8 +2,7 @@ FROM jruby:9.2.8
 
 ENV RAILS_ENV=production
 
-RUN gem install bundler && \
-    gem install rake
+RUN gem install bundler
 
 WORKDIR /app
 
