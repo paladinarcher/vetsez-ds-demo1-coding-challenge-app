@@ -43,7 +43,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: dsbpa_test
+  database: <%= ENV['DATABASE_SCHEMA'].nil? ? 'dsbpa_test' : ENV['DATABASE_SCHEMA'] %>
   username:  <%= ENV['DSBPA_TEST_USER']%>
   password: <%= ENV['DSBPA_TEST_PASSWORD']%>
   host: <%= ENV['DATABASE_HOST'] %>
@@ -69,7 +69,7 @@ test:
 #
 production:
   <<: *default
-  database: dsbpa_production
+  database: <%= ENV['DATABASE_SCHEMA'].nil? ? 'dsbpa_production' : ENV['DATABASE_SCHEMA'] %>
   username: <%= ENV['DSBPA_PRODUCTION_USER']%>
   password: <%= ENV['DSBPA_PRODUCTION_PASSWORD']%>
   host: <%= ENV['DATABASE_HOST'] %>
