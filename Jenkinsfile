@@ -30,13 +30,13 @@ pipeline {
             }
         }
         stage("Build Containers") {
-            agent {
-                node {
-                    label 'docker'
-                }
-            }
             parallel {
                 stage("Database Migration Container") {
+                    agent {
+                        node {
+                            label 'docker'
+                        }
+                    }
                     steps {
                         script {
                             docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
@@ -47,6 +47,11 @@ pipeline {
                     }
                 }
                 stage("Application Container") {
+                    agent {
+                        node {
+                            label 'docker'
+                        }
+                    }
                     steps {
                         unstash 'mavenOutput'
                         script {
