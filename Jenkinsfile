@@ -11,6 +11,7 @@ pipeline {
     environment {
         DATABASE_USER = 'dsbpa'
         DATABASE_PASSWORD = 'dsbpa'
+        DATABASE_SCHEMA = 'ci'
     }
     stages {
         stage('Create Release') {
