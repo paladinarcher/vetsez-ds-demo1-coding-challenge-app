@@ -46,7 +46,8 @@ test:
   database: dsbpa_test
   username:  <%= ENV['DSBPA_TEST_USER']%>
   password: <%= ENV['DSBPA_TEST_PASSWORD']%>
-
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
@@ -71,4 +72,5 @@ production:
   database: dsbpa_production
   username: <%= ENV['DSBPA_PRODUCTION_USER']%>
   password: <%= ENV['DSBPA_PRODUCTION_PASSWORD']%>
-
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
