@@ -9,8 +9,8 @@ pipeline {
         string(name: 'developmentVersion', defaultValue: '', description: 'Provide the next development version (leave blank for no release):')
     }
     environment {
-        DSBPA_TEST_USER = 'dsbpa'
-        DSBPA_TEST_PASSWORD = 'dsbpa'
+        DATABASE_USER = 'dsbpa'
+        DATABASE_PASSWORD = 'dsbpa'
     }
     stages {
         stage('Building Application') {

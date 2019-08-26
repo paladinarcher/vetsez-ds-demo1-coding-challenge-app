@@ -44,8 +44,8 @@ development:
 test:
   <<: *default
   database: <%= ENV['DATABASE_SCHEMA'].nil? ? 'dsbpa_test' : ENV['DATABASE_SCHEMA'] %>
-  username:  <%= ENV['DSBPA_TEST_USER']%>
-  password: <%= ENV['DSBPA_TEST_PASSWORD']%>
+  username:  <%= ENV['DATABASE_USER']%>
+  password: <%= ENV['DATABASE_PASSWORD']%>
   host: <%= ENV['DATABASE_HOST'] %>
   port: <%= ENV['DATABASE_PORT'] %>
 # As with config/secrets.yml, you never want to store sensitive information,
@@ -70,7 +70,7 @@ test:
 production:
   <<: *default
   database: <%= ENV['DATABASE_SCHEMA'].nil? ? 'dsbpa_production' : ENV['DATABASE_SCHEMA'] %>
-  username: <%= ENV['DSBPA_PRODUCTION_USER']%>
-  password: <%= ENV['DSBPA_PRODUCTION_PASSWORD']%>
+  username: <%= ENV['DATABASE_USER']%>
+  password: <%= ENV['DATABASE_PASSWORD']%>
   host: <%= ENV['DATABASE_HOST'] %>
   port: <%= ENV['DATABASE_PORT'] %>

@@ -6,8 +6,9 @@ services:
     build: 
       context: .
     environment:
-      - DSBPA_TEST_USER=dsbpa
-      - DSBPA_TEST_PASSWORD=dsbpa
+      - RAILS_ENV=test
+      - DATABASE_USER=dsbpa
+      - DATABASE_PASSWORD=dsbpa
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
     ports:
@@ -20,8 +21,8 @@ services:
       dockerfile: Dockerfile.db-init
     environment:
       - RAILS_ENV=test
-      - DSBPA_TEST_USER=dsbpa
-      - DSBPA_TEST_PASSWORD=dsbpa
+      - DATABASE_USER=dsbpa
+      - DATABASE_PASSWORD=dsbpa
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
   
