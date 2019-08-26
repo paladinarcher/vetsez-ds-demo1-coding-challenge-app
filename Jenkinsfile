@@ -91,6 +91,9 @@ pipeline {
                         image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}")
                         image.pull()
                         image.push("development")
+                        initImage = docker.image("meetveracity/coding-challenge-db-init:${env.BRANCH_NAME}")
+                        initImage.pull()
+                        initImage.push("development")
                     }
                 }
             }
