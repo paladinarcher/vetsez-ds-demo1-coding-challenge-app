@@ -1,0 +1,15 @@
+FROM jruby:9.2.8
+
+ENV RAILS_ENV=production
+
+RUN gem install bundler
+
+WORKDIR /app
+
+# Copy our rails source code into container
+COPY . .
+
+#
+RUN bundle install
+
+CMD ["rake", "db:migrate"]

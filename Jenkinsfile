@@ -72,17 +72,36 @@ pipeline {
             }
         }
         stage("Build Containers") {
-            agent {
-                node {
-                    label 'docker'
+            parallel {
+                stage("Database Migration Container") {
+                    agent {
+                        node {
+                            label 'docker'
+                        }
+                    }
+                    steps {
+                        script {
+                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
+                                dbImage = docker.build("meetveracity/coding-challenge-db-init", "-f Dockerfile.db-init .")
+                                dbImage.push("${env.BRANCH_NAME}")
+                            }
+                        }
+                    }
                 }
-            }
-            steps {
-                unstash 'mavenOutput'
-                script {
-                    docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                        image = docker.build("meetveracity/coding-challenge-app")
-                        image.push("${env.BRANCH_NAME}")
+                stage("Application Container") {
+                    agent {
+                        node {
+                            label 'docker'
+                        }
+                    }
+                    steps {
+                        unstash 'mavenOutput'
+                        script {
+                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
+                                image = docker.build("meetveracity/coding-challenge-app")
+                                image.push("${env.BRANCH_NAME}")
+                            }
+                        }
                     }
                 }
             }
@@ -114,6 +133,9 @@ pipeline {
                         image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}")
                         image.pull()
                         image.push("development")
+                        initImage = docker.image("meetveracity/coding-challenge-db-init:${env.BRANCH_NAME}")
+                        initImage.pull()
+                        initImage.push("development")
                     }
                 }
             }

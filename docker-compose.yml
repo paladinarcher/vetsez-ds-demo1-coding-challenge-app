@@ -8,8 +8,22 @@ services:
     environment:
       - DSBPA_TEST_USER=dsbpa
       - DSBPA_TEST_PASSWORD=dsbpa
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
     ports:
       - "8080:8080"
+
+  db-init:
+    image: meetveracity/coding-challenge-db-init
+    build: 
+      context: .
+      dockerfile: Dockerfile.db-init
+    environment:
+      - RAILS_ENV=test
+      - DSBPA_TEST_USER=dsbpa
+      - DSBPA_TEST_PASSWORD=dsbpa
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
   
   postgres:
     image: library/postgres:12-alpine
