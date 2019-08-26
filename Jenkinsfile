@@ -35,12 +35,26 @@ pipeline {
                     label 'docker'
                 }
             }
-            steps {
-                unstash 'mavenOutput'
-                script {
-                    docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                        image = docker.build("meetveracity/coding-challenge-app")
-                        image.push("${env.BRANCH_NAME}")
+            parallel {
+                stage("Database Migration Container") {
+                    steps {
+                        script {
+                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
+                                dbImage = docker.build("meetveracity/coding-challenge-db-init", "-f Dockerfile.db-init .")
+                                dbImage.push("${env.BRANCH_NAME}")
+                            }
+                        }
+                    }
+                }
+                stage("Application Container") {
+                    steps {
+                        unstash 'mavenOutput'
+                        script {
+                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
+                                image = docker.build("meetveracity/coding-challenge-app")
+                                image.push("${env.BRANCH_NAME}")
+                            }
+                        }
                     }
                 }
             }
@@ -56,6 +70,11 @@ pipeline {
             }
         }
         stage("Promote to Development") {
+            when {
+                not {
+                    changeRequest()
+                }
+            }
             agent {
                 node {
                     label 'docker'
