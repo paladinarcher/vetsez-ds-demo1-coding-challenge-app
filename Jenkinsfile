@@ -84,6 +84,8 @@ pipeline {
                         script {
                             if (params.releaseVersion != '') {
                                 //Checkout the tag
+                                def url = sh(returnStdout: true, script: 'git config remote.origin.url').trim()
+                                def repo = url.substring(url.indexOf('://')+3)
                                 withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                                     sh "git fetch https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} +refs/tags/${params.releaseVersion}:refs/tags/${params.releaseVersion}"
                                     sh "git checkout tags/${params.releaseVersion}"
