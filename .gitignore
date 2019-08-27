@@ -44,3 +44,7 @@ yarn-debug.log*
 # Ignore generated files
 /context.txt
 /version.txt
+
+# rbenv places a .ruby-version in local dir to determine which ruby version to use
+.ruby-version
+
