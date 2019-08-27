@@ -84,7 +84,10 @@ pipeline {
                         script {
                             if (params.releaseVersion != '') {
                                 //Checkout the tag
-                                sh "git checkout tags/${params.releaseVersion}"
+                                withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                                    sh "git fetch https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} +refs/tags/${params.releaseVersion}:refs/tags/${params.releaseVersion}"
+                                    sh "git checkout tags/${params.releaseVersion}"
+                                }
                             }
                             docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
                                 dbImage = docker.build("meetveracity/coding-challenge-db-init", "-f Dockerfile.db-init .")
@@ -109,7 +112,7 @@ pipeline {
                                 image = docker.build("meetveracity/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}")
                                 if (params.releaseVersion != '') {
-                                    dbImage.push(params.releaseVersion)
+                                    image.push(params.releaseVersion)
                                 }
                             }
                         }
