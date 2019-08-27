@@ -46,7 +46,9 @@ pipeline {
                     def repo = url.substring(url.indexOf('://')+3)
                     withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         //Push the branch to the remote
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} ${env.BRANCH_NAME}"
+                        //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} ${env.BRANCH_NAME}"
+                        sh "git show-ref"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} HEAD:${env.BRANCH_NAME}"
                         //Push the tag to the remote
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} --tags"
                     }
