@@ -82,7 +82,6 @@ namespace :devops do
   #running in devops.rake ensures the rails environment is test for snapshost builds and production for releases
   desc 'run seeds'
   task :seed => :environment do |task|
-    return unless ENV['RAILS_ENV'].eql? 'test' #don't seed production
     p task.comment
     ActiveRecord::Base.establish_connection(:test)
     puts "Running seeds for test"

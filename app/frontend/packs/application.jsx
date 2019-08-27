@@ -11,7 +11,7 @@ const Application = props => {
     testAxios();
     return (
         <div>
-            <img src={GH.getImagePath('va-header-70.png')} alt="VA Header Image" />
+            <img src={GH.getImagePath('media/images/va-header-70.png')} alt="VA Header Image" />
             <br/>
             <Comment/>
         </div>

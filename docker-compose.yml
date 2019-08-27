@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   dsbpa:
-    image: meetveracity/coding-challenge-app
+    image: meetveracity/coding-challenge-app:development
     build: 
       context: .
     environment:
@@ -16,7 +16,7 @@ services:
       - "8080:8080"
 
   db-init:
-    image: meetveracity/coding-challenge-db-init
+    image: meetveracity/coding-challenge-db-init:development
     build: 
       context: .
       dockerfile: Dockerfile.db-init
