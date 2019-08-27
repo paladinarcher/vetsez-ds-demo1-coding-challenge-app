@@ -37,7 +37,7 @@ pipeline {
                 sh "git tag -a v${params.releaseVersion} -m \"Release version ${params.releaseVersion}\""
 
                 //Set the next dev version
-                sh "${cmd} org.codehaus.mojo:versions-maven-plugin:2.5::set -DnewVersion=${params.developmentVersion}  -DgenerateBackupPoms=false -DprocessAllModules=true"
+                sh "mvn org.codehaus.mojo:versions-maven-plugin:2.5::set -DnewVersion=${params.developmentVersion}  -DgenerateBackupPoms=false -DprocessAllModules=true"
                 //Commit changes locally
                 sh "git commit -a -m \"Preparing POMs for next development version ${params.developmentVersion}\""
 
