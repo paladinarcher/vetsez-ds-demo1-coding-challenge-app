@@ -134,17 +134,38 @@ When deploying to Tomcat rename the war file to 'dsbpa.war' so the initial conte
 
 
 
-Docker notes
-docker-compose up #bring docke in foreground
+# Docker notes
+###bring docker up in foreground
+```
+docker-compose up 
+```
 
-docker-compose pull #pull latest war
+###pull latest war
+```
+docker-compose pull
+```
 
-docker-compose up --build #test my local changes (run maven build first)
+###test my local changes (run maven build first)
+```
+docker-compose up --build 
+```
 
-docker-compose up -d #(run in background)
+### run in background
+```
+docker-compose up -d 
+```
 
-docker-compose down #kill mny -d docker
+###kill mny -d docker
+```
+docker-compose down 
+```
 
-docker-compose exec dsbpa ls -la #execute command
+###execute command in docker container
+```
+docker-compose exec dsbpa ls -la 
+```
 
-docker-compose logs dsbpa #show stdout
+###show stdout
+```
+docker-compose logs dsbpa 
+```
