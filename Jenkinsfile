@@ -34,7 +34,7 @@ pipeline {
                 sh "git commit -a -m \"Releasing version ${params.releaseVersion}\""
 
                 //Tag release
-                sh "git tag -a v${params.releaseVersion} -m \"Release version ${params.releaseVersion}\""
+                sh "git tag -a ${params.releaseVersion} -m \"Release version ${params.releaseVersion}\""
 
                 //Set the next dev version
                 sh "mvn org.codehaus.mojo:versions-maven-plugin:2.5::set -DnewVersion=${params.developmentVersion}  -DgenerateBackupPoms=false -DprocessAllModules=true"
@@ -46,8 +46,6 @@ pipeline {
                     def repo = url.substring(url.indexOf('://')+3)
                     withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         //Push the branch to the remote
-                        //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} ${env.BRANCH_NAME}"
-                        sh "git show-ref"
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} HEAD:${env.BRANCH_NAME}"
                         //Push the tag to the remote
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repo} --tags"
@@ -55,7 +53,7 @@ pipeline {
                 }
 
                 //Checkout the tag
-                sh "git checkout tags/v${releaseVersion}"
+                sh "git checkout tags/${params.releaseVersion}"
             }
         }
         stage('Building Application') {
@@ -84,9 +82,16 @@ pipeline {
                     }
                     steps {
                         script {
+                            if (params.releaseVersion != '') {
+                                //Checkout the tag
+                                sh "git checkout tags/${params.releaseVersion}"
+                            }
                             docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
                                 dbImage = docker.build("meetveracity/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}")
+                                if (params.releaseVersion != '') {
+                                    dbImage.push(params.releaseVersion)
+                                }
                             }
                         }
                     }
@@ -103,6 +108,9 @@ pipeline {
                             docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
                                 image = docker.build("meetveracity/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}")
+                                if (params.releaseVersion != '') {
+                                    dbImage.push(params.releaseVersion)
+                                }
                             }
                         }
                     }
