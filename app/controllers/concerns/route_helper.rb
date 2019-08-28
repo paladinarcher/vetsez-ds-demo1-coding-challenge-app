@@ -4,7 +4,7 @@ module RouteHelper
 
   IMAGE_EXTENSIONS = %w(.jpeg .jpg .png .gif).freeze
 
-  if $WINDOWS
+  if WINDOWS
     IMAGE_ROOT_PATH = 'media/images/'
   else
     # For Linux/Unix
