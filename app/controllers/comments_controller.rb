@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  # skip_before_action :verify_authenticity_token
+
   # before_action :set_comment, only: [:show, :edit, :update, :destroy]
  $log.always("I have loaded the comments controller")
   def root
@@ -6,6 +8,16 @@ class CommentsController < ApplicationController
 
   def fetch_time
     render json: {time: Time.now.to_s}
+  end
+
+  def greg
+    request.headers.each do |elem|
+      ret = "header - #{elem.inspect}"
+      puts ret
+    end
+
+    redirect_to root_path
+    # render json: {success: true}
   end
 
   def add_comment

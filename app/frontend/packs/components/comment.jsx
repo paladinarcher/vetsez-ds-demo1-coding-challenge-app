@@ -1,12 +1,16 @@
 import React from 'react';
 import GH from '../utils/gon_helper';
 import axios from '../utils/axios'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
 
 class Comment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             comment: '',
+            military: false,
             comments: []
         };
         this.handleChangeField = this.handleChangeField.bind(this);
@@ -33,13 +37,45 @@ class Comment extends React.Component {
             })
     }
 
+    email_change = (event) => {
+        console.log("email change", event.target.value);
+        const military_val = event.target.value;
+        const patt = new RegExp('^\\S+@\\S*\\.mil$');
+        const isValidMil = patt.test(military_val);
+        this.setState({...this.state, military: isValidMil});
+        console.log("match is ", isValidMil);
+        // this.setState({...this.state, military: military_val});
+        // console.log("email change called", event.currentTarget.elements);
+
+        };
+
+    greg = (event) => {
+        event.preventDefault();
+        console.log("greg called", event.currentTarget.elements);
+        console.log("email value is ", event.currentTarget.elements['email-kma'].value);
+        console.log("first name is ", event.currentTarget.elements['fname'].value);
+        const token = document.querySelector('[name="csrf-token"]').content;
+        alert("token izzzz "+ JSON.stringify(token));
+        event.currentTarget.submit();
+    };
+
+    military_input = () => {
+        console.log("military is ", this.state.military);
+        return (
+            <Form.Group controlId="exampleForm.ControlInput3">
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter Last Name" name="lname" readOnly={this.state.military} default={'hello'}/>
+            </Form.Group>
+        )
+    }
+
     render() {
         const { comment, comments} = this.state;
         const listItems = comments.map((c) =>
             <li key={c.id}>{c.comment}</li>
         );
         return (
-            <div>
+            <div style={{padding: '15px'}}>
                 <div>
                     <label id='lblComment'>Add a Comment</label><br/>
                     <input
@@ -55,6 +91,33 @@ class Comment extends React.Component {
                         {listItems}
                     </ul>
                 </div>
+                <br/>
+                <Card style={{ width: '80%' }}>
+                    <Card.Body>
+                        <Card.Title>Card Form</Card.Title>
+                        <Card.Text>
+                            Please select the facility...
+                        </Card.Text>
+                        <Form onSubmit={this.greg} action={gon.routes.greg_path} method="post">
+                            <input type="hidden" name="authenticity_token" value={document.querySelector('[name="csrf-token"]').content}/>
+                            <Form.Group controlId="exampleForm.ControlInput1">
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control type="email" placeholder="name@example.com" name="email-kma" required onChange={this.email_change} />
+                                <Form.Text className="text-muted">
+                                    We'll never share your email with anyone else.
+                                </Form.Text>
+                            </Form.Group>
+                            {this.military_input()}
+                            <Form.Group controlId="exampleForm.ControlInput2">
+                                <Form.Label>First Name</Form.Label>
+                                <Form.Control type="date" placeholder="Enter First Name" name="fname"/>
+                            </Form.Group>
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
+                        </Form>
+                    </Card.Body>
+                </Card>
             </div>
         )
     }
