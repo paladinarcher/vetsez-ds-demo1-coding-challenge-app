@@ -1,0 +1,58 @@
+{
+  "id": "79da7ef6-dfde-4b59-85ea-d6b19ca627be",
+  "version": "2.0",
+  "name": "coding-challenge-app",
+  "url": "http://localhost:8080/dsbpa/",
+  "tests": [{
+    "id": "ad3e5b6b-f541-4ca4-a588-2848eb1657b6",
+    "name": "Testing Page Title",
+    "commands": [{
+      "id": "f574cb90-2944-499f-bee0-96da535d5b18",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3348c869-712a-4b8c-8c77-0c8b98d307a1",
+      "comment": "",
+      "command": "assertTitle",
+      "target": "DSBPA",
+      "targets": [],
+      "value": "DSBPA"
+    }]
+  }, {
+    "id": "85c19d26-9332-4d14-9920-e3af58284724",
+    "name": "Button Is Present",
+    "commands": [{
+      "id": "c87d16c6-ba6f-4abc-b8f9-69155aa39c9b",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5c0f1cd0-09ff-4266-9e18-121cac195a51",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=button",
+      "targets": [
+        ["css=button", "css:finder"],
+        ["xpath=//div[@id='app']/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": "Submit"
+    }]
+  }],
+  "suites": [{
+    "id": "c3190138-a9e1-4d8b-afed-27e571b1576a",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["ad3e5b6b-f541-4ca4-a588-2848eb1657b6", "85c19d26-9332-4d14-9920-e3af58284724"]
+  }],
+  "urls": ["http://localhost:8080/", "http://localhost:8080/dsbpa/"],
+  "plugins": []
+}
