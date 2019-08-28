@@ -1,0 +1,13 @@
+{
+  "name": "selenium",
+  "version": "1.0.0",
+  "description": "Selenium tests for digital services",
+  "main": "index.js",
+  "author": "VetsEZ",
+  "license": "MIT",
+  "dependencies": {
+    "chromedriver": "^76.0.1",
+    "selenium-side-runner": "^3.12.1",
+    "selenium-webdriver": "^4.0.0-alpha.4"
+  }
+}
