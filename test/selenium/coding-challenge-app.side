@@ -4,65 +4,6 @@
   "name": "coding-challenge-app",
   "url": "http://localhost:8080/dsbpa/",
   "tests": [{
-    "id": "115e290e-2e31-433d-adec-89ca73cf544e",
-    "name": "Testing Comment",
-    "commands": [{
-      "id": "840cf437-0127-4efc-8c38-62139a604ae6",
-      "comment": "",
-      "command": "open",
-      "target": "/dsbpa/",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "d9e07285-602f-493b-9a15-732447ea5573",
-      "comment": "",
-      "command": "click",
-      "target": "css=input",
-      "targets": [
-        ["css=input", "css:finder"],
-        ["xpath=//input[@value='']", "xpath:attributes"],
-        ["xpath=//div[@id='app']/div/div/div/input", "xpath:idRelative"],
-        ["xpath=//input", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "8feb5de7-03f9-4d51-9fc8-15c359686fff",
-      "comment": "",
-      "command": "type",
-      "target": "css=input",
-      "targets": [
-        ["css=input", "css:finder"],
-        ["xpath=//input[@value='Hello']", "xpath:attributes"],
-        ["xpath=//div[@id='app']/div/div/div/input", "xpath:idRelative"],
-        ["xpath=//input", "xpath:position"]
-      ],
-      "value": "Hello"
-    }, {
-      "id": "2f3f2a59-d6df-41f4-baf4-2cf5c8c15ec3",
-      "comment": "",
-      "command": "click",
-      "target": "css=button",
-      "targets": [
-        ["css=button", "css:finder"],
-        ["xpath=//div[@id='app']/div/div/div/button", "xpath:idRelative"],
-        ["xpath=//button", "xpath:position"],
-        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
-      ],
-      "value": ""
-    }, {
-      "id": "2ee90816-e341-477e-af28-7cd168c3c2e5",
-      "comment": "",
-      "command": "verifyText",
-      "target": "css=li:nth-child(1)",
-      "targets": [
-        ["css=li:nth-child(1)", "css:finder"],
-        ["xpath=//div[@id='app']/div/div/div[2]/ul/li", "xpath:idRelative"],
-        ["xpath=//li", "xpath:position"],
-        ["xpath=//li[contains(.,'World')]", "xpath:innerText"]
-      ],
-      "value": "Hello"
-    }]
-  }, {
     "id": "ad3e5b6b-f541-4ca4-a588-2848eb1657b6",
     "name": "Testing Page Title",
     "commands": [{
@@ -80,6 +21,29 @@
       "targets": [],
       "value": "DSBPA"
     }]
+  }, {
+    "id": "85c19d26-9332-4d14-9920-e3af58284724",
+    "name": "Button Is Present",
+    "commands": [{
+      "id": "c87d16c6-ba6f-4abc-b8f9-69155aa39c9b",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5c0f1cd0-09ff-4266-9e18-121cac195a51",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=button",
+      "targets": [
+        ["css=button", "css:finder"],
+        ["xpath=//div[@id='app']/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": "Submit"
+    }]
   }],
   "suites": [{
     "id": "c3190138-a9e1-4d8b-afed-27e571b1576a",
@@ -87,7 +51,7 @@
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": ["115e290e-2e31-433d-adec-89ca73cf544e", "ad3e5b6b-f541-4ca4-a588-2848eb1657b6"]
+    "tests": ["ad3e5b6b-f541-4ca4-a588-2848eb1657b6", "85c19d26-9332-4d14-9920-e3af58284724"]
   }],
   "urls": ["http://localhost:8080/", "http://localhost:8080/dsbpa/"],
   "plugins": []
