@@ -126,9 +126,9 @@ pipeline {
         }
         stage("Testing") {
             parallel {
-                stage("Functional Testing") {
+                stage("") {
                     stages {
-                        stage('Deploy Test Environment') {
+                        stage('Deploy Functional Test Environment') {
                             agent {
                                 node {
                                     label 'helm'
@@ -144,13 +144,13 @@ pipeline {
                                     sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}\" --set \"initImage.tag=${env.BRANCH_NAME}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --namespace development helmTemp/k8s/coding-challenge-app"
 
                                     //Find the Service Port
-                                    functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l release=${releaseName} -o jsonpath=\"http://{.items[1].metadata.name}:{.items[1].spec.ports[0].port}\"")
+                                    functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}:{.items[0].spec.ports[0].port}\"")
 
                                     echo "Service is available at ${functionalTestUrl}"
                                 }
                             }
                         }
-                        stage('Test Execution') {
+                        stage('Functional Test Execution') {
                             agent {
                                 node {
                                     label 'ruby'
