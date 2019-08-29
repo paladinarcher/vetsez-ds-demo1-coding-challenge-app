@@ -36,15 +36,13 @@ class UForm extends React.Component {
                 alert("Needs to start with The");
                 this.setState({...this.state, validated: true});
             } else {
-                const data = {
-                    first_name: f.elements['first_name'].value,
-                    last_name: f.elements['last_name'].value,
-                    branch: f.elements['branch'].value,
-                    email: f.elements['email'].value,
-                    comment: f.elements['comment'].value,
-                    selection: f.elements['selection'].value,
-                    appointment_date: f.elements['appointment_date'].value,
-                };
+                let data = {};
+                for (const element of f.elements) {
+                    if (element.type !== 'button' && element.name !== undefined) {
+                        data[element.name] = element.value;
+                    }
+                }
+
                 axios.post(gon.routes.post_form_path, data)
                     .then(function (response) {
                         alert(response.data.message);

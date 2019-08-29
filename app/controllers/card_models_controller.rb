@@ -40,7 +40,6 @@ class CardModelsController < ApplicationController
   # POST /card_models
   # POST /card_models.json
   def ajax_post_form
-    $log.always(params.inspect)
     card_model = CardModel.new
     card_model.first_name = params[:first_name]
     card_model.last_name = params[:last_name]
@@ -49,15 +48,11 @@ class CardModelsController < ApplicationController
     card_model.comment= params[:comment]
     card_model.branch= params[:branch]
     card_model.selection= params[:selection]
-    $log.always(card_model.inspect)
 
     if card_model.save
-      $log.always("-------------------Success-------------------------")
       render json: {success: true, message: "Form saved successfully! Model id is #{card_model.id}"}
     else
-      $log.always("-------------------Error-------------------------")
       $log.always(card_model.errors.inspect)
-
       render json: {success: false, message: card_model.errors}, status: :bad_request
     end
   end
