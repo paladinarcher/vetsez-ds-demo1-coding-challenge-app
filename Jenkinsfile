@@ -137,17 +137,22 @@ pipeline {
                             steps {
                                 script {
                                     def releaseName = "ft-${env.BRANCH_NAME.toLowerCase()}"
-                                    def helmDir = pwd(tmp: true)
                                     //Download the Chart
-                                    sh "git clone \"https://github.com/meetveracity/coding-challenge-devops.git\" ${helmDir}"
+                                    sh "git clone \"https://github.com/meetveracity/coding-challenge-devops.git\" helmChart"
 
                                     //Deploy the Chart
-                                    sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}\" --set \"initImage.tag=${env.BRANCH_NAME}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --namespace development ${helmDir}/k8s/coding-challenge-app"
+                                    sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}\" --set \"initImage.tag=${env.BRANCH_NAME}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --namespace development helmChart/k8s/coding-challenge-app"
 
                                     //Find the Service Port
                                     functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}:{.items[0].spec.ports[0].port}\"")
 
                                     echo "Service is available at ${functionalTestUrl}"
+                                }
+                            }
+                            post {
+                                //Clean up our helm checkout
+                                always {
+                                    sh 'rm -rf helmChart'
                                 }
                             }
                         }
