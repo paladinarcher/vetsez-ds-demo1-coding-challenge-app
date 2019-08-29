@@ -23,6 +23,7 @@ class UForm extends React.Component {
     };
 
     post_form = () => {
+        let self = this;
         const f = document.querySelector('[id="myForm"]');
         const isValid = f.checkValidity();
 
@@ -49,6 +50,7 @@ class UForm extends React.Component {
                     .then(function (response) {
                         alert(response.data.message);
                         f.reset();
+                        self.setState({...self.state, validated: false});
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -119,7 +121,7 @@ class UForm extends React.Component {
                                     <Form.Label>Appointment Date</Form.Label>
                                     <Form.Control type="date" placeholder="Select the Appt Date" name="appointment_date" required/>
                                     <Form.Control.Feedback type="invalid">
-                                        Appoinment date is required.
+                                        Appoinment date is missing or is invalid.
                                     </Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group as={Col} controlId="selection">
