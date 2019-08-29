@@ -1,3 +1,5 @@
+def functionalTestUrl = null
+
 pipeline {
     agent {
         node {
@@ -122,33 +124,57 @@ pipeline {
                 }
             }
         }
-        stage("Functional Testing") {
-            agent {
-                node {
-                    label 'helm'
+        stage("Testing") {
+            parallel {
+                stage("Functional Testing") {
+                    stages {
+                        stage('Deploy Test Environment') {
+                            agent {
+                                node {
+                                    label 'helm'
+                                }
+                            }
+                            steps {
+                                script {
+                                    def releaseName = "ft-${env.BRANCH_NAME.toLowerCase()}"
+                                    //Download the Chart
+                                    sh "git clone \"https://github.com/meetveracity/coding-challenge-devops.git\" helmTemp"
+
+                                    //Deploy the Chart
+                                    sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}\" --set \"initImage.tag=${env.BRANCH_NAME}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --namespace development helmTemp/k8s/coding-challenge-app"
+
+                                    //Find the Service Port
+                                    functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l release=${releaseName} -o jsonpath=\"http://{.items[1].metadata.name}:{.items[1].spec.ports[0].port}\"")
+
+                                    echo "Service is available at ${functionalTestUrl}"
+                                }
+                            }
+                        }
+                        stage('Test Execution') {
+                            agent {
+                                node {
+                                    label 'ruby'
+                                }
+                            }
+                            steps {
+                                dir('test/selenium') {
+                                    sh 'yarn install'
+                                    sh "export PATH=$PATH:\$(pwd)/node_modules/.bin; selenium-side-runner --base-url=${functionalTestUrl} --output-format=junit -c \"browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage]\" coding-challenge-app.side"
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-            steps {
-                script {
-                    def releaseName = "ft-${env.BRANCH_NAME.toLowerCase()}"
-                    //Download the Chart
-                    sh "git clone \"https://github.com/meetveracity/coding-challenge-devops.git\" helmTemp"
 
-                    //Deploy the Chart
-                    sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}\" --set \"initImage.tag=${env.BRANCH_NAME}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --namespace development helmTemp/k8s/coding-challenge-app"
-
-                    //Find the Service Port
-                    serviceUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l release=${releaseName} -o jsonpath=\"http://{.items[1].metadata.name}:{.items[1].spec.ports[0].port}\"")
-
-                    echo "Service is available at ${serviceUrl}"
+                stage("Performance Testing") {
+                    steps {
+                        echo "TDB..."
+                    }
                 }
             }
         }
-        stage("Performance Testing") {
-            steps {
-                echo "TDB..."
-            }
-        }
+        
+        
         stage("Promote to Development") {
             when {
                 not {
