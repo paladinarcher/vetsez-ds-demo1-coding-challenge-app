@@ -126,7 +126,7 @@ pipeline {
         }
         stage("Testing") {
             parallel {
-                stage("") {
+                stage("Functional") {
                     stages {
                         stage('Deploy Functional Test Environment') {
                             agent {
@@ -158,7 +158,9 @@ pipeline {
                             }
                             steps {
                                 dir('test/selenium') {
+                                    sh "echo \"Working Directory is \$(pwd)\""
                                     sh 'yarn install'
+                                    sh "ls -l \$(pwd)/node_modules/.bin"
                                     sh "export PATH=$PATH:\$(pwd)/node_modules/.bin; selenium-side-runner --base-url=${functionalTestUrl} --output-format=junit -c \"browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage]\" coding-challenge-app.side"
                                 }
                             }
