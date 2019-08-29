@@ -137,11 +137,12 @@ pipeline {
                             steps {
                                 script {
                                     def releaseName = "ft-${env.BRANCH_NAME.toLowerCase()}"
+                                    def helmDir = pwd(tmp: true)
                                     //Download the Chart
-                                    sh "git clone \"https://github.com/meetveracity/coding-challenge-devops.git\" helmTemp"
+                                    sh "git clone \"https://github.com/meetveracity/coding-challenge-devops.git\" ${helmDir}"
 
                                     //Deploy the Chart
-                                    sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}\" --set \"initImage.tag=${env.BRANCH_NAME}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --namespace development helmTemp/k8s/coding-challenge-app"
+                                    sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}\" --set \"initImage.tag=${env.BRANCH_NAME}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --namespace development ${helmDir}/k8s/coding-challenge-app"
 
                                     //Find the Service Port
                                     functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}:{.items[0].spec.ports[0].port}\"")
@@ -151,11 +152,6 @@ pipeline {
                             }
                         }
                         stage('Functional Test Execution') {
-                            agent {
-                                node {
-                                    label 'ruby'
-                                }
-                            }
                             steps {
                                 dir('test/selenium') {
                                     sh "echo \"Working Directory is \$(pwd)\""
