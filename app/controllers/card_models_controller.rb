@@ -31,6 +31,11 @@ class CardModelsController < ApplicationController
     render json: ret
   end
 
+  def get_table_data
+    rows = CardModel.all
+    render json: rows
+  end
+
   # POST /card_models
   # POST /card_models.json
   def create

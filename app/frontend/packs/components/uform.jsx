@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import BootstrapTable from 'react-bootstrap-table-next';
 
 class UForm extends React.Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class UForm extends React.Component {
             military: false,
             options: [],
             validated: false,
+            tableData: [],
         };
     }
 
@@ -50,6 +52,7 @@ class UForm extends React.Component {
                         alert(response.data.message);
                         f.reset();
                         self.setState({...self.state, validated: false});
+                        self.loadTableData();
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -75,7 +78,28 @@ class UForm extends React.Component {
     };
 
     render() {
-        //remove form input if axios
+        const columns = [{
+            dataField: 'id',
+            text: 'ID'
+        }, {
+            dataField: 'first_name',
+            text: 'First Name'
+        }, {
+            dataField: 'last_name',
+            text: 'Last Name'
+        }, {
+            dataField: 'email',
+            text: 'Email'
+        }, {
+            dataField: 'branch',
+            text: 'Branch'
+        }, {
+            dataField: 'selection',
+            text: 'Selection'
+        }, {
+            dataField: 'comment',
+            text: 'Comment'
+        }];
         return (
             <div style={{padding: '15px'}}>
                 <Card style={{width: '80%'}}>
@@ -147,6 +171,8 @@ class UForm extends React.Component {
                         </Form>
                     </Card.Body>
                 </Card>
+                <br/>
+                <BootstrapTable keyField='id' data={ this.state.tableData } columns={ columns } />
             </div>
         )
     }
@@ -159,12 +185,25 @@ class UForm extends React.Component {
         return ret;
     };
 
+    loadTableData = () => {
+        const self = this;
+        axios.get(gon.routes.get_table_data_path)
+            .then(function (response) {
+                self.setState({...self.state, tableData: response.data});
+            })
+            .catch(function (error) {
+                console.log("error", error);
+                alert("there was an error loading the table data! " + error.message() );
+            });
+    };
+
     componentDidMount() {
         // retrieve the drop down items
         const self = this;
         axios.get(gon.routes.get_selections_path)
             .then(function (response) {
                 self.setState({...self.state, options: self.loadSelection(response.data)});
+                self.loadTableData();
             })
             .catch(function (error) {
                 console.log("error", error);

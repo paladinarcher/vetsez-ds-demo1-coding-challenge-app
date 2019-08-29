@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from './utils/axios'
 import GH from './utils/gon_helper';
 import Comment from "./components/comment";
 import UForm from "./components/uform";
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 // fix for IE11 allowing us to use axios/fetch for ajax calls
 import {promise, polyfill} from 'es6-promise';

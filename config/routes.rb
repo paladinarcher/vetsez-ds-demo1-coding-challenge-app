@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   # post 'uncontrolled_form' => 'card_models#create'
   post 'post_form' => 'card_models#ajax_post_form'
   get 'get_selections' => 'card_models#get_selections'
+  get 'get_table_data' => 'card_models#get_table_data'
 
   root :to => 'comments#root'
 
