@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   get 'fetch_time' => 'comments#fetch_time'
   get 'list_comments' => 'comments#list_comments'
   post 'add_comment' => 'comments#add_comment'
-  post 'uncontrolled_form' => 'card_models#create'
+  # post 'uncontrolled_form' => 'card_models#create'
+  post 'post_form' => 'card_models#ajax_post_form'
 
   root :to => 'comments#root'
 
