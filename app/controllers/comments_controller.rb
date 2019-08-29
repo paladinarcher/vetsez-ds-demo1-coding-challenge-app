@@ -10,12 +10,8 @@ class CommentsController < ApplicationController
     render json: {time: Time.now.to_s}
   end
 
-  def greg
-    request.headers.each do |elem|
-      ret = "header - #{elem.inspect}"
-      puts ret
-    end
-
+  def uncontrolled_form
+    puts params
     redirect_to root_path
     # render json: {success: true}
   end

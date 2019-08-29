@@ -1,6 +1,5 @@
 class GonHelper {
     static getImagePath(img) {
-        console.log("image is ",img);
         return gon.packs.paths.images[img];
     }
 

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'fetch_time' => 'comments#fetch_time'
   get 'list_comments' => 'comments#list_comments'
   post 'add_comment' => 'comments#add_comment'
-  post 'greg' => 'comments#greg'
+  post 'uncontrolled_form' => 'comments#uncontrolled_form'
 
   root :to => 'comments#root'
 
