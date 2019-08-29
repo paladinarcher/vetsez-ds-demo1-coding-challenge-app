@@ -138,7 +138,7 @@ pipeline {
                     sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}\" --set \"initImage.tag=${env.BRANCH_NAME}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --namespace development helmTemp/k8s/coding-challenge-app"
 
                     //Find the Service Port
-                    serviceUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l release=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}:{.items[0].spec.ports[0].port}\"")
+                    serviceUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l release=${releaseName} -o jsonpath=\"http://{.items[1].metadata.name}:{.items[1].spec.ports[0].port}\"")
 
                     echo "Service is available at ${serviceUrl}"
                 }
