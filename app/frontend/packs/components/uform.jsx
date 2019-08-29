@@ -11,6 +11,7 @@ class UForm extends React.Component {
         super(props);
         this.state = {
             military: false,
+            options: [],
             validated: false,
         };
     }
@@ -125,12 +126,7 @@ class UForm extends React.Component {
                                 <Form.Group as={Col} controlId="selection">
                                     <Form.Label>Selection</Form.Label>
                                     <Form.Control as="select" name='selection' required>
-                                        <option value=''>Choose...</option>
-                                        <option value='one'>1</option>
-                                        <option value='two'>2</option>
-                                        <option value='three'>3</option>
-                                        <option value='four'>4</option>
-                                        <option value='five'>5</option>
+                                        {this.state.options}
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         Selection is required.
@@ -155,7 +151,25 @@ class UForm extends React.Component {
         )
     }
 
+    loadSelection = (data) => {
+        let ret = [<option key={0} value=''>Choose...</option>];
+        for (const item of data) {
+            ret.push(<option key={item.id} value={item.id}>{item.label}</option>);
+        }
+        return ret;
+    };
+
     componentDidMount() {
+        // retrieve the drop down items
+        const self = this;
+        axios.get(gon.routes.get_selections_path)
+            .then(function (response) {
+                self.setState({...self.state, options: self.loadSelection(response.data)});
+            })
+            .catch(function (error) {
+                console.log("error", error);
+                alert("there was an error loading the selection listing! " + error.message() );
+            });
     }
 }
 

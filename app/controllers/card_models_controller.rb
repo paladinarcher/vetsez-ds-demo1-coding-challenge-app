@@ -21,6 +21,16 @@ class CardModelsController < ApplicationController
   def edit
   end
 
+  def get_selections
+    ret = [];
+    ret.push({id: 123, label: 'Army'})
+    ret.push({id: 124, label: 'Navy'})
+    ret.push({id: 125, label: 'Marine Corp'})
+    ret.push({id: 126, label: 'Air Force'})
+    ret.push({id: 127, label: 'Coast Guard'})
+    render json: ret
+  end
+
   # POST /card_models
   # POST /card_models.json
   def create

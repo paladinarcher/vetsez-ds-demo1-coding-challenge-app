@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post 'add_comment' => 'comments#add_comment'
   # post 'uncontrolled_form' => 'card_models#create'
   post 'post_form' => 'card_models#ajax_post_form'
+  get 'get_selections' => 'card_models#get_selections'
 
   root :to => 'comments#root'
 
