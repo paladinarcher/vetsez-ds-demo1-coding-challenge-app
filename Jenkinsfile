@@ -160,8 +160,13 @@ pipeline {
                                 dir('test/selenium') {
                                     sh "echo \"Working Directory is \$(pwd)\""
                                     sh 'yarn install'
-                                    sh "ls -l \$(pwd)/node_modules/.bin"
-                                    sh "export PATH=$PATH:\$(pwd)/node_modules/.bin; selenium-side-runner --base-url ${functionalTestUrl} --output-format=junit -c \"browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage]\" coding-challenge-app.side"
+                                    sh "mkdir reports"
+                                    sh "export PATH=$PATH:\$(pwd)/node_modules/.bin; selenium-side-runner --base-url ${functionalTestUrl} --output-directory=reports --output-format=junit -c \"browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage]\" coding-challenge-app.side"
+                                }
+                            }
+                            post {
+                                always {
+                                    junit '**/test/selenium/reports/*.xml'
                                 }
                             }
                         }
