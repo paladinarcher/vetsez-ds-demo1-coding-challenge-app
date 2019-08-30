@@ -15,7 +15,7 @@ export default class Application extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            card: 'welcome'
+            card: 'schedAppt'
         };
     }
 
@@ -39,10 +39,10 @@ export default class Application extends React.Component {
             'schedAppt': <SchedAppt/>,
         };
         return (
-            <div>
+            <div style={{padding: '20px'}}>
                 <img src={GH.getImagePath('media/images/va-header-70.png')} alt="VA Header Image" name='welcome' onClick={this.swapCard}/>
-                <button onClick={this.swapCard} name='schedAppt'>Schedule Appointment</button>
-                <h1>Hi {this.props.username}, Welcome!</h1>
+                {/*<button onClick={this.swapCard} name='schedAppt'>Schedule Appointment</button>*/}
+                <h1>Hi {gon.user}, Welcome!</h1>
                 <h3>Please use the selectors below to find a facility near you</h3>
                 <h3>and select your preferred appointment type regarding your visit</h3>
                 <br/>
@@ -53,5 +53,5 @@ export default class Application extends React.Component {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    ReactDOM.render(<Application username="John Smith"/>, document.getElementById('app'));
+    ReactDOM.render(<Application/>, document.getElementById('app'));
 });
