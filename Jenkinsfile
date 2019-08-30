@@ -169,7 +169,7 @@ pipeline {
                                 always {
                                     junit '**/test/selenium/reports/*.xml'
                                     //Clean up reports directory
-                                    sh "rm -rf reports"
+                                    sh "rm -rf test/selenium/reports"
                                 }
                             }
                         }
