@@ -54,7 +54,7 @@ class SchedAppt extends React.Component {
                         <Form id="myForm" noValidate validated={this.state.validated}>
                             <Form.Row>
                                 <Form.Group as={Col} controlId="selectFacility">
-                                    <Form.Label>Select Facility</Form.Label>
+                                    <Form.Label id="FacilityLabel">Select Facility</Form.Label>
                                     <Form.Control as="select" name='selection' required>
                                         {this.state.facilities}
                                     </Form.Control>
@@ -65,7 +65,7 @@ class SchedAppt extends React.Component {
                             </Form.Row>
                                 <Form.Row>
                                 <Form.Group as={Col} controlId="selectApptType">
-                                    <Form.Label>Appointment Type</Form.Label>
+                                    <Form.Label id="AppointmentLabel">Appointment Type</Form.Label>
                                     <Form.Control as="select" name='selection' required>
                                         {this.state.appointment_types}
                                     </Form.Control>
@@ -127,8 +127,10 @@ class SchedAppt extends React.Component {
                 self.setState({...self.state, facilities: self.loadFacilities(facs.data)});
             })
             .catch(function (error) {
-                console.log("error", error);
-                alert("there was an error loading the selection listing! " + error.message() );
+                if (!gon.testing) {
+                    console.log("error", error);
+                    alert("there was an error loading the selection listing! " + error.message() );
+                }
             });
 
         axios.get(gon.routes.get_appointment_types_path)
@@ -138,8 +140,10 @@ class SchedAppt extends React.Component {
                 self.setState({...self.state, appointment_types: self.loadAppointmentTypes(appts.data)});
             })
             .catch(function (error) {
-                console.log("error", error);
-                alert("there was an error loading the selection listing! " + error.message() );
+                if (!gon.testing) {
+                    console.log("error", error);
+                    alert("there was an error loading the selection listing! " + error.message() );
+                }
             });
     }
 }
