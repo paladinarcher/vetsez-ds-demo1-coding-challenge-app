@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'schedule/get_facilities'
+  get 'schedule/get_appointment_types'
+  get 'schedule/get_user'
   # resources :comments
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
