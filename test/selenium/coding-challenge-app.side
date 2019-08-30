@@ -1,0 +1,323 @@
+{
+  "id": "79da7ef6-dfde-4b59-85ea-d6b19ca627be",
+  "version": "2.0",
+  "name": "coding-challenge-app",
+  "url": "http://localhost:8080/dsbpa/",
+  "tests": [{
+    "id": "ad3e5b6b-f541-4ca4-a588-2848eb1657b6",
+    "name": "Testing Page Title",
+    "commands": [{
+      "id": "f574cb90-2944-499f-bee0-96da535d5b18",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3348c869-712a-4b8c-8c77-0c8b98d307a1",
+      "comment": "",
+      "command": "assertTitle",
+      "target": "DSBPA",
+      "targets": [],
+      "value": "DSBPA"
+    }]
+  }, {
+    "id": "85c19d26-9332-4d14-9920-e3af58284724",
+    "name": "User Name Displayed",
+    "commands": [{
+      "id": "c87d16c6-ba6f-4abc-b8f9-69155aa39c9b",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5c0f1cd0-09ff-4266-9e18-121cac195a51",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h1",
+      "targets": [
+        ["css=h1", "css:finder"],
+        ["xpath=//div[@id='app']/div/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'Hi John Smith, Welcome!')]", "xpath:innerText"]
+      ],
+      "value": "Hi John Smith, Welcome!"
+    }]
+  }, {
+    "id": "17729bb0-8d6e-42ed-8bd2-bede36542423",
+    "name": "Greeting Test",
+    "commands": [{
+      "id": "01467224-bc9f-4a09-8f2d-519b7413a7ae",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a1d64a45-e145-4e92-a41b-46e66fb6ec02",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h3:nth-child(3)",
+      "targets": [
+        ["css=h3:nth-child(3)", "css:finder"],
+        ["xpath=//div[@id='app']/div/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Please use the selectors below to find a facility near you')]", "xpath:innerText"]
+      ],
+      "value": "Please use the selectors below to find a facility near you"
+    }, {
+      "id": "dbe1763e-164f-49e6-9f8a-8c3302afd8d4",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h3:nth-child(4)",
+      "targets": [
+        ["css=h3:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='app']/div/h3[2]", "xpath:idRelative"],
+        ["xpath=//h3[2]", "xpath:position"],
+        ["xpath=//h3[contains(.,'and select your preferred appointment type regarding your visit')]", "xpath:innerText"]
+      ],
+      "value": "and select your preferred appointment type regarding your visit"
+    }]
+  }, {
+    "id": "91d25569-2161-4329-8a1c-df97457f1c31",
+    "name": "Facility Dropdown Populated",
+    "commands": [{
+      "id": "04351583-ea6f-42a2-a524-a7620874a33a",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a97d28bb-4691-4a96-b999-28f82ad2a629",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectFacility",
+      "targets": [
+        ["id=selectFacility", "id"], 
+        ["name=selection", "name"],
+        ["css=#selectFacility", "css:finder"],
+        ["xpath=//select[@id='selectFacility']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "286588af-3c93-48fb-9ba3-8598315b28e2",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectFacility",
+      "targets": [],
+      "value": "label=New York"
+    }, {
+      "id": "8318c515-7b11-46b7-8db6-baee29b7ed98",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectFacility",
+      "targets": [
+        ["id=selectFacility", "id"],
+        ["name=selection", "name"],
+        ["css=#selectFacility", "css:finder"],
+        ["xpath=//select[@id='selectFacility']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "517ddf95-2828-4f53-95bd-cc8a7a4e4bd0",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectFacility",
+      "targets": [],
+      "value": "label=Los Angeles"
+    }, {
+      "id": "0d4241c1-9ae0-4ef8-8258-d2a08941a1fa",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectFacility",
+      "targets": [
+        ["id=selectFacility", "id"],
+        ["name=selection", "name"],
+        ["css=#selectFacility", "css:finder"],
+        ["xpath=//select[@id='selectFacility']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2d04458a-ac6f-4d72-9d8e-4ff8982fae17",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectFacility",
+      "targets": [],
+      "value": "label=Portland"
+    }, {
+      "id": "7b4e48d5-583e-460b-8506-ac4f66f5671c",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectFacility",
+      "targets": [
+        ["id=selectFacility", "id"],
+        ["name=selection", "name"],
+        ["css=#selectFacility", "css:finder"],
+        ["xpath=//select[@id='selectFacility']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4d412f45-c63b-4df8-935c-be934b156eaa",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectFacility",
+      "targets": [],
+      "value": "label=Choose a Facility..."
+    }]
+  }, {
+    "id": "a3129a7d-2da7-452d-9f20-1128c1dc5076",
+    "name": "Appointment Type Dropdown Populated",
+    "commands": [{
+      "id": "ccd3e4b2-da66-4b52-bd15-41ac50e2e17b",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f3848166-1ad0-4286-a022-354663f255b0",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectApptType",
+      "targets": [
+        ["id=selectApptType", "id"],
+        ["css=#selectApptType", "css:finder"],
+        ["xpath=//select[@id='selectApptType']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b761bb00-5e3b-45de-af6c-ff950c01e1fb",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectApptType",
+      "targets": [],
+      "value": "label=Allergist"
+    }, {
+      "id": "b3cd028e-9d29-4d68-97f5-153738ce71e7",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectApptType",
+      "targets": [
+        ["id=selectApptType", "id"],
+        ["css=#selectApptType", "css:finder"],
+        ["xpath=//select[@id='selectApptType']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a3a6353e-b0e4-4d9a-bb46-095844db991f",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectApptType",
+      "targets": [],
+      "value": "label=Surgeon"
+    }, {
+      "id": "0a55b3eb-2959-48f1-be35-be930427098d",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectApptType",
+      "targets": [
+        ["id=selectApptType", "id"],
+        ["css=#selectApptType", "css:finder"],
+        ["xpath=//select[@id='selectApptType']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6cd8ea6f-babb-428e-9456-12473fe957e7",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectApptType",
+      "targets": [],
+      "value": "label=Primary Care"
+    }, {
+      "id": "08e0b771-764b-400b-8cb8-0e0e1c4ba475",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectApptType",
+      "targets": [
+        ["id=selectApptType", "id"],
+        ["css=#selectApptType", "css:finder"],
+        ["xpath=//select[@id='selectApptType']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "705327f6-af83-4912-b1db-3783404b6434",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectApptType",
+      "targets": [],
+      "value": "label=Cardiologist"
+    }, {
+      "id": "07fca3c5-65e2-4164-aa6e-b2811dec7434",
+      "comment": "",
+      "command": "click",
+      "target": "id=selectApptType",
+      "targets": [
+        ["id=selectApptType", "id"],
+        ["css=#selectApptType", "css:finder"],
+        ["xpath=//select[@id='selectApptType']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "858aa987-1b4b-4fc3-9aa1-0b6abd11773b",
+      "comment": "",
+      "command": "select",
+      "target": "id=selectApptType",
+      "targets": [],
+      "value": "label=Choose Appointment Type..."
+    }]
+  }, {
+    "id": "fac7e05c-7d29-4620-838b-22ae718dec6d",
+    "name": "Submit Button Present",
+    "commands": [{
+      "id": "f5d90dd8-3012-4a95-a559-fb5499c0edee",
+      "comment": "",
+      "command": "open",
+      "target": "/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f7adf139-0e14-439f-84de-dc33bb01b128",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "c3190138-a9e1-4d8b-afed-27e571b1576a",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["ad3e5b6b-f541-4ca4-a588-2848eb1657b6", "85c19d26-9332-4d14-9920-e3af58284724", "17729bb0-8d6e-42ed-8bd2-bede36542423", "91d25569-2161-4329-8a1c-df97457f1c31", "a3129a7d-2da7-452d-9f20-1128c1dc5076", "fac7e05c-7d29-4620-838b-22ae718dec6d"]
+  }],
+  "urls": ["http://localhost:8080/", "http://localhost:8080/dsbpa/"],
+  "plugins": []
+}
