@@ -9,21 +9,12 @@ class SchedAppt extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            military: false,
-            facilities: [
-                {id: 100, name: 'Atlanta'}
-            ],
+            facilities: [],
+            appointment_types: [],
             validated: false,
             tableData: [],
         };
     }
-
-    // email_change = (event) => {
-    //     const military_val = event.target.value;
-    //     const patt = new RegExp('^\\S+@\\S*\\.mil$');
-    //     const isValidMil = patt.test(military_val);
-    //     this.setState({...this.state, military: isValidMil});
-    // };
 
     post_form = () => {
         let self = this;
@@ -65,22 +56,18 @@ class SchedAppt extends React.Component {
                                 <Form.Group as={Col} controlId="selectFacility">
                                     <Form.Label>Select Facility</Form.Label>
                                     <Form.Control as="select" name='selection' required>
-                                        <option key="0" value="">Choose a Medical Facility...</option>
-                                        <option key="100" value="100">Atlanta</option>
-                                        <option key="101" value="101">New York</option>
-                                        <option key="102" value="102">Phoenix</option>
+                                        {this.state.facilities}
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         Medical Facility is required.
                                     </Form.Control.Feedback>
                                 </Form.Group>
+                            </Form.Row>
+                                <Form.Row>
                                 <Form.Group as={Col} controlId="selectApptType">
                                     <Form.Label>Appointment Type</Form.Label>
                                     <Form.Control as="select" name='selection' required>
-                                        <option key="0" value="">Choose an Appt Type...</option>
-                                        <option key="100" value="100">one</option>
-                                        <option key="101" value="101">two</option>
-                                        <option key="102" value="102">three</option>
+                                        {this.state.appointment_types}
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         Appointment Type is required.
@@ -99,6 +86,23 @@ class SchedAppt extends React.Component {
     }
 
     loadFacilities = (data) => {
+        let ret = [<option key={0} value=''>Choose a Facility...</option>];
+        for (const item of data) {
+            ret.push(<option key={item.id} value={item.id}>{item.location}</option>);
+        }
+        return ret;
+    };
+
+    loadAppointmentTypes = (data) => {
+        let ret = [<option key={0} value=''>Choose Appointment Type...</option>];
+        for (const item of data) {
+            ret.push(<option key={item.id} value={item.id}>{item.type}</option>);
+        }
+        return ret;
+    };
+/*
+
+    loadFacilities = (data) => {
         const facilities = [];
         facilities.push({id: 100, name: 'Atlanta'});
         facilities.push({id: 100, name: 'Atlanta'});
@@ -112,23 +116,32 @@ class SchedAppt extends React.Component {
 
         // this.setState({...self.state, facilities: facilities});
     };
+*/
 
     componentDidMount() {
-        this.loadFacilities();
-    }
+        // retrieve the drop down items
+        const self = this;
+        axios.get(gon.routes.get_facilities_path)
+            .then(function (response) {
+                const facs = response.data;
+                self.setState({...self.state, facilities: self.loadFacilities(facs.data)});
+            })
+            .catch(function (error) {
+                console.log("error", error);
+                alert("there was an error loading the selection listing! " + error.message() );
+            });
 
-    // componentDidMount() {
-    //     // retrieve the drop down items
-    //     const self = this;
-    //     axios.get(gon.routes.get_facilities_path)
-    //         .then(function (response) {
-    //             self.setState({...self.state, facilities: self.loadSelection(response.data)});
-    //         })
-    //         .catch(function (error) {
-    //             console.log("error", error);
-    //             alert("there was an error loading the selection listing! " + error.message() );
-    //         });
-    // }
+        axios.get(gon.routes.get_appointment_types_path)
+            .then(function (response) {
+                const appts = response.data;
+                console.log("appts are ", appts);
+                self.setState({...self.state, appointment_types: self.loadAppointmentTypes(appts.data)});
+            })
+            .catch(function (error) {
+                console.log("error", error);
+                alert("there was an error loading the selection listing! " + error.message() );
+            });
+    }
 }
 
 export default SchedAppt

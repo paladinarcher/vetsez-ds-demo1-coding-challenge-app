@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  get 'schedule/get_facilities'
-  get 'schedule/get_appointment_types'
+  get 'get_facilities' => 'schedule#get_facilities'
+  get 'get_appointment_types' => 'schedule#get_appointment_types'
   get 'schedule/get_user'
   # resources :comments
 
