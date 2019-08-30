@@ -9,18 +9,18 @@ class Comment extends React.Component {
             comment: '',
             comments: []
         };
-        this.handleChangeField = this.handleChangeField.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.resetComments = this.resetComments.bind(this);
+        // this.handleChangeField = this.handleChangeField.bind(this);
+        // this.handleSubmit = this.handleSubmit.bind(this);
+        // this.resetComments = this.resetComments.bind(this);
     }
 
-    handleChangeField(key, event) {
+    handleChangeField = (key, event) => {
         this.setState({
             [key]: event.target.value,
         });
-    }
+    };
 
-    handleSubmit() {
+    handleSubmit = () => {
         const {comment} = this.state;
         let that = this;
         axios.post(GH.getRoute("add_comment_path"), {comment: comment})
@@ -34,7 +34,7 @@ class Comment extends React.Component {
     }
 
 
-    resetComments() {
+    resetComments = () => {
         let that = this;
         axios.get(GH.getRoute("list_comments_path"))
             .then(function (response) {

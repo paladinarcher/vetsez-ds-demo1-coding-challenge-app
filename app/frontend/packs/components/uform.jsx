@@ -1,5 +1,4 @@
 import React from 'react';
-import GH from '../utils/gon_helper';
 import axios from '../utils/axios'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'

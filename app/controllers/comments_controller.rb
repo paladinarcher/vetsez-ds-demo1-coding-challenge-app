@@ -10,11 +10,13 @@ class CommentsController < ApplicationController
     render json: {time: Time.now.to_s}
   end
 
+=begin
   def uncontrolled_form
     puts params
     redirect_to root_path
     # render json: {success: true}
   end
+=end
 
   def add_comment
     $log.always("Comment attempt")

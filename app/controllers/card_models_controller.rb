@@ -32,7 +32,7 @@ class CardModelsController < ApplicationController
   end
 
   def get_table_data
-    rows = CardModel.all
+    rows = CardModel.all.order(created_at: :desc).as_json
     render json: rows
   end
 
