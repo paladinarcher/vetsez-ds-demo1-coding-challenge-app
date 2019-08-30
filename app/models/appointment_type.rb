@@ -1,0 +1,2 @@
+class AppointmentType < ApplicationRecord
+end
