@@ -40,7 +40,7 @@ export default class Application extends React.Component {
         };
         return (
             <div style={{padding: '20px'}}>
-                <img src={GH.getImagePath('media/images/va-header-70.png')} alt="VA Header Image" name='welcome' onClick={this.swapCard}/>
+                <img src={GH.getImagePath('media/images/va-header-70.png')} alt="VA Header Image" name='welcome' />
                 {/*<button onClick={this.swapCard} name='schedAppt'>Schedule Appointment</button>*/}
                 <h1>Hi {gon.user}, Welcome!</h1>
                 <h3>Please use the selectors below to find a facility near you</h3>
