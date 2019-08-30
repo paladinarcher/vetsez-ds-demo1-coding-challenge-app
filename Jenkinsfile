@@ -161,13 +161,15 @@ pipeline {
                                 dir('test/selenium') {
                                     sh "echo \"Working Directory is \$(pwd)\""
                                     sh 'yarn install'
-                                    sh "mkdir reports"
+                                    sh "mkdir -p reports"
                                     sh "export PATH=$PATH:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --output-directory=reports --output-format=junit -c \"browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage,disable-gpu]\" coding-challenge-app.side"
                                 }
                             }
                             post {
                                 always {
                                     junit '**/test/selenium/reports/*.xml'
+                                    //Clean up reports directory
+                                    sh "rm -rf reports"
                                 }
                             }
                         }
