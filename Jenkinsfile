@@ -172,6 +172,15 @@ pipeline {
                             }
                         }
                     }
+                    post {
+                        always {
+                            script {
+                                node('helm') {
+                                    sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
+                                }
+                            }
+                        }
+                    }
                 }
 
                 stage("Performance Testing") {
@@ -204,15 +213,6 @@ pipeline {
                         initImage.pull()
                         initImage.push("development")
                     }
-                }
-            }
-        }
-    }
-    post {
-        always {
-            script {
-                node('helm') {
-                    sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
                 }
             }
         }
