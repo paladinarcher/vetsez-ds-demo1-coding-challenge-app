@@ -48,3 +48,7 @@ yarn-debug.log*
 # rbenv places a .ruby-version in local dir to determine which ruby version to use
 .ruby-version
 
+# Ignore downloaded npm modules for testing
+test/selenium/node_modules
+test/selenium/reports
+
