@@ -155,7 +155,7 @@ docker-compose up --build
 docker-compose up -d 
 ```
 
-###kill mny -d docker
+###kill my background docker
 ```
 docker-compose down 
 ```
