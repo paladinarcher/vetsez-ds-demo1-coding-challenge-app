@@ -5,14 +5,14 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-require './db/comments_seed'
+# require './db/comments_seed'
 
 facilities = ['New York', 'Los Angeles', 'Portland']
 for facility in facilities
   Facility.create(location: facility)
 end
 
-apointmentment_types = ['Allergist', 'Surgeon', 'Primary Care', 'Cardiologist']
-for appt in apointmentment_types
+appointmentment_types = ['Allergist', 'Surgeon', 'Primary Care', 'Cardiologist']
+for appt in appointmentment_types
   AppointmentType.create(type_of_appointment: appt)
 end

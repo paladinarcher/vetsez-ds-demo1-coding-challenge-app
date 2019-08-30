@@ -96,7 +96,7 @@ class SchedAppt extends React.Component {
     loadAppointmentTypes = (data) => {
         let ret = [<option key={0} value=''>Choose Appointment Type...</option>];
         for (const item of data) {
-            ret.push(<option key={item.id} value={item.id}>{item.type}</option>);
+            ret.push(<option key={item.id} value={item.id}>{item.type_of_appointment}</option>);
         }
         return ret;
     };
@@ -124,7 +124,7 @@ class SchedAppt extends React.Component {
         axios.get(gon.routes.get_facilities_path)
             .then(function (response) {
                 const facs = response.data;
-                self.setState({...self.state, facilities: self.loadFacilities(facs.data)});
+                self.setState({...self.state, facilities: self.loadFacilities(facs)});
             })
             .catch(function (error) {
                 if (!gon.testing) {
@@ -136,8 +136,7 @@ class SchedAppt extends React.Component {
         axios.get(gon.routes.get_appointment_types_path)
             .then(function (response) {
                 const appts = response.data;
-                console.log("appts are ", appts);
-                self.setState({...self.state, appointment_types: self.loadAppointmentTypes(appts.data)});
+                self.setState({...self.state, appointment_types: self.loadAppointmentTypes(appts)});
             })
             .catch(function (error) {
                 if (!gon.testing) {
