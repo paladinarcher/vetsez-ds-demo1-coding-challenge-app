@@ -44,6 +44,8 @@ export default class Application extends React.Component {
                 <button onClick={this.swapCard} name='schedAppt'>Schedule Appointment</button>
                 <div style={{float: 'right'}}>user: {this.props.username}</div>
                 <h1>Hi {this.props.username}, Welcome!</h1>
+                <h3>Please use the selectors below to find a facility near you</h3>
+                <h3>and select your preferred appointment type regarding your visit</h3>
                 {/*<button onClick={this.swapCard} name='uform'>Uncontrolled Form</button>*/}
                 <br/>
                 {cards[this.state.card]}
