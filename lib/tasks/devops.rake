@@ -88,6 +88,13 @@ namespace :devops do
     Rake::Task['db:seed'].invoke() #rake db:migrate RAILS_ENV=test
   end
 
+  # seed the menu options
+  desc 'hook into docker flow for db setup'
+  task :db_setup_for_docker => :environment do |task|
+    Rake::Task['db:migrate'].invoke()
+    Rake::Task['db:seed'].invoke()
+  end
+
   desc 'Build war file'
   task :build_war do |task|
     p task.comment

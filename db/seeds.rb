@@ -7,12 +7,18 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 # require './db/comments_seed'
 
-facilities = ['New York', 'Los Angeles', 'Portland']
-for facility in facilities
-  Facility.create(location: facility)
-end
+begin
+  Facility.delete_all
+  facilities = ['New York', 'Los Angeles', 'Portland']
+  for facility in facilities
+    Facility.create!(location: facility)
+  end
 
-appointmentment_types = ['Allergist', 'Surgeon', 'Primary Care', 'Cardiologist']
-for appt in appointmentment_types
-  AppointmentType.create(type_of_appointment: appt)
+  AppointmentType.delete_all
+  appointment_types = ['Allergist', 'Surgeon', 'Primary Care', 'Cardiologist']
+  for appt in appointment_types
+    AppointmentType.create!(type_of_appointment: appt)
+  end
+rescue => ex
+  $log.error(LEX("Seeding of appointment types and facilities failed", ex))
 end
