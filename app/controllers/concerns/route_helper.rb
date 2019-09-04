@@ -3,13 +3,7 @@ module RouteHelper
   include ActionView::Helpers::AssetUrlHelper
 
   IMAGE_EXTENSIONS = %w(.jpeg .jpg .png .gif).freeze
-
-  if WINDOWS
-    IMAGE_ROOT_PATH = 'media/images/'
-  else
-    # For Linux/Unix
-    IMAGE_ROOT_PATH = 'media/packs/images/'
-  end
+  IMAGE_ROOT_PATH = 'media/packs/images/'
 
   def setup_routes
     original_verbosity = $VERBOSE
