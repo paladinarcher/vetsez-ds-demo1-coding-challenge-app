@@ -9,7 +9,7 @@ environment.plugins.append('Manifest', new ManifestPlugin({
     publicPath: config.publicPath,
     writeToFileEmit: true,
     filter: f => {
-        f.name = f.name.replace(/media\/images\//g, 'media/packs/images/')
+        f.name = f.name.replace(/media\/images\//g, 'media/packs/images/') //Windows builds leave out 'packs'
       //  f.path = f.path.replace(/\\/g, '/')
         return f
     }
