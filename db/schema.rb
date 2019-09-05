@@ -21,19 +21,6 @@ ActiveRecord::Schema.define(version: 2019_09_05_152549) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "articles", force: :cascade do |t|
-    t.string "title"
-    t.text "body"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "comments", force: :cascade do |t|
-    t.string "comment"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "doctors", force: :cascade do |t|
     t.string "name"
     t.bigint "appointment_type_id"
