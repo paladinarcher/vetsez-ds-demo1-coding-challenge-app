@@ -11,9 +11,35 @@ class SchedAppt extends React.Component {
         this.state = {
             facilities: [],
             appointment_types: [],
+            doctors: [],
             validated: false,
             tableData: [],
+            formdata: {}
         };
+    }
+
+    handleInputChange =(event) => {
+        let s = this.state;
+        s.formdata[event.target.id] = event.target.value;
+        this.setState(s);
+    }
+
+    appointmentChange = (event) => {
+        const facility_id = this.state.formdata.facility_id;
+        const apptType = event.target.value;
+
+        if (facility_id && facility_id.length > 0 && apptType.length > 0) {
+            this.loadDoctors(facility_id, apptType);
+        }
+    }
+
+    facilityChange = (event) => {
+        const apptType = this.state.formdata.appointment_type_id;
+        const facility_id = event.target.value;
+
+        if (apptType && apptType.length > 0 && facility_id.length > 0) {
+            this.loadDoctors(facility_id, apptType);
+        }
     }
 
     post_form = () => {
@@ -47,15 +73,15 @@ class SchedAppt extends React.Component {
 
     render() {
         return (
-            <div style={{padding: '3px'}}>
+            <div style={{padding: '3px'}} onChange={this.handleInputChange}>
                 <Card>
                     <Card.Body>
                         <Card.Title>Schedule Appointment</Card.Title>
                         <Form id="myForm" noValidate validated={this.state.validated}>
                             <Form.Row>
-                                <Form.Group as={Col} controlId="selectFacility">
+                                <Form.Group as={Col} controlId="facility_id">
                                     <Form.Label id="FacilityLabel">Select Facility</Form.Label>
-                                    <Form.Control as="select" name='selection' required>
+                                    <Form.Control as="select" name='selection' required onChange={this.facilityChange}>
                                         {this.state.facilities}
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
@@ -63,16 +89,36 @@ class SchedAppt extends React.Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Form.Row>
-                                <Form.Row>
-                                <Form.Group as={Col} controlId="selectApptType">
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="appointment_type_id">
                                     <Form.Label id="AppointmentLabel">Appointment Type</Form.Label>
-                                    <Form.Control as="select" name='selection' required>
+                                    <Form.Control as="select" name='selection' required onChange={this.appointmentChange}>
                                         {this.state.appointment_types}
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         Appointment Type is required.
                                     </Form.Control.Feedback>
                                 </Form.Group>
+                            </Form.Row>
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="doctor">
+                                    <Form.Label id="DoctorLabel">Doctor</Form.Label>
+                                    <Form.Control as="select" name='selection' required>
+                                        {this.state.doctors}
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        Select a doctor.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Form.Row>
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="reason">
+                                    <Form.Label id="ReasonLabel">Reason for Appointment</Form.Label>
+                                    <Form.Control as="textarea" rows="3" name='reason' required />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter the reason for the appointment.
+                                    </Form.Control.Feedback>
+                               </Form.Group>
                             </Form.Row>
                             <Button variant="primary" onClick={this.post_form}>
                                 Submit
@@ -81,6 +127,7 @@ class SchedAppt extends React.Component {
                     </Card.Body>
                 </Card>
                 <br/>
+                {/*<p>{JSON.stringify(this.state)}</p>*/}
             </div>
         )
     }
@@ -100,23 +147,30 @@ class SchedAppt extends React.Component {
         }
         return ret;
     };
-/*
 
-    loadFacilities = (data) => {
-        const facilities = [];
-        facilities.push({id: 100, name: 'Atlanta'});
-        facilities.push({id: 100, name: 'Atlanta'});
-        facilities.push({id: 101, name: 'New York'});
-        facilities.push({id: 102, name: 'Phoenix'});
-
-        let ret = [<option key={0} value=''>Choose a Medical Facility...</option>];
-        for (const item of facilities) {
+    loadDoctorSelections = (data) => {
+        let ret = [<option key={0} value=''>Choose a Doctor...</option>];
+        for (const item of data) {
             ret.push(<option key={item.id} value={item.id}>{item.name}</option>);
         }
-
-        // this.setState({...self.state, facilities: facilities});
+        return ret;
     };
-*/
+
+    loadDoctors = (facility, apptType) => {
+        const data = {facility_id: facility, appointment_type_id: apptType};
+        const self = this;
+
+        axios.get(gon.routes.get_doctors_path, {params: data})
+            .then(function (response) {
+                self.setState({...self.state, doctors: self.loadDoctorSelections(response.data)});
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert("Error Saving Concepts. Exception is: " + error);
+            });
+
+
+    };
 
     componentDidMount() {
         // retrieve the drop down items

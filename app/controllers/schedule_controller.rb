@@ -15,21 +15,9 @@ class ScheduleController < ApplicationController
 
   def get_doctors
     facility_id = params[:facility_id]
-    appointment_type_id = params[:type_of_appointment]
+    appointment_type_id = params[:appointment_type_id]
 
-    appt_type = AppointmentType.find(appointment_type_id)
-    facility = Facility.find(facility_id)
-
-    list = []
-    facility.get_doctors.each do |doc|
-      if doc.get_appt_type == appt_type
-        doc_hash = {}
-        doc_hash[:id] = doc.id
-        doc_hash[:name] = doc.name
-        list << doc_hash
-      end
-    end
-
+    list = Doctor.where(appointment_type_id: appointment_type_id, facility_id: facility_id).all.to_a
     $log.info{"Get doctors is returning #{list.inspect}"}
 
     render json: list

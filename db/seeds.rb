@@ -37,12 +37,37 @@ doc_a.appointment_type = ALLERGIST
 doc_a.facility = NEW_YORK
 doc_a.save!
 
+doc_a = Doctor.new(name: 'Dr. Suess')
+doc_a.appointment_type = ALLERGIST
+doc_a.facility = NEW_YORK
+doc_a.save!
+
+doc_a = Doctor.new(name: 'Dr. Oz')
+doc_a.appointment_type = ALLERGIST
+doc_a.facility = NEW_YORK
+doc_a.save!
+
 doc_b = Doctor.new(name: 'Dr. B')
 doc_b.appointment_type = SURGEON
 doc_b.facility = NEW_YORK
 doc_b.save!
 
+doc_b = Doctor.new(name: 'Dr. who')
+doc_b.appointment_type = SURGEON
+doc_b.facility = NEW_YORK
+doc_b.save!
+
+doc_b = Doctor.new(name: 'Dr. McCoy')
+doc_b.appointment_type = SURGEON
+doc_b.facility = NEW_YORK
+doc_b.save!
+
 doc_c = Doctor.new(name: 'Dr. C')
+doc_c.appointment_type = PRIMARY_CARE
+doc_c.facility = NEW_YORK
+doc_c.save!
+
+doc_c = Doctor.new(name: 'Dr. Strange')
 doc_c.appointment_type = PRIMARY_CARE
 doc_c.facility = NEW_YORK
 doc_c.save!
