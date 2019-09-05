@@ -11,7 +11,7 @@ class SchedAppt extends React.Component {
         this.state = {
             facilities: [],
             appointment_types: [],
-            doctors: [],
+            doctors: this.loadDoctorSelections([]),
             validated: false,
             tableData: [],
             formdata: {}
