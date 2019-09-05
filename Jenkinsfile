@@ -162,8 +162,7 @@ pipeline {
                                     sh "echo \"Working Directory is \$(pwd)\""
                                     sh 'yarn install'
                                     sh "mkdir -p reports"
-                                    sh "google-chrome --headless --no-sandbox --disable-gpu"
-                                    sh "export PATH=\$PATH:/usr/bin:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --output-directory=reports --output-format=junit -c \"browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage,disable-gpu]\" coding-challenge-app.side"
+                                    sh "export PATH=\$PATH:/usr/bin:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --output-directory=reports --output-format=junit -c \"browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage,disable-gpu,remote-debugging-port=0]\" coding-challenge-app.side"
                                 }
                             }
                             post {
