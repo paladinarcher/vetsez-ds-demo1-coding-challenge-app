@@ -167,7 +167,7 @@ pipeline {
                                     sh "echo \"Working Directory is \$(pwd)\""
                                     sh 'yarn install'
                                     sh "mkdir -p reports"
-                                    sh "export PATH=\$PATH:/usr/bin:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --server http://localhost:4444/wd/hub --output-directory=reports --output-format=junit -c \"browserName=chrome\" coding-challenge-app.side"
+                                    sh "export PATH=\$PATH:/usr/bin:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --server http://localhost:4444/wd/hub --output-directory=reports --output-format=junit -c \"browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage]\" coding-challenge-app.side"
                                 }
                             }
                             post {
