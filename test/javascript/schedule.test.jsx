@@ -30,3 +30,19 @@ test('appointment type label exists and text', () => {
     expect(wrapper.find('#AppointmentLabel').exists()).toBe(true);
     expect(wrapper.find('#AppointmentLabel').text()).toBe('Appointment Type');
 });
+
+test('doctor type label exists and text', () => {
+    console.log("in test appointment type label...");
+    const wrapper = shallow(<SchedAppt />);
+    //console.log("wrapper", wrapper.debug());
+    expect(wrapper.find('#DoctorLabel').exists()).toBe(true);
+    expect(wrapper.find('#DoctorLabel').text()).toBe('Doctor');
+});
+
+test('reason for appointment type label exists and text', () => {
+    console.log("in test appointment type label...");
+    const wrapper = shallow(<SchedAppt />);
+    //console.log("wrapper", wrapper.debug());
+    expect(wrapper.find('#ReasonLabel').exists()).toBe(true);
+    expect(wrapper.find('#ReasonLabel').text()).toBe('Reason for Appointment');
+});
