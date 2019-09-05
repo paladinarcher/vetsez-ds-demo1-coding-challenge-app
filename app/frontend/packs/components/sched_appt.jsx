@@ -114,7 +114,7 @@ class SchedAppt extends React.Component {
                             <Form.Row>
                                 <Form.Group as={Col} controlId="reason">
                                     <Form.Label id="ReasonLabel">Reason for Appointment</Form.Label>
-                                    <Form.Control as="textarea" rows="3" name='reason' required />
+                                    <Form.Control as="textarea" rows="3" maxLength="800" name='reason' required />
                                     <Form.Control.Feedback type="invalid">
                                         Please enter the reason for the appointment.
                                     </Form.Control.Feedback>
