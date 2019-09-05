@@ -4,6 +4,9 @@ import axios from './utils/axios'
 import GH from './utils/gon_helper';
 import Comment from "./components/comment";
 import SchedAppt from "./components/sched_appt";
+import {Header, Main, Footer} from "./components/layout";
+
+"./components/layout";
 // import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 // fix for IE11 allowing us to use axios/fetch for ajax calls
@@ -40,13 +43,11 @@ export default class Application extends React.Component {
         };
         return (
             <div style={{padding: '20px'}}>
-                <img src={GH.getImagePath('va-header-70.png')} alt="VA Header Image" name='welcome' />
-                {/*<button onClick={this.swapCard} name='schedAppt'>Schedule Appointment</button>*/}
-                <h1>Hi {gon.user}, Welcome!</h1>
-                <h3>Please use the selectors below to find a facility near you</h3>
-                <h3>and select your preferred appointment type regarding your visit</h3>
-                <br/>
-                {cards[this.state.card]}
+                <Header/>
+                <Main>
+                    {cards[this.state.card]}
+                </Main>
+                <Footer/>
             </div>
         );
     }

@@ -47,8 +47,8 @@ class SchedAppt extends React.Component {
 
     render() {
         return (
-            <div style={{padding: '15px'}}>
-                <Card style={{width: '80%'}}>
+            <div style={{padding: '3px'}}>
+                <Card>
                     <Card.Body>
                         <Card.Title>Schedule Appointment</Card.Title>
                         <Form id="myForm" noValidate validated={this.state.validated}>
