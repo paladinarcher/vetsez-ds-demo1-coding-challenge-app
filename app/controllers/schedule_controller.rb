@@ -12,5 +12,27 @@ class ScheduleController < ApplicationController
     $log.info{"Get appointment types is returning #{appointment_types.inspect}"}
     render json: appointment_types
   end
+
+  def get_doctors
+    facility_id = params[:facility_id]
+    appointment_type_id = params[:type_of_appointment]
+
+    appt_type = AppointmentType.find(appointment_type_id)
+    facility = Facility.find(facility_id)
+
+    list = []
+    facility.get_doctors.each do |doc|
+      if doc.get_appt_type == appt_type
+        doc_hash = {}
+        doc_hash[:id] = doc.id
+        doc_hash[:name] = doc.name
+        list << doc_hash
+      end
+    end
+
+    $log.info{"Get doctors is returning #{list.inspect}"}
+
+    render json: list
+  end
   
 end
