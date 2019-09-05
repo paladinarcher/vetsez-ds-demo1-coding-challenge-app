@@ -29,7 +29,7 @@ namespace :devops do
   default_war = "#{default_name}.war"
   context = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
   $maven_version = env('PROJECT_VERSION', $UNVERSIONED)
-  ENV['RAILS_RELATIVE_URL_ROOT'] = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
+  #ENV['RAILS_RELATIVE_URL_ROOT'] = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
   ENV['RAILS_ENV'] = version_to_rails_mode(ENV['PROJECT_VERSION'])
   ENV['NODE_ENV'] = 'production'
 

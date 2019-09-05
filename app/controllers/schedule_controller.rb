@@ -12,5 +12,15 @@ class ScheduleController < ApplicationController
     $log.info{"Get appointment types is returning #{appointment_types.inspect}"}
     render json: appointment_types
   end
+
+  def get_doctors
+    facility_id = params[:facility_id]
+    appointment_type_id = params[:appointment_type_id]
+
+    list = Doctor.where(appointment_type_id: appointment_type_id, facility_id: facility_id).all.to_a
+    $log.info{"Get doctors is returning #{list.inspect}"}
+
+    render json: list
+  end
   
 end

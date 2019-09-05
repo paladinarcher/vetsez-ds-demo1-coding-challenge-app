@@ -7369,6 +7369,14 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-bootstrap-time-picker@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-time-picker/-/react-bootstrap-time-picker-2.0.1.tgz#dbb343558478b4e35d82b464862a0748621852b7"
+  integrity sha512-hbZyoLWav9P6UPTQPQRoC7rQT5UYb0a4Cs/8Wiszs1Rda/cH3Ar1B2uM78GKJjXMK0VYGR9XKyza2BCnLJ+ZSA==
+  dependencies:
+    prop-types "^15.7.2"
+    time-number "^1.1.0"
+
 react-bootstrap@^1.0.0-beta.12:
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-1.0.0-beta.12.tgz#49fb83e288b1b5fa86e4c51e145630ec8b8598bb"
@@ -8555,6 +8563,11 @@ thunky@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.0.3.tgz#f5df732453407b09191dae73e2a8cc73f381a826"
   integrity sha512-YwT8pjmNcAXBZqrubu22P4FYsh2D4dxRmnWBOL8Jk8bUcRUtc5326kx32tuTmFDAZtLOGEVNl8POAR8j896Iow==
+
+time-number@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/time-number/-/time-number-1.1.0.tgz#93a00193a2e4f841bfba87513987f4dbe3c09a4e"
+  integrity sha1-k6ABk6Lk+EG/uodROYf02+PAmk4=
 
 timers-browserify@^2.0.4:
   version "2.0.11"

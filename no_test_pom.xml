@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <!-- in order to get your jars run this -->
+  <!-- mvn initialize -->
+
+
+  <groupId>com.vetsez.dsbpa.gui.web.rails</groupId>
+  <artifactId>dsbpa</artifactId>
+  <version>1.00-SNAPSHOT</version><!--THIS IS THE ONLY PLACE SNAPSHOT CAN EXIST BEFORE MAKING A RELEASE!!-->
+  <packaging>pom</packaging>
+
+  <name>digital services bpa</name>
+
+  <description>
+    This project is the Ruby on Rails web GUI for Digital Services.
+  </description>
+
+  <properties>
+    <!--Open up the assembly.xml file in rails common if new directories are added. --><!-- railsMode is automatically set to 'test' or 'production' - 'test' if the version number ends with '-SNAPSHOT'
+		or 'production' otherwise.	See ant execution below-->
+  </properties>
+
+  <organization>
+    <name>VetsEZ (Veterans EZ Info, Inc.)</name>
+    <url>http://vetsez.company/</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <properties>
+        <info>For a listing of developers, clone the project and execute 'git shortlog -sn'</info>
+      </properties>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/meetveracity/coding-challenge-app.git</url>
+  </scm>
+
+  <repositories>
+    <repository>
+      <id>rubygems-proxy</id>
+      <name>Rubygems Proxy</name>
+      <url>http://rubygems-proxy.torquebox.org/releases</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jruby</groupId>
+      <artifactId>jruby-complete</artifactId>
+      <version>9.2.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>rubygems</groupId>
+      <artifactId>rake</artifactId>
+      <version>12.3.2</version>
+      <type>gem</type>
+    </dependency>
+    <dependency>
+      <groupId>rubygems</groupId>
+      <artifactId>bundler</artifactId>
+      <version>2.0.1</version>
+      <type>gem</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Stomp any existing jar files in lib/jars to make sure an old version hanging around doesn't stomp us...-->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}/lib/jars/</directory>
+              <includes>
+                <include>**/*</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <!-- Place dependent jars! -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>place-jars</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <excludeArtifactIds>
+                jruby-complete,rake,bundler,junit
+              </excludeArtifactIds>
+              <overWriteReleases>true</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <stripVersion>true</stripVersion>
+              <outputDirectory>${basedir}/lib/jars/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.torquebox.mojo</groupId>
+        <artifactId>jruby9-exec-maven-plugin</artifactId>
+        <version>0.3.1</version>
+        <executions>
+          <execution>
+            <id>install bundler</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <command>gem</command>
+              <args>install bundler</args>
+            </configuration>
+          </execution>
+          <execution>
+            <id>bundle install</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Djava.awt.headless=true</jrubyJvmArgs>
+              <command>bundle</command>
+              <args>install</args>
+            </configuration>
+          </execution><execution>
+            <id>build war</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Djava.awt.headless=true</jrubyJvmArgs>
+              <execArgs>PROJECT_VERSION=${project.version} </execArgs>
+              <command>rake</command>
+              <args>devops:build_war</args> <!--//Used only during a build on windows. This must be the last argument.-->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Attach the war -->
+      <!--
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-artifacts</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attach-artifact</goal>
+            </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>${project.build.directory}/dsbpa.war</file>
+                  <type>war</type>
+                </artifact>
+              </artifacts>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      -->
+
+      <plugin>
+        <groupId>external.atlassian.jgitflow</groupId>
+        <artifactId>jgitflow-maven-plugin</artifactId>
+        <version>1.0-m4.3</version>
+        <dependencies>
+          <dependency>
+            <groupId>xerces</groupId>	<!-- workaround jgitflow https://ecosystem.atlassian.net/browse/MJF-251 -->
+            <artifactId>xercesImpl</artifactId>
+            <version>2.11.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+</project>
