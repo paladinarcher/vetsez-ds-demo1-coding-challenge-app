@@ -129,6 +129,12 @@ To build a war:
 mvn clean package
 ```
 
+To build a war without running any tests (useful when you want to avoid a dependency on a database).
+
+```bazaar
+ mvn -f no_test_pom.xml clean package
+```
+
 Look in the target directory when done for dsbpa-1.00-SNAPSHOT.war.
 When deploying to Tomcat rename the war file to 'dsbpa.war' so the initial context is only 'dsbpa'
 
