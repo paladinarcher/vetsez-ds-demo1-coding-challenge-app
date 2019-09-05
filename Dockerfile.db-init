@@ -12,4 +12,4 @@ COPY . .
 #
 RUN bundle install
 
-CMD ["rake", "db:migrate"]
+CMD ["rake", "devops:db_setup_for_docker"]
