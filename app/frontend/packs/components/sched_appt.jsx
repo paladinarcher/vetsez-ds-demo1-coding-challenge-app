@@ -11,7 +11,7 @@ class SchedAppt extends React.Component {
         this.state = {
             facilities: [],
             appointment_types: [],
-            doctors: [],
+            doctors: this.loadDoctorSelections([]),
             validated: false,
             tableData: [],
             formdata: {}
@@ -24,21 +24,14 @@ class SchedAppt extends React.Component {
         this.setState(s);
     }
 
-    appointmentChange = (event) => {
-        const facility_id = this.state.formdata.facility_id;
-        const apptType = event.target.value;
+    checkLoadDoctorsOnchange = (event) => {
+        const f = event.target.id === 'facility_id' ? event.target.value : this.state.formdata.facility_id;
+        const a = event.target.id === 'appointment_type_id' ? event.target.value : this.state.formdata.appointment_type_id;
 
-        if (facility_id && facility_id.length > 0 && apptType.length > 0) {
-            this.loadDoctors(facility_id, apptType);
-        }
-    }
-
-    facilityChange = (event) => {
-        const apptType = this.state.formdata.appointment_type_id;
-        const facility_id = event.target.value;
-
-        if (apptType && apptType.length > 0 && facility_id.length > 0) {
-            this.loadDoctors(facility_id, apptType);
+        if (f && f.length > 0 && a && a.length > 0) {
+            this.loadDoctors(f, a);
+        } else {
+            this.loadDoctors('not', 'yet');
         }
     }
 
@@ -81,7 +74,7 @@ class SchedAppt extends React.Component {
                             <Form.Row>
                                 <Form.Group as={Col} controlId="facility_id">
                                     <Form.Label id="FacilityLabel">Select Facility</Form.Label>
-                                    <Form.Control as="select" name='selection' required onChange={this.facilityChange}>
+                                    <Form.Control as="select" name='selection' required onChange={this.checkLoadDoctorsOnchange}>
                                         {this.state.facilities}
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
@@ -92,7 +85,7 @@ class SchedAppt extends React.Component {
                             <Form.Row>
                                 <Form.Group as={Col} controlId="appointment_type_id">
                                     <Form.Label id="AppointmentLabel">Appointment Type</Form.Label>
-                                    <Form.Control as="select" name='selection' required onChange={this.appointmentChange}>
+                                    <Form.Control as="select" name='selection' required onChange={this.checkLoadDoctorsOnchange}>
                                         {this.state.appointment_types}
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
@@ -127,7 +120,7 @@ class SchedAppt extends React.Component {
                     </Card.Body>
                 </Card>
                 <br/>
-                {/*<p>{JSON.stringify(this.state)}</p>*/}
+                {/*<p>{JSON.stringify(this.state.doctors)}</p>*/}
             </div>
         )
     }
@@ -162,6 +155,7 @@ class SchedAppt extends React.Component {
 
         axios.get(gon.routes.get_doctors_path, {params: data})
             .then(function (response) {
+                console.log("response.data", response.data);
                 self.setState({...self.state, doctors: self.loadDoctorSelections(response.data)});
             })
             .catch(function (error) {
