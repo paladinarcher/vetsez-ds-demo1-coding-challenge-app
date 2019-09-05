@@ -183,7 +183,7 @@ pipeline {
                         always {
                             script {
                                 node('helm') {
-                                    sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
+                                    //sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
                                 }
                             }
                         }
