@@ -217,7 +217,7 @@ pipeline {
                     
                     //Print out the preview instance URL
                     def previewUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].status.loadBalancer.ingress[0].hostname}\"")
-                    echo "Preview instance is available at ${previewUrl}"
+                    echo "Preview instance is available at ${previewUrl}/dsbpa"
                 }
             }
             post {
