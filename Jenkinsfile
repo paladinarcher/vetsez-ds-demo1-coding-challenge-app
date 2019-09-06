@@ -148,6 +148,8 @@ pipeline {
                                     functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
 
                                     echo "Service is available at ${functionalTestUrl}"
+                                    //Force the page to load at least once before we start our testing.
+                                    sh "wget -O ${functionalTestUrl} > /dev/null"
                                 }
                             }
                             post {
