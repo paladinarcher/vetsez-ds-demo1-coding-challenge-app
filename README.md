@@ -178,23 +178,24 @@ docker-compose logs dsbpa
 
 # Running Selenium Tests
 ###Prerequisite 
-```
+
 You must install the Selenium side runner and add it to your PATH. Make sure you have Chrome installed on your machine.
-
+```
 yarn global add selenium-side-runner
-
+```
 Add the chromedriver.exe to your Windows PATH. This file can be downloaded from test/selenium
 
-###Running the test in the command line 
-```
+'''Running the test in the command line '''
+
 To run a suite of tests in the command line, open up a new Bash instance and run the following:
 
 selenium-side-runner -c "browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage]" ./test/selenium/coding-challenge-app.side
 
 You may create your own test cases by using the Selenium IDE Chrome extension and exporting the .side file. The coding-challenge-app.side is the default test suite that is used in the Jenkins build.
 
-###Running a local build to test new changes
+'''Running a local build to test new changes'''
 ```
 docker-compose pull
 mvn -f no_test_pom.xml clean package
 docker-compose up
+```
