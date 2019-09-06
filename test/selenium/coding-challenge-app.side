@@ -316,9 +316,23 @@
       "id": "eb339c6c-8332-4a65-8270-f3bbd85699cf",
       "comment": "",
       "command": "open",
-      "target": "http://localhost:8080/dsbpa/",
+      "target": "/dsbpa/",
       "targets": [],
       "value": ""
+    }, {
+      "id": "d9e108a9-c3c1-4e67-9b9e-d16fc98ccca9",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "id=facility_id",
+      "targets": [
+        ["id=facility_id", "id"],
+        ["name=selection", "name"],
+        ["css=#facility_id", "css:finder"],
+        ["xpath=//select[@id='facility_id']", "xpath:attributes"],
+        ["xpath=//form[@id='myForm']/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": "30000"
     }, {
       "id": "b5a9c480-7797-4617-8052-9bf4fa60169f",
       "comment": "",
@@ -427,9 +441,16 @@
       "id": "88af0a5f-ad50-4422-b442-670c03633b99",
       "comment": "",
       "command": "open",
-      "target": "http://localhost:8080/dsbpa/",
+      "target": "/dsbpa/",
       "targets": [],
       "value": ""
+    }, {
+      "id": "eadefc1b-3138-4ee1-868e-c76d5153a8be",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "id=facility_id",
+      "targets": [],
+      "value": "30000"
     }, {
       "id": "66cc8079-00a4-4182-bbee-543e686b4a24",
       "comment": "",
@@ -499,9 +520,16 @@
       "id": "c80aaf9b-05d6-476d-b8ef-e172197985a1",
       "comment": "",
       "command": "open",
-      "target": "http://localhost:8080/dsbpa/",
+      "target": "/dsbpa/",
       "targets": [],
       "value": ""
+    }, {
+      "id": "f01b067d-8bc9-4501-9d11-bd478fe3ac4e",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=facility_id",
+      "targets": [],
+      "value": "30000"
     }, {
       "id": "0a4ec27e-084d-411a-b8a1-2517bf25afaf",
       "comment": "",
@@ -571,9 +599,16 @@
       "id": "2abe772d-b23b-4b77-9889-c881fa49e6a9",
       "comment": "",
       "command": "open",
-      "target": "http://localhost:8080/dsbpa/",
+      "target": "/dsbpa/",
       "targets": [],
       "value": ""
+    }, {
+      "id": "8bab812b-2ea5-4caf-bee0-af7f95e30ee9",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "id=facility_id",
+      "targets": [],
+      "value": "30000"
     }, {
       "id": "37360ec5-dc65-4d0c-b69b-257cd5956bf5",
       "comment": "",
