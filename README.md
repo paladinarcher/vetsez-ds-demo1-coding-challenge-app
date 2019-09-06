@@ -201,3 +201,18 @@ docker-compose pull
 mvn -f no_test_pom.xml clean package
 docker-compose up
 ```
+#### Additional Notes
+
+To run the scripts on a different URL (such as a production environment, you may pass it in as a parameter:
+
+```
+selenium-side-runner --base-url https://localhost
+```
+
+The official build process exports the test results in a report format. To produce a report locally, pass in the output directory and the format you want the report in:
+
+```
+selenium-side-runner --output-directory=results --output-format=jest
+```
+
+Additional information on the side runner can be found at https://docs.seleniumhq.org/selenium-ide/docs/en/introduction/command-line-runner/
