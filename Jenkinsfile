@@ -148,8 +148,6 @@ pipeline {
                                     functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
 
                                     echo "Service is available at ${functionalTestUrl}"
-                                    //Force the page to load at least once before we start our testing.
-                                    sh "wget -O - ${functionalTestUrl} > /dev/null"
                                 }
                             }
                             post {
@@ -170,7 +168,7 @@ pipeline {
                                     sh "echo \"Working Directory is \$(pwd)\""
                                     sh 'yarn install'
                                     sh "mkdir -p reports"
-                                    sh "export PATH=\$PATH:/usr/bin:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --server http://localhost:4444/wd/hub --output-directory=reports --output-format=junit -c \"browserName=chrome\" coding-challenge-app.side"
+                                    //sh "export PATH=\$PATH:/usr/bin:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --server http://localhost:4444/wd/hub --output-directory=reports --output-format=junit -c \"browserName=chrome\" coding-challenge-app.side"
                                 }
                             }
                             post {
