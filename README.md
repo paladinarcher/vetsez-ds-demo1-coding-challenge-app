@@ -189,7 +189,9 @@ Add the chromedriver.exe to your Windows PATH. This file can be downloaded from 
 
 To run a suite of tests in the command line, open up a new Bash instance and run the following:
 
+```
 selenium-side-runner -c "browserName=chrome chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage]" ./test/selenium/coding-challenge-app.side
+```
 
 You may create your own test cases by using the Selenium IDE Chrome extension and exporting the .side file. The coding-challenge-app.side is the default test suite that is used in the Jenkins build.
 
