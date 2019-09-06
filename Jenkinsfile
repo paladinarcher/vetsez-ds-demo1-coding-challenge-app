@@ -168,15 +168,12 @@ pipeline {
                                     sh "echo \"Working Directory is \$(pwd)\""
                                     sh 'yarn install'
                                     sh "mkdir -p reports"
-                                    sh "wget ${functionalTestUrl}"
                                     sh "export PATH=\$PATH:/usr/bin:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --server http://localhost:4444/wd/hub --output-directory=reports --output-format=junit -c \"browserName=chrome\" coding-challenge-app.side"
                                 }
                             }
                             post {
                                 always {
                                     junit '**/test/selenium/reports/*.xml'
-                                    //Clean up reports directory
-                                    sh "rm -rf test/selenium/reports"
                                 }
                             }
                         }
@@ -185,7 +182,7 @@ pipeline {
                         always {
                             script {
                                 node('helm') {
-                                    //sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
+                                    sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
                                 }
                             }
                         }
