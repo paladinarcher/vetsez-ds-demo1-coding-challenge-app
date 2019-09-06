@@ -149,6 +149,7 @@ pipeline {
 
                                     echo "Service is available at ${functionalTestUrl}"
                                     sh "kubectl --namespace development get pods"
+                                    sh "kubectl --namespace development get svc"
                                 }
                             }
                             post {
@@ -186,7 +187,7 @@ pipeline {
                         always {
                             script {
                                 node('helm') {
-                                    sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
+                                    //sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
                                 }
                             }
                         }
