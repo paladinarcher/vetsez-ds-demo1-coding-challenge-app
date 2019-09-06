@@ -220,6 +220,12 @@ pipeline {
                     echo "Preview instance is available at ${previewUrl}"
                 }
             }
+            post {
+                //Clean up our helm checkout
+                always {
+                    sh 'rm -rf helmChart'
+                }
+            }
         }
         
         

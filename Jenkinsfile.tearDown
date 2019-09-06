@@ -1,0 +1,32 @@
+/**
+This pipeline requires the Multi Branch Teardown plugin, https://plugins.jenkins.io/multibranch-job-tear-down.
+This job will be started by Jenkins when a branch is deleted. The repository URL and branch name are provided
+as parameters.
+*/
+
+pipeline {
+        agent {
+            node {
+                label 'helm'
+            }
+        }
+        parameters {
+            string(name: 'git_url', description: 'Url of the repository whose branch is being deleted.')
+            string(name: 'branch_name', description: 'The name of the branch being deleted.')
+        }
+        stages {
+            stage('Remove Review Instance') {
+                steps {
+                    /*
+                    Delete the Helm Release for that branch
+                    */
+                    script {
+                        def repo = deployment.repositoryLabel(params.git_url)
+                        def branchName = params.branch_name.toLowerCase()
+
+                        sh "helm delete --purge ${branchName}"
+                    }
+                }
+            }
+        }
+    }
