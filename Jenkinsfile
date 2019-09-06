@@ -149,7 +149,7 @@ pipeline {
 
                                     echo "Service is available at ${functionalTestUrl}"
                                     //Force the page to load at least once before we start our testing.
-                                    sh "wget -O ${functionalTestUrl} > /dev/null"
+                                    sh "wget -O - ${functionalTestUrl} > /dev/null"
                                 }
                             }
                             post {
