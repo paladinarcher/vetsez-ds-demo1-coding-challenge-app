@@ -21,7 +21,6 @@ pipeline {
                     Delete the Helm Release for that branch
                     */
                     script {
-                        def repo = deployment.repositoryLabel(params.git_url)
                         def branchName = params.branch_name.toLowerCase()
 
                         sh "helm delete --purge ${branchName}"
