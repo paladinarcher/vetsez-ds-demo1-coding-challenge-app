@@ -174,8 +174,10 @@ pipeline {
                                         }
                                     } catch (err) {
                                         if (changeRequest()) {
+                                            echo "There were failed test, marking as UNSTABLE"
                                             currentBuild.result = 'UNSTABLE'
                                         } else {
+                                            echo "There were failed test, marking as FAILED"
                                             throw err
                                         }
                                     }
