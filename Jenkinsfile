@@ -173,11 +173,9 @@ pipeline {
                                             sh "export PATH=\$PATH:/usr/bin:\$(pwd)/node_modules/.bin:\$(pwd)/node_modules/chromedriver/lib/chromedriver; selenium-side-runner --base-url ${functionalTestUrl} --server http://localhost:4444/wd/hub --output-directory=reports --output-format=junit -c \"browserName=chrome\" coding-challenge-app.side"
                                         }
                                     } catch (err) {
-                                        if (changeRequest()) {
-                                            echo "There were failed test, marking as UNSTABLE"
+                                        if (env.BRANCH_NAME != 'master') {
                                             currentBuild.result = 'UNSTABLE'
                                         } else {
-                                            echo "There were failed test, marking as FAILED"
                                             throw err
                                         }
                                     }
