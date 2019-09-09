@@ -175,6 +175,8 @@ pipeline {
                                     } catch (err) {
                                         if (changeRequest()) {
                                             currentBuild.result = 'UNSTABLE'
+                                        } else {
+                                            throw err
                                         }
                                     }
                                 }
