@@ -42,9 +42,9 @@ set DATABASE_USER=dsbpa
 set DATABASE_PASSWORD=dsbpa
 ```
 
-5.  At a command prompt, run the following commands while in the gem_home directory:  
+5.  At a command prompt, run the following commands while in Rails base directory:  
 ```
-..\<repo directory>\options
+options
 gem install bundler
 bundle install
 yarn install
@@ -69,6 +69,7 @@ GRANT ALL PRIVILEGES ON DATABASE dsbpa_production TO dsbpa;
 8.  At a command prompt, run the following commands while in the Rails base directory:
 ```
 rake db:migrate
+rake db:seed
 options.bat
 wds.bat
 ```
