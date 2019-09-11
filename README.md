@@ -4,7 +4,7 @@
 ##### Note for Windows 10 Pro users:  When installing programs, ensure that none of file paths have spaces in them (e.g. C:\Users\Program Location vs C:\Users\ProgramLocation).  The first one will cause problems with Ruby on Rails.
 
 1. Download and install the current stable versions of:  
-JAVA 11 JDK, JRuby (Desired Executable Setup File), Maven, Yarn, PostgreSQL, and Node  
+JAVA 11 JDK, JRuby ((<= 9.2.8.0) - Desired Executable Setup File), Maven, Yarn, PostgreSQL, and Node  
 (When acquiring the JDK and JRuby, ensure they are both the 64-bit versions and allow paths to be modified)
 ```
 https://www.oracle.com/java/technologies/javase-jdk11-downloads.html
@@ -14,7 +14,7 @@ https://yarnpkg.com/lang/en/docs/install/#windows-stable
 https://nodejs.org/en/download/  
 https://www.postgresql.org/download/ (Remember the password assigned during installation)
 ```
-2. Download JRuby JAR file (and place it into the base directory JRuby was installed into)
+2. Download JRuby JAR complete file (and place it into the base directory JRuby was installed into)
 ```
 https://www.jruby.org/download
 ```
@@ -22,9 +22,9 @@ https://www.jruby.org/download
 ```
 https://github.com/meetveracity/coding-challenge-app.git
 ```
-***Wherever the clone is created will hereafter be referred to as the Rails base directory.***
+***Wherever the clone is created will hereafter be referred to as the Rails root.***
 
-4.  Create a batch file in the Rails base directory named options.bat and copy the following into it and changing the marked lines as needed for the local environment (Including removing the > at the beginning of the lines):
+4.  Create a batch file in the Rails root named options.bat and copy the following into it and changing the marked lines as needed for the local environment (Including removing the > at the beginning of the lines):
 ```bazaar
 @echo off
 set JRUBY_OPTS=--dev -J-Xmx2g -J-Djava.awt.headless=true -J-Dcatalina.base=./logs/java_logs -J-Djava.net.preferIPv4Stack=true
@@ -42,7 +42,7 @@ set DATABASE_USER=dsbpa
 set DATABASE_PASSWORD=dsbpa
 ```
 
-5.  At a command prompt, run the following commands while in Rails base directory:  
+5.  At a command prompt, run the following commands while in Rails root:  
 ```
 options
 gem install bundler
@@ -66,19 +66,23 @@ GRANT ALL PRIVILEGES ON DATABASE dsbpa_test TO dsbpa;
 GRANT ALL PRIVILEGES ON DATABASE dsbpa_production TO dsbpa;
 \q
 ```
-8.  At a command prompt, run the following commands while in the Rails base directory:
+8.  At a command prompt, run the following commands while in the Rails root and then reboot(if the rails server says you have pending migrations, rerun this):
 ```
+options.bat
 rake db:migrate
 rake db:seed
+```
+9.  After you reboot your system, run the following commands while in the Rails root:
+```
 options.bat
 wds.bat
 ```
-9.  Open a second command prompt/terminal and run the following while in the Rails base directory:
+10.  Open a second command prompt/terminal and run the following while in the Rails root:
 ```
 options.bat
 startup.bat
 ```
-10.  After this is running, the website should be running locally.  To test, go to:
+11.  After this is running, the website should be running locally.  To test, go to:
 ```
 http://localhost:3000/dsbpa
 ```
