@@ -66,13 +66,13 @@ GRANT ALL PRIVILEGES ON DATABASE dsbpa_test TO dsbpa;
 GRANT ALL PRIVILEGES ON DATABASE dsbpa_production TO dsbpa;
 \q
 ```
-8.  At a command prompt, run the following commands while in the Rails root and then reboot(if the rails server says you have pending migrations, rerun this):
+8.  At a command prompt, run the following commands while in the Rails root and then restart the Rails server (if the rails server says you have pending migrations, rerun this):
 ```
 options.bat
 rake db:migrate
 rake db:seed
 ```
-9.  After you reboot your system, run the following commands while in the Rails root:
+9.  After you restart the Rails server, run the following commands while in the Rails root:
 ```
 options.bat
 wds.bat
