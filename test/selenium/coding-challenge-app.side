@@ -706,7 +706,7 @@
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": ["ad3e5b6b-f541-4ca4-a588-2848eb1657b6", "6d1c3d1b-1bed-4200-8036-e974bd93ae37", "116f93c4-9ec1-45af-af98-b2bc419725c1", "344931a8-a014-4b81-9c15-0d0775e34741", "fac7e05c-7d29-4620-838b-22ae718dec6d", "cfa5a2ee-b996-4ad2-9070-1afdc99a65ed", "647d37e1-7c98-4bf7-ab1e-7aa37d36f28e"]
+    "tests": ["ad3e5b6b-f541-4ca4-a588-2848eb1657b6", "fac7e05c-7d29-4620-838b-22ae718dec6d", "647d37e1-7c98-4bf7-ab1e-7aa37d36f28e"]
   }],
   "urls": ["http://localhost:8080/", "http://localhost:8080/dsbpa/"],
   "plugins": []
