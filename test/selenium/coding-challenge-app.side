@@ -375,6 +375,13 @@
       "targets": [],
       "value": "label=Allergist"
     }, {
+      "id": "7ea732eb-d87d-4bf1-b513-5942725a2696",
+      "comment": "",
+      "command": "pause",
+      "target": "2000",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "06fd12a6-1a57-41c0-b135-4f0f4c67a614",
       "comment": "",
       "command": "click",
@@ -493,6 +500,13 @@
       "targets": [],
       "value": "label=Surgeon"
     }, {
+      "id": "6ec06a17-31d9-441c-8c96-1a6fdfb8cb28",
+      "comment": "",
+      "command": "pause",
+      "target": "2000",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "14723fe5-961d-42ca-8d65-72ecd6d2753e",
       "comment": "",
       "command": "click",
@@ -572,6 +586,13 @@
       "targets": [],
       "value": "label=Primary Care"
     }, {
+      "id": "5a3c4d86-82c9-476f-8c53-90150a49d9ad",
+      "comment": "",
+      "command": "pause",
+      "target": "2000",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "60fbea5a-112d-4335-bb44-d1f7bc5f5190",
       "comment": "",
       "command": "click",
@@ -650,6 +671,13 @@
       "target": "id=appointment_type_id",
       "targets": [],
       "value": "label=Cardiologist"
+    }, {
+      "id": "a0162cd6-0cc7-464c-b15c-cd06f1bfc456",
+      "comment": "",
+      "command": "pause",
+      "target": "2000",
+      "targets": [],
+      "value": ""
     }, {
       "id": "27dcb0f2-7752-4302-926a-0726f649c254",
       "comment": "",
