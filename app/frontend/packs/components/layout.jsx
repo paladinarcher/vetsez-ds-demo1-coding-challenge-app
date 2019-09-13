@@ -33,17 +33,17 @@ const Footer = () => {
                 </div>
                 <nav role="navigation" aria-label="External Links Navigation">
                     <ul>
-                        <li><a href="http://www.va.gov/about_va/" target="_blank" title="Information about the Department of Veterans Affairs">About VA</a></li>
-                        <li><a href="http://vaww.section508.va.gov/" target="_blank" title="Section 508 Accessibility">Accessibility</a></li>
-                        <li><a href="http://vista.med.va.gov/disclaimer.htm" target="_blank" title="Web Disclaimer">Disclaimer</a></li>
-                        <li><a href="http://vaww.va.gov/landing_employee.htm" target="_blank" title="Resources for VA employees">Employee Resources</a></li>
-                        <li><a href="http://vaww.va.gov/directory/" target="_blank" title="Find a Veterans Affairs facility">Find a Facility</a></li>
-                        <li><a href="https://www.va.gov/privacy/" target="_blank" title="Privacy policy for the VA Intranet">Intranet Privacy Policy</a></li>
-                        <li><a href="http://vaww.nca.va.gov/" target="_blank" title="Intranet site for National Cemetery Administration">NCA Intranet Home</a></li>
-                        <li><a href="https://vaww.va.gov/OHRM/EmployeeRelations/grievance_appeals/" target="_blank" title="No Fear Act information">No Fear Act</a></li>
-                        <li><a href="http://vaww.va.gov/landing_organizations.htm" target="_blank" title="Department of Veterans Affairs Organizations">Organizations</a></li>
-                        <li><a href="http://vista.med.va.gov/termsofuse.htm" target="_blank" title="Terms of Use">Terms of Use</a></li>
-                        <li><a href="http://vaww.va.gov/" target="_blank" title="Veterans Affairs Intranet Home Page">VA Intranet Home</a></li>
+                        <li><a href="https://www.va.gov/homeless/" target="_blank" title="Homeless Veterans">Homeless Veterans</a></li>
+                        <li><a href="https://www.va.gov/womenvet/" target="_blank" title="Woman Veterans">Woman Veterans</a></li>
+                        <li><a href="https://www.va.gov/centerforminorityveterans/" target="_blank" title="Minority Veterans">Minority Veterans</a></li>
+                        <li><a href="https://www.ptsd.va.gov" target="_blank" title="PTSD">PTSD</a></li>
+                        <li><a href="https://www.mentalhealth.va.gov" target="_blank" title="Mental Health">Mental Health</a></li>
+                        <li><a href="https://www.va.gov/adaptivesports/" target="_blank" title="Adaptive sports and special events">Adaptive sports and special events</a></li>
+                        <li><a href="https://www.nrd.gov" target="_blank" title="National Resource Directory">National Resource Directory</a></li>
+                        <li><a href="https://www.va.gov/vaforms/" target="_blank" title="Find a VA Form">Find a VA Form</a></li>
+                        <li><a href="https://www.mobile.va.gov/appstore/" target="_blank" title="Get VA Mobile Apps">Get VA Mobile Apps</a></li>
+                        <li><a href="https://www.va.gov/jobs/" target="_blank" title="Careers at VA">Careers at VA</a></li>
+                        <li><a href="https://www.va.gov/landing2_business.htm" target="_blank" title="Doing business with VA">Doing business with VA</a></li>
                     </ul>
                 </nav>
             </footer>
