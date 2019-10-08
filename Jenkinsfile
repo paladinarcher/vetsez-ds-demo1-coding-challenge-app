@@ -71,7 +71,9 @@ pipeline {
         }
         stage('Source Code Analysis') {
             steps {
-                sh "mvn sonar:sonar"
+                withSonarQubeEnv('sonarqube') {
+                    sh "mvn sonar:sonar"
+                }
             }
         }
         stage("Build Containers") {
