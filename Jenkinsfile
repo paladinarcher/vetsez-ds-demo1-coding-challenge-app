@@ -281,7 +281,7 @@ pipeline {
         always {
             script {
                 // build status of null means successful
-                buildStatus =  buildStatus ?: 'SUCCESS'
+                def buildStatus =  currentBuild.currentResult ?: 'SUCCESS'
 
                 // Default values
                 def colorCode = '#FF0000'
