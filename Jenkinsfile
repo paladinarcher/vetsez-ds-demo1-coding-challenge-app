@@ -71,7 +71,7 @@ pipeline {
         }
         stage('Source Code Analysis') {
             steps {
-                echo "TDB..."
+                sh "mvn sonar:sonar"
             }
         }
         stage("Build Containers") {

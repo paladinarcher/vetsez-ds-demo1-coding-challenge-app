@@ -19,6 +19,8 @@
   <properties>
     <!--Open up the assembly.xml file in rails common if new directories are added. --><!-- railsMode is automatically set to 'test' or 'production' - 'test' if the version number ends with '-SNAPSHOT'
 		or 'production' otherwise.	See ant execution below-->
+    <sonar.sources>app, config, db, lib</sonar.sources>
+    <sonar.tests>test</sonar.tests>
   </properties>
 
   <organization>
