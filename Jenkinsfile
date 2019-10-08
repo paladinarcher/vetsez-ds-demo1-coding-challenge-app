@@ -277,4 +277,29 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            script {
+                // build status of null means successful
+                buildStatus =  buildStatus ?: 'SUCCESS'
+
+                // Default values
+                def colorCode = '#FF0000'
+                def msg = "${buildStatus} - Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+
+                // Override default values based on build status
+                if (buildStatus == 'STARTED') {
+                    colorCode = '#0000FF'
+                } else if (buildStatus == 'SUCCESS') {
+                    colorCode = '#00FF00'
+                } else if (buildStatus == 'UNSTABLE') {
+                    colorCode = '#FFFF00'
+                } else {
+                    colorCode = '#FF0000'
+                }
+
+                slackSend (color: colorCode, message: msg)
+            }
+        }
+    }
 }
