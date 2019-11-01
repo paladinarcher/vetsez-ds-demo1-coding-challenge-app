@@ -6,11 +6,15 @@ const Header = () => {
         <div className="header-container">
             <header>
                 <div className="logo" aria-label="VA Logo">
-                    <img style={{verticalAlign: 'middle'}} src={GH.getImagePath('va-logo-white.png')} alt="VA Header Image"/>
+                    <a href="https://www.va.gov" title="Go to VA.gov">
+                        <img style={{verticalAlign: 'middle'}} src={GH.getImagePath('va-logo-white.png')} alt="VA Header Image"/>
+                        <img src={GH.getImagePath('desktop-hd-line-2.png')} alt="line1"/>
+                    </a>
                 </div>
                 <div style={{float: 'right', display: 'inline'}}>{gon.user}</div>
+
                 <br/>
-                <hr/>
+
             </header>
         </div>
     )
@@ -29,21 +33,23 @@ const Footer = () => {
         <div className="footer-container">
             <footer>
                 <div className="logo" aria-label="VA Logo">
-                    <img src={GH.getImagePath('va-logo-white.png')} alt="VA Footer Image"/>
+                    <a href="https://www.va.gov" title="Go to VA.gov">
+                        <img src={GH.getImagePath('va-logo-white.png')} alt="VA Footer Image"/>
+                        <img src={GH.getImagePath('desktop-hd-line-2.png')} alt="line2"/>
+                    </a>
                 </div>
                 <nav role="navigation" aria-label="External Links Navigation">
                     <ul>
-                        <li><a href="https://www.va.gov/homeless/" target="_blank" title="Homeless Veterans">Homeless Veterans</a></li>
-                        <li><a href="https://www.va.gov/womenvet/" target="_blank" title="Woman Veterans">Woman Veterans</a></li>
-                        <li><a href="https://www.va.gov/centerforminorityveterans/" target="_blank" title="Minority Veterans">Minority Veterans</a></li>
-                        <li><a href="https://www.ptsd.va.gov" target="_blank" title="PTSD">PTSD</a></li>
-                        <li><a href="https://www.mentalhealth.va.gov" target="_blank" title="Mental Health">Mental Health</a></li>
-                        <li><a href="https://www.va.gov/adaptivesports/" target="_blank" title="Adaptive sports and special events">Adaptive sports and special events</a></li>
-                        <li><a href="https://www.nrd.gov" target="_blank" title="National Resource Directory">National Resource Directory</a></li>
-                        <li><a href="https://www.va.gov/vaforms/" target="_blank" title="Find a VA Form">Find a VA Form</a></li>
-                        <li><a href="https://www.mobile.va.gov/appstore/" target="_blank" title="Get VA Mobile Apps">Get VA Mobile Apps</a></li>
-                        <li><a href="https://www.va.gov/jobs/" target="_blank" title="Careers at VA">Careers at VA</a></li>
-                        <li><a href="https://www.va.gov/landing2_business.htm" target="_blank" title="Doing business with VA">Doing business with VA</a></li>
+                        <li><a href="https://www.section508.va.gov" title="Accessibility">Accessibility</a></li>
+                        <li><a href="https://www.va.gov/orm/NOFEAR_Select.asp" title="No FEAR Act Data">No FEAR Act Data</a></li>
+                        <li><a href="https://www.va.gov/oig/" title="Office of Inspector General">Office of Inspector General</a></li>
+                        <li><a href="https://www.va.gov/opa/Plain_Language.asp" title="Plain Language">Plain Language</a></li>
+                        <li><a href="https://www.va.gov/privacy-policy/" title="Privacy, Policies &amp; Legal information">Privacy, Policies &amp; Legal information</a></li>
+                        <li><a href="https://www.va.gov/privacy/" title="VA Privacy Service">VA Privacy Service</a></li>
+                        <li><a href="https://www.va.gov/foia/" title="Freedom of Information Act (FOIA)">Freedom of Information Act (FOIA)</a></li>
+                        <li><a href="https://www.usa.gov/" title="USA.gov">USA.gov</a></li>
+                        <li><a href="https://www.va.gov/scorecard/" title="VA.gov scorecard">VA.gov scorecard</a></li>
+                        <li><a href="https://www.va.gov/veterans-portrait-project/" title="Veterans Portrait Project">Veterans Portrait Project</a></li>
                     </ul>
                 </nav>
             </footer>
