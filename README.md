@@ -119,7 +119,7 @@ docker-compose up
 docker-compose pull
 ```
 
-#### Test my local changes (run maven build first)
+#### Test my local changes after running the maven build locally
 ```
 docker-compose up --build
 ```
