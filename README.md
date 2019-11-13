@@ -124,6 +124,11 @@ docker-compose pull
 docker-compose up --build
 ```
 
+#### If you are having database issues with connections you can remove the local volumes
+```
+docker-compose down -v
+```
+
 #### Run in background
 ```
 docker-compose up -d
