@@ -4,10 +4,7 @@ import axios from './utils/axios'
 import GH from './utils/gon_helper';
 import Comment from "./components/comment";
 import SchedAppt from "./components/sched_appt";
-import {Header, Main, Footer} from "./components/layout";
-
-"./components/layout";
-// import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import {Header, Header2, Main, Footer} from "./components/layout";
 
 // fix for IE11 allowing us to use axios/fetch for ajax calls
 import {promise, polyfill} from 'es6-promise';

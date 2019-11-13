@@ -119,9 +119,14 @@ docker-compose up
 docker-compose pull
 ```
 
-#### Test my local changes (run maven build first)
+#### Test my local changes after running the maven build locally
 ```
 docker-compose up --build
+```
+
+#### If you are having database issues with connections you can remove the local volumes
+```
+docker-compose down -v
 ```
 
 #### Run in background
