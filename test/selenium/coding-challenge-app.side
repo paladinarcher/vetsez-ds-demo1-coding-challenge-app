@@ -9,13 +9,10 @@
     "commands": [{
       "id": "f574cb90-2944-499f-bee0-96da535d5b18",
       "comment": "",
-<<<<<<< Updated upstream
       "command": "",
       "target": "",
-=======
       "command": "open",
       "target": "http://localhost:8080/dsbpa/",
->>>>>>> Stashed changes
       "targets": [],
       "value": ""
     }, {
