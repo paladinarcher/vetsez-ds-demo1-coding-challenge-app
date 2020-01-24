@@ -70,10 +70,10 @@ pipeline {
 
             post {
               success {
-                setBuildStatus("Create Release.", "SUCCESS", "Create Release")
+                setBuildStatus("Create Release.", "SUCCESS", "ci/jenkins/createRelease")
               }
               failure {
-                setBuildStatus("Create Release.", "FAILURE", "Create Release")
+                setBuildStatus("Create Release.", "FAILURE", "ci/jenkins/createRelease")
               }
             }
         }
@@ -90,10 +90,10 @@ pipeline {
 
             post {
               success {
-                setBuildStatus("Building Application.", "SUCCESS", "Building Application")
+                setBuildStatus("Building Application.", "SUCCESS", "ci/jenkins/buildingApplication")
               }
               failure {
-                setBuildStatus("Building Application.", "FAILURE", "Building Application")
+                setBuildStatus("Building Application.", "FAILURE", "ci/jenkins/buildingApplication")
               }
             }
         }
