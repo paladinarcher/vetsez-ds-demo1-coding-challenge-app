@@ -55,4 +55,4 @@ test/selenium/reports
 # Ignore IDE files
 .project
 .settings
-
+.idea
