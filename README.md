@@ -20,7 +20,7 @@ https://www.jruby.org/download
 ```
 3.  Ensure GIT is working on the development machine and clone the following Repo:
 ```
-https://github.com/meetveracity/coding-challenge-app.git
+https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-app.git
 ```
 ***Wherever the clone is created will hereafter be referred to as the Rails root.***
 

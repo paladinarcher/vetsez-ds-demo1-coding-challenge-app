@@ -138,7 +138,7 @@ pipeline {
                                 script {
                                     def releaseName = "ft-${env.BRANCH_NAME.toLowerCase()}"
                                     //Download the Chart
-                                    sh "git clone \"https://github.com/meetveracity/coding-challenge-devops.git\" helmChart"
+                                    sh "git clone \"https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-devops.git\" helmChart"
 
                                     //Deploy the Chart
                                     sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
@@ -220,7 +220,7 @@ pipeline {
                 script {
                     def releaseName = "${env.BRANCH_NAME.toLowerCase()}"
                     //Download the Chart
-                    sh "git clone \"https://github.com/meetveracity/coding-challenge-devops.git\" helmChart"
+                    sh "git clone \"https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-devops.git\" helmChart"
 
                     //Deploy the Chart
                     sh "helm upgrade --install ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
