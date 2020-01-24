@@ -9,8 +9,8 @@
     "commands": [{
       "id": "f574cb90-2944-499f-bee0-96da535d5b18",
       "comment": "",
-      "command": "open",
-      "target": "/dsbpa/",
+      "command": "",
+      "target": "",
       "targets": [],
       "value": ""
     }, {
@@ -706,7 +706,7 @@
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": []
+    "tests": ["ad3e5b6b-f541-4ca4-a588-2848eb1657b6"]
   }],
   "urls": ["http://localhost:8080/", "http://localhost:8080/dsbpa/"],
   "plugins": []
