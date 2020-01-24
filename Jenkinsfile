@@ -1,5 +1,15 @@
 def functionalTestUrl = null
 
+void setBuildStatus(String message, String state, String context) {
+  step([
+      $class: "GitHubCommitStatusSetter",
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-app"],
+      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+  ]);
+}
+
 pipeline {
     agent {
         node {
@@ -57,6 +67,15 @@ pipeline {
                 //Checkout the tag
                 sh "git checkout tags/${params.releaseVersion}"
             }
+
+            post {
+              success {
+                setBuildStatus("Create Release.", "SUCCESS", "Create Release")
+              }
+              failure {
+                setBuildStatus("Create Release.", "FAILURE", "Create Release")
+              }
+            }
         }
         stage('Building Application') {
             steps {
@@ -68,10 +87,27 @@ pipeline {
             //         junit '**/target/surefire-reports/*.xml'
             //     }
             // }
+
+            post {
+              success {
+                setBuildStatus("Building Application.", "SUCCESS", "Building Application")
+              }
+              failure {
+                setBuildStatus("Building Application.", "FAILURE", "Building Application")
+              }
+            }
         }
         stage('Source Code Analysis') {
             steps {
                 echo "TDB..."
+            }
+            post {
+              success {
+                setBuildStatus("Source Code Analysis.", "SUCCESS", "Source Code Analysis")
+              }
+              failure {
+                setBuildStatus("Source Code Analysis.", "FAILURE", "Source Code Analysis")
+              }
             }
         }
         stage("Build Containers") {
@@ -102,6 +138,14 @@ pipeline {
                             }
                         }
                     }
+                    post {
+                      success {
+                        setBuildStatus("Database Migration Container.", "SUCCESS", "Database Migration Container")
+                      }
+                      failure {
+                        setBuildStatus("Database Migration Container.", "FAILURE", "Database Migration Container")
+                      }
+                    }
                 }
                 stage("Application Container") {
                     agent {
@@ -120,6 +164,14 @@ pipeline {
                                 }
                             }
                         }
+                    }
+                    post {
+                      success {
+                        setBuildStatus("Application Container.", "SUCCESS", "Application Container")
+                      }
+                      failure {
+                        setBuildStatus("Application Container.", "FAILURE", "Application Container")
+                      }
                     }
                 }
             }
@@ -151,6 +203,12 @@ pipeline {
                                 }
                             }
                             post {
+                              success {
+                                setBuildStatus("Deploy Functional Test Environment.", "SUCCESS", "Deploy Functional Test Environment")
+                              }
+                              failure {
+                                setBuildStatus("Deploy Functional Test Environment.", "FAILURE", "Deploy Functional Test Environment")
+                              }
                                 //Clean up our helm checkout
                                 always {
                                     sh 'rm -rf helmChart'
@@ -182,6 +240,12 @@ pipeline {
                                 }
                             }
                             post {
+                              success {
+                                setBuildStatus("Functional Test Execution.", "SUCCESS", "Functional Test Execution")
+                              }
+                              failure {
+                                setBuildStatus("Functional Test Execution.", "FAILURE", "Functional Test Execution")
+                              }
                                 always {
                                     junit '**/test/selenium/reports/*.xml'
                                 }
@@ -202,6 +266,14 @@ pipeline {
                 stage("Performance Testing") {
                     steps {
                         echo "TDB..."
+                    }
+                    post {
+                      success {
+                        setBuildStatus("Performance Testing.", "SUCCESS", "Performance Testing")
+                      }
+                      failure {
+                        setBuildStatus("Performance Testing.", "FAILURE", "Performance Testing")
+                      }
                     }
                 }
             }
@@ -242,6 +314,12 @@ pipeline {
                 }
             }
             post {
+              success {
+                setBuildStatus("Review Instance Deployment.", "SUCCESS", "Review Instance Deployment")
+              }
+              failure {
+                setBuildStatus("Review Instance Deployment.", "FAILURE", "Review Instance Deployment")
+              }
                 //Clean up our helm checkout
                 always {
                     sh 'rm -rf helmChart'
@@ -274,6 +352,14 @@ pipeline {
                         initImage.push("latest")
                     }
                 }
+            }
+            post {
+              success {
+                setBuildStatus("Promote to Development.", "SUCCESS", "Promote to Development")
+              }
+              failure {
+                setBuildStatus("Promote to Development.", "FAILURE", "Promote to Development")
+              }
             }
         }
     }
