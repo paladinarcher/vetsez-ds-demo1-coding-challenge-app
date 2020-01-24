@@ -162,14 +162,14 @@ class SchedAppt extends React.Component {
                             </Form.Row>
                             <Form.Row>
                                 <Form.Group as={Col} controlId="appt_date">
-                                    <Form.Label id="ReasonLabel">Preferred Appointment Date</Form.Label>
+                                    <Form.Label id="ApptDateLabel">Preferred Appointment Date</Form.Label>
                                     <Form.Control ref={(c)=>this.appt_date=c} type="date" placeholder="Appointment Date" name='appt_date' required value={this.state.formdata.appt_date}/>
                                     <Form.Control.Feedback type="invalid">
                                         Please enter the preferred appointment date.
                                     </Form.Control.Feedback>
                                </Form.Group>
                                 <Form.Group as={Col} controlId="appt_time">
-                                    <Form.Label id="ReasonLabel">Appointment Time</Form.Label>
+                                    <Form.Label id="ApptTimeLabel">Appointment Time</Form.Label>
                                     <Form.Control as="select" name='selection' required>
                                         {this.state.appt_times}
                                     </Form.Control>
