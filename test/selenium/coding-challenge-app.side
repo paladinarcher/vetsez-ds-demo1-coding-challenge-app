@@ -19,9 +19,9 @@
       "id": "3348c869-712a-4b8c-8c77-0c8b98d307a1",
       "comment": "",
       "command": "assertTitle",
-      "target": "DSBPA",
+      "target": "localhost",
       "targets": [],
-      "value": "DSBPA"
+      "value": "localhost"
     }]
   }],
   "suites": [{
