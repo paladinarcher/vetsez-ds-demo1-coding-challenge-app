@@ -80,7 +80,7 @@ pipeline {
         stage('Building Application') {
             steps {
               sh "whoami"
-              sh "chown -R jenkins:jenkins /home/jenkins/.m2"
+              sh "sudo chown -R jenkins:jenkins /home/jenkins/.m2"
               sh "ls -lah /home/jenkins/.m2"
                 sh "mvn clean install"
                 stash name: 'mavenOutput', includes: '**/target/*'
