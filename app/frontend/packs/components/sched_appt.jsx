@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import axios from '../utils/axios'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
@@ -9,6 +10,7 @@ class SchedAppt extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            appt_times: [],
             facilities: [],
             appointment_types: [],
             doctors: this.loadDoctorSelections([]),
@@ -18,11 +20,47 @@ class SchedAppt extends React.Component {
         };
     }
 
-    handleInputChange =(event) => {
+    handleInputChange = (event) => {
         let s = this.state;
         s.formdata[event.target.id] = event.target.value;
         this.setState(s);
-    }
+    };
+
+    is_valid_appt_date = () => {
+        if (this.state.formdata['appt_date'] !== undefined) {
+            console.log(this.state.formdata['appt_date']);
+            let now = new Date();
+            now.setHours(0, 0, 0, 0);
+            now = Date.UTC(now.getFullYear(), now.getMonth() + 1, now.getDate());
+            let a = this.state.formdata['appt_date'].split("-");
+            let appt_date = Date.UTC(a[0], a[1], a[2]);
+            return (now <= appt_date);
+        }
+    };
+
+    loadTimes = (start_hr, end_hr) => {
+        if (start_hr >= end_hr) {
+            alert("Invalid load times arguments passed. The start_hr must be greater than the end_hr.")
+        }
+
+        let hour = start_hr;
+        let t = '';
+        let ret = [<option key={0} value=''>Select an Appointment Time...</option>];
+
+        do {
+            if (hour < 10) {
+                t = '0' + hour;
+            } else {
+                t = hour;
+            }
+            ret.push(<option key={t + ':00'} value={t + ':00'}>{t + ':00'}</option>);
+            ret.push(<option key={t + ':30'} value={t + ':30'}>{t + ':30'}</option>);
+            hour++;
+            start_hr++;
+        }
+        while (start_hr <= end_hr);
+        this.setState({...this.state, appt_times: ret});
+    };
 
     checkLoadDoctorsOnchange = (event) => {
         const f = event.target.id === 'facility_id' ? event.target.value : this.state.formdata.facility_id;
@@ -33,7 +71,7 @@ class SchedAppt extends React.Component {
         } else {
             this.loadDoctors('not', 'yet');
         }
-    }
+    };
 
     post_form = () => {
         let self = this;
@@ -42,6 +80,15 @@ class SchedAppt extends React.Component {
 
         // extra validation
         if (isValid) {
+            if (! self.is_valid_appt_date()) {
+                alert("Please enter a date that is greater than or equal to today's date.");
+                var s = self.state;
+                s.formdata.appt_date = '';
+                ReactDOM.findDOMNode(self.appt_date).focus();
+                self.setState(s);
+                return false;
+            }
+
             let data = {};
             for (const element of f.elements) {
                 if (element.type !== 'button' && element.name !== undefined) {
@@ -113,14 +160,32 @@ class SchedAppt extends React.Component {
                                     </Form.Control.Feedback>
                                </Form.Group>
                             </Form.Row>
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="appt_date">
+                                    <Form.Label id="ApptDateLabel">Preferred Appointment Date</Form.Label>
+                                    <Form.Control ref={(c)=>this.appt_date=c} type="date" placeholder="Appointment Date" name='appt_date' required value={this.state.formdata.appt_date}/>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter the preferred appointment date.
+                                    </Form.Control.Feedback>
+                               </Form.Group>
+                                <Form.Group as={Col} controlId="appt_time">
+                                    <Form.Label id="ApptTimeLabel">Appointment Time</Form.Label>
+                                    <Form.Control as="select" name='selection' required>
+                                        {this.state.appt_times}
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter the appointment time.
+                                    </Form.Control.Feedback>
+                               </Form.Group>
+                            </Form.Row>
                             <Button variant="primary" onClick={this.post_form}>
-                                Submit
+                                Find Appointment
                             </Button>
                         </Form>
                     </Card.Body>
                 </Card>
                 <br/>
-                {/*<p>{JSON.stringify(this.state.doctors)}</p>*/}
+                {/*<p>{JSON.stringify(this.state.formdata)}</p>*/}
             </div>
         )
     }
@@ -162,11 +227,10 @@ class SchedAppt extends React.Component {
                 console.log(error);
                 alert("Error Saving Concepts. Exception is: " + error);
             });
-
-
     };
 
     componentDidMount() {
+        this.loadTimes(8,18);
         // retrieve the drop down items
         const self = this;
         axios.get(gon.routes.get_facilities_path)
