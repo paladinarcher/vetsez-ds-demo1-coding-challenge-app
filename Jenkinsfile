@@ -3,7 +3,7 @@ def functionalTestUrl = null
 void setBuildStatus(String message, String state, String context) {
   step([
       $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-app.git"],
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-app"],
       contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
       errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
       statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
@@ -103,10 +103,10 @@ pipeline {
             }
             post {
               success {
-                setBuildStatus("Source Code Analysis.", "SUCCESS", "Source Code Analysis")
+                setBuildStatus("Source Code Analysis.", "SUCCESS", "ci/jenkins/sourceCodeAnalysis")
               }
               failure {
-                setBuildStatus("Source Code Analysis.", "FAILURE", "Source Code Analysis")
+                setBuildStatus("Source Code Analysis.", "FAILURE", "ci/jenkins/sourceCodeAnalysis")
               }
             }
         }
@@ -140,10 +140,10 @@ pipeline {
                     }
                     post {
                       success {
-                        setBuildStatus("Database Migration Container.", "SUCCESS", "Database Migration Container")
+                        setBuildStatus("Database Migration Container.", "SUCCESS", "ci/jenkins/databaseMigrationContainer")
                       }
                       failure {
-                        setBuildStatus("Database Migration Container.", "FAILURE", "Database Migration Container")
+                        setBuildStatus("Database Migration Container.", "FAILURE", "ci/jenkins/databaseMigrationContainer")
                       }
                     }
                 }
@@ -167,10 +167,10 @@ pipeline {
                     }
                     post {
                       success {
-                        setBuildStatus("Application Container.", "SUCCESS", "Application Container")
+                        setBuildStatus("Application Container.", "SUCCESS", "ci/jenkins/applicationContainer")
                       }
                       failure {
-                        setBuildStatus("Application Container.", "FAILURE", "Application Container")
+                        setBuildStatus("Application Container.", "FAILURE", "ci/jenkins/applicationContainer")
                       }
                     }
                 }
@@ -204,10 +204,10 @@ pipeline {
                             }
                             post {
                               success {
-                                setBuildStatus("Deploy Functional Test Environment.", "SUCCESS", "Deploy Functional Test Environment")
+                                setBuildStatus("Deploy Functional Test Environment.", "SUCCESS", "ci/jenkins/deployFunctionalTestEnvironment")
                               }
                               failure {
-                                setBuildStatus("Deploy Functional Test Environment.", "FAILURE", "Deploy Functional Test Environment")
+                                setBuildStatus("Deploy Functional Test Environment.", "FAILURE", "ci/jenkins/deployFunctionalTestEnvironment")
                               }
                                 //Clean up our helm checkout
                                 always {
@@ -241,10 +241,10 @@ pipeline {
                             }
                             post {
                               success {
-                                setBuildStatus("Functional Test Execution.", "SUCCESS", "Functional Test Execution")
+                                setBuildStatus("Functional Test Execution.", "SUCCESS", "ci/jenkins/functionalTestExecution")
                               }
                               failure {
-                                setBuildStatus("Functional Test Execution.", "FAILURE", "Functional Test Execution")
+                                setBuildStatus("Functional Test Execution.", "FAILURE", "ci/jenkins/functionalTestExecution")
                               }
                                 always {
                                     junit '**/test/selenium/reports/*.xml'
@@ -269,10 +269,10 @@ pipeline {
                     }
                     post {
                       success {
-                        setBuildStatus("Performance Testing.", "SUCCESS", "Performance Testing")
+                        setBuildStatus("Performance Testing.", "SUCCESS", "ci/jenkins/performanceTesting")
                       }
                       failure {
-                        setBuildStatus("Performance Testing.", "FAILURE", "Performance Testing")
+                        setBuildStatus("Performance Testing.", "FAILURE", "ci/jenkins/performanceTesting")
                       }
                     }
                 }
@@ -315,10 +315,10 @@ pipeline {
             }
             post {
               success {
-                setBuildStatus("Review Instance Deployment.", "SUCCESS", "Review Instance Deployment")
+                setBuildStatus("Review Instance Deployment.", "SUCCESS", "ci/jenkins/reviewInstanceDeployment")
               }
               failure {
-                setBuildStatus("Review Instance Deployment.", "FAILURE", "Review Instance Deployment")
+                setBuildStatus("Review Instance Deployment.", "FAILURE", "ci/jenkins/reviewInstanceDeployment")
               }
                 //Clean up our helm checkout
                 always {
@@ -355,10 +355,10 @@ pipeline {
             }
             post {
               success {
-                setBuildStatus("Promote to Development.", "SUCCESS", "Promote to Development")
+                setBuildStatus("Promote to Development.", "SUCCESS", "ci/jenkins/promoteToDevelopment")
               }
               failure {
-                setBuildStatus("Promote to Development.", "FAILURE", "Promote to Development")
+                setBuildStatus("Promote to Development.", "FAILURE", "ci/jenkins/promoteToDevelopment")
               }
             }
         }
