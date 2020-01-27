@@ -80,6 +80,7 @@ pipeline {
         stage('Building Application') {
             steps {
               sh "whoami"
+              sh "ls -lah /home/jenkins/"
               sh "sudo chown -R jenkins:jenkins /home/jenkins/.m2"
               sh "ls -lah /home/jenkins/.m2"
                 sh "mvn clean install"
