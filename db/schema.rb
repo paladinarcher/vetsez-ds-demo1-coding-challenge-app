@@ -10,31 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_05_152549) do
+ActiveRecord::Schema.define(version: 0) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "appointment_types", force: :cascade do |t|
-    t.string "type_of_appointment"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "doctors", force: :cascade do |t|
-    t.string "name"
-    t.bigint "appointment_type_id"
-    t.bigint "facility_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["appointment_type_id"], name: "index_doctors_on_appointment_type_id"
-    t.index ["facility_id"], name: "index_doctors_on_facility_id"
-  end
-
-  create_table "facilities", force: :cascade do |t|
-    t.string "location"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
 end
