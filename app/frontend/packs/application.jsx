@@ -2,8 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from './utils/axios'
 import GH from './utils/gon_helper';
-import Comment from "./components/comment";
-import SchedAppt from "./components/sched_appt";
 import {Header, Header2, Main, Footer} from "./components/layout";
 
 // fix for IE11 allowing us to use axios/fetch for ajax calls
@@ -15,7 +13,7 @@ export default class Application extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            card: 'schedAppt'
+            card: 'welcome'
         };
     }
 
@@ -36,7 +34,6 @@ export default class Application extends React.Component {
     render() {
         const cards = {
             'welcome': <div>Welcome!</div>,
-            'schedAppt': <SchedAppt/>,
         };
         return (
             <div style={{padding: '20px'}}>
