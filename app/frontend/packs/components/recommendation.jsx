@@ -13,12 +13,12 @@ const schema = yup.object().shape({
         .required(),
     first_name: yup
         .string()
-        .min(3)
-        .required(),
+        .required()
+        .min(3),
     last_name: yup
         .string()
-        .min(3)
-        .required(),
+        .required()
+        .min(3),
     password: yup
         .string()
         .required(),
@@ -27,12 +27,12 @@ const schema = yup.object().shape({
         .required()
 });
 
-function Errors({ errors }) {
-    if (!errors) return null;
+function Errors({error_messages }) {
+    if (!error_messages) return null;
 
     return (
         <ul className="errors">
-            {errors.map((error, i) => (
+            {error_messages.map((error, i) => (
                 <li key={i}>{error}</li>
             ))}
         </ul>
@@ -40,8 +40,9 @@ function Errors({ errors }) {
 }
 
 function Recommendation() {
-    const [step, setStep] = useState(1);
-    const [fields, setFields] = useState({
+    let stepTransitions = {"authenticate" : "confirmation", "confirmation" : "survey", "survey" : "authenticate"};
+    const [step, setStep] = useState("authenticate");
+    const [authFields, setAuthFields] = useState({
         email: "",
         first_name: "",
         last_name: "",
@@ -49,33 +50,32 @@ function Recommendation() {
         confirm_password: "",
     });
 
-    const [errors, setErrors] = useState({
+    const [authErrors, setAuthErrors] = useState({
         email: null,
         first_name: null,
         last_name: null,
-        password: "",
-        confirm_password: ""
+        password: null,
+        confirm_password: null
     });
 
-    const formIsValid =
-        fields.email !== "" &&
-        fields.first_name !== "" &&
-        fields.last_name !== "" &&
-        fields.password !== "" &&
-        fields.confirm_password !== "" &&
-        !errors.email &&
-        !errors.first_name &&
-        !errors.last_name &&
-        !errors.password &&
-        !errors.confirm_password
-    ;
+    function authenticateIsValid () {
+        let authFieldsValid = true;
+        for (const property in authFields) {
+            authFieldsValid = authFieldsValid && (authFields[property] !== "");
+        }
+        let authErrorsValid = true;
+        for (const property in authErrors) {
+            authErrorsValid = authErrorsValid && !authErrors[property];
+        }
+        return authErrorsValid && authFieldsValid;
+    };
 
     function handleInputChange(event) {
         const {target} = event;
         const {name} = target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         validateField(name, value);
-        setFields({...fields, [name]: value});
+        setAuthFields({...authFields, [name]: value});
     }
 
     function handleBlur(event) {
@@ -89,22 +89,20 @@ function Recommendation() {
             .reach(schema, name)
             .validate(value)
             .then(valid => {
-                setErrors({...errors, [name]: null});
+                setAuthErrors({...authErrors, [name]: null});
             })
             .catch(e => {
-                setErrors({...errors, [name]: e.errors});
+                setAuthErrors({...authErrors, [name]: e.errors});
             });
     }
 
     function handleSubmit(event) {
         event.preventDefault();
-        if (formIsValid) {
-            console.table(fields);
+        if (authenticateIsValid()) {
+            console.table(authFields);
             let s = step;
             console.log("current step is ", s);
-            if (s+1 <= 2) {
-                setStep(s + 1);
-            }
+            setStep(stepTransitions[s]);
             // axios.post(gon.routes.post_form_path, fields)
             //     .then(function (response) {
             //         alert(response.data.message);
@@ -120,7 +118,7 @@ function Recommendation() {
         }
     }
 
-    function step1() {
+    function authenticate() {
         return (
             <div className="Recommendation" >
                 <div style={{padding: '3px'}}>
@@ -130,56 +128,56 @@ function Recommendation() {
                             <form>
                                 <label htmlFor="first_name">First Name</label>
                                 <input
-                                    className={errors["first_name"] ? "invalid" : ""}
+                                    className={authErrors["first_name"] ? "invalid" : ""}
                                     type="string"
                                     name="first_name"
-                                    value={fields.first_name}
+                                    value={authFields.first_name}
                                     onChange={handleInputChange}
                                     onBlur={handleBlur}
                                     autoFocus
                                 />
-                                <Errors errors={errors["first_name"]} />
+                                <Errors error_messages={authErrors["first_name"]} />
                                 <label htmlFor="last_name">Last Name</label>
                                 <input
-                                    className={errors["last_name"] ? "invalid" : ""}
+                                    className={authErrors["last_name"] ? "invalid" : ""}
                                     type="string"
                                     name="last_name"
-                                    value={fields.last_name}
+                                    value={authFields.last_name}
                                     onChange={handleInputChange}
                                     onBlur={handleBlur}
                                 />
-                                <Errors errors={errors["last_name"]} />
+                                <Errors error_messages={authErrors["last_name"]} />
                                 <label htmlFor="email">Email</label>
                                 <input
-                                    className={errors["email"] ? "invalid" : ""}
+                                    className={authErrors["email"] ? "invalid" : ""}
                                     type="email"
                                     name="email"
-                                    value={fields.email}
+                                    value={authFields.email}
                                     onChange={handleInputChange}
                                     onBlur={handleBlur}
                                 />
-                                <Errors errors={errors["email"]} /><br/>
+                                <Errors error_messages={authErrors["email"]} /><br/>
                                 <label htmlFor="email">Password</label>
                                 <input
-                                    className={errors["password"] ? "invalid" : ""}
+                                    className={authErrors["password"] ? "invalid" : ""}
                                     type="password"
                                     name="password"
-                                    value={fields.password}
+                                    value={authFields.password}
                                     onChange={handleInputChange}
                                     onBlur={handleBlur}
                                 />
-                                <Errors errors={errors["password"]} /><br/>
+                                <Errors error_messages={authErrors["password"]} /><br/>
                                 <label htmlFor="email">Re-enter Password</label>
                                 <input
-                                    className={errors["confirm_password"] ? "invalid" : ""}
+                                    className={authErrors["confirm_password"] ? "invalid" : ""}
                                     type="password"
                                     name="confirm_password"
-                                    value={fields.confirm_password}
+                                    value={authFields.confirm_password}
                                     onChange={handleInputChange}
                                     onBlur={handleBlur}
                                 />
-                                <Errors errors={errors["confirm_password"]} /><br/>
-                                <button type="submit" onClick={handleSubmit} disabled={!formIsValid}>
+                                <Errors error_messages={authErrors["confirm_password"]} /><br/>
+                                <button type="submit" onClick={handleSubmit} disabled={!authenticateIsValid()}>
                                     Register User
                                 </button>
                             </form>
@@ -194,12 +192,10 @@ function Recommendation() {
     }
 
     function handleNext() {
-        console.log("s is ", s);
-        let s = step;
-        setStep(s + 1);
+        setStep(stepTransitions[step]);
     }
 
-    function step2() {
+    function confirmation() {
         return (
             <div className="Recommendation" >
                 <div style={{padding: '3px'}}>
@@ -216,7 +212,7 @@ function Recommendation() {
         )
 
     }
-    function step3() {
+    function survey() {
         return (
             <div className="Recommendation" >
                 <div style={{padding: '3px'}}>
@@ -241,13 +237,13 @@ function Recommendation() {
     }
 
     function renderStep() {
-        if (step === 1) {
-            return step1();
-        } else if (step === 2) {
-            return step2();
+        if (step === "authenticate") {
+            return authenticate();
+        } else if (step === "confirmation") {
+            return confirmation();
         }
-        else if (step ===3) {
-            return step3();
+        else if (step === "survey") {
+            return survey();
         }
     }
 
