@@ -342,11 +342,11 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                        image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}")
+                        image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         image.pull()
                         image.push("development-${env.GIT_COMMIT}")
                         image.push("latest")
-                        initImage = docker.image("meetveracity/coding-challenge-db-init:${env.BRANCH_NAME}")
+                        initImage = docker.image("meetveracity/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         initImage.pull()
                         initImage.push("development-${env.GIT_COMMIT}")
                         initImage.push("latest")
