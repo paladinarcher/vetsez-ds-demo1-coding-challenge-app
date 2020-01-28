@@ -9,19 +9,21 @@
     "commands": [{
       "id": "f574cb90-2944-499f-bee0-96da535d5b18",
       "comment": "",
-      "command": "",
-      "target": "",
       "command": "open",
       "target": "http://localhost:8080/dsbpa/",
       "targets": [],
       "value": ""
     }, {
-      "id": "3348c869-712a-4b8c-8c77-0c8b98d307a1",
+      "id": "0deccb82-6724-423a-a8d4-6958e476618b",
       "comment": "",
-      "command": "assertTitle",
-      "target": "localhost",
-      "targets": [],
-      "value": "localhost"
+      "command": "assertText",
+      "target": "css=div:nth-child(2) > div",
+      "targets": [
+        ["css=div:nth-child(2) > div", "css:finder"],
+        ["xpath=//div[@id='app']/div/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div", "xpath:position"]
+      ],
+      "value": "Welcome!"
     }]
   }],
   "suites": [{
