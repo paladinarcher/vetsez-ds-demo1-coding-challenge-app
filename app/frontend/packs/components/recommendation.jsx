@@ -19,7 +19,10 @@ const schema = yup.object().shape({
         .string()
         .min(3)
         .required(),
-    question1: yup
+    password: yup
+        .string()
+        .required(),
+    confirm_password: yup
         .string()
         .required()
 });
@@ -37,26 +40,35 @@ function Errors({ errors }) {
 }
 
 function Recommendation() {
+    const [step, setStep] = useState(1);
     const [fields, setFields] = useState({
         email: "",
         first_name: "",
         last_name: "",
+        password: "",
+        confirm_password: "",
     });
-    const [step, setStep] = useState(1);
 
     const [errors, setErrors] = useState({
         email: null,
         first_name: null,
-        last_name: null
+        last_name: null,
+        password: "",
+        confirm_password: ""
     });
 
     const formIsValid =
         fields.email !== "" &&
         fields.first_name !== "" &&
         fields.last_name !== "" &&
+        fields.password !== "" &&
+        fields.confirm_password !== "" &&
         !errors.email &&
         !errors.first_name &&
-        !errors.last_name;
+        !errors.last_name &&
+        !errors.password &&
+        !errors.confirm_password
+    ;
 
     function handleInputChange(event) {
         const {target} = event;
@@ -114,7 +126,7 @@ function Recommendation() {
                 <div style={{padding: '3px'}}>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Register User</Card.Title>
+                            <Card.Title>Welcome</Card.Title>
                             <form>
                                 <label htmlFor="first_name">First Name</label>
                                 <input
@@ -147,6 +159,26 @@ function Recommendation() {
                                     onBlur={handleBlur}
                                 />
                                 <Errors errors={errors["email"]} /><br/>
+                                <label htmlFor="email">Password</label>
+                                <input
+                                    className={errors["password"] ? "invalid" : ""}
+                                    type="password"
+                                    name="password"
+                                    value={fields.password}
+                                    onChange={handleInputChange}
+                                    onBlur={handleBlur}
+                                />
+                                <Errors errors={errors["password"]} /><br/>
+                                <label htmlFor="email">Re-enter Password</label>
+                                <input
+                                    className={errors["confirm_password"] ? "invalid" : ""}
+                                    type="password"
+                                    name="confirm_password"
+                                    value={fields.confirm_password}
+                                    onChange={handleInputChange}
+                                    onBlur={handleBlur}
+                                />
+                                <Errors errors={errors["confirm_password"]} /><br/>
                                 <button type="submit" onClick={handleSubmit} disabled={!formIsValid}>
                                     Register User
                                 </button>
@@ -160,29 +192,42 @@ function Recommendation() {
             </div>
         );
     }
+
+    function handleNext() {
+        console.log("s is ", s);
+        let s = step;
+        setStep(s + 1);
+    }
+
     function step2() {
         return (
             <div className="Recommendation" >
                 <div style={{padding: '3px'}}>
                     <Card>
                         <Card.Body>
-                            <Card.Title>User Survey</Card.Title>
-                            <p>User: {fields.first_name}</p>
-                            <p>Email: {fields.email}</p>
+                            <Card.Title>Success Message</Card.Title>
+                            <h3>Let's go Next!</h3>
+                            <button onClick={handleNext}>Next</button>
+
+                        </Card.Body>
+                    </Card>
+                </div>
+            </div>
+        )
+
+    }
+    function step3() {
+        return (
+            <div className="Recommendation" >
+                <div style={{padding: '3px'}}>
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>Survey</Card.Title>
+                            <h3>What Services are you interested in?</h3>
+                            <h5>(select all that apply)</h5>
                             <form>
-                                <label htmlFor="question1">Question 1: What is your name?</label>
-                                <input
-                                    className={errors["question1"] ? "invalid" : ""}
-                                    type="string"
-                                    name="question1"
-                                    value={fields.question1}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
-                                    autoFocus
-                                />
-                                <Errors errors={errors["question1"]} />
-                                <button type="submit" onClick={handleSubmit} disabled={!formIsValid}>
-                                    Submit Survey
+                                <button type="submit">
+                                    Get Results
                                 </button>
                             </form>
 
@@ -198,8 +243,11 @@ function Recommendation() {
     function renderStep() {
         if (step === 1) {
             return step1();
-        } else {
+        } else if (step === 2) {
             return step2();
+        }
+        else if (step ===3) {
+            return step3();
         }
     }
 
