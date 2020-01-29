@@ -302,8 +302,8 @@ pipeline {
                     def previewUrl = "http://"
                     while (previewUrl=="http://" && count < 90) {
                       previewUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].status.loadBalancer.ingress[0].hostname}\"")
-                      sleep 1
-                      count++
+                      if(previewUrl=="http://") { sleep 5 }
+                      count+=5
                     }
 
                     if(previewUrl=="http://") {
