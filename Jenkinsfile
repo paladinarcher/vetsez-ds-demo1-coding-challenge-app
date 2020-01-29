@@ -194,11 +194,15 @@ pipeline {
 
                                     //Deploy the Chart
                                     sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
-                                    sleep 60
 
                                     //Find the Service Port
-                                    functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
-
+                                    def count = 0
+                                    def functionalTestUrl = "http://"
+                                    while (functionalTestUrl=="http://" && count < 90) {
+                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
+                                      if(functionalTestUrl=="http://") { sleep 5 }
+                                      count+=5
+                                    }
                                     echo "Service is available at ${functionalTestUrl}"
                                 }
                             }
