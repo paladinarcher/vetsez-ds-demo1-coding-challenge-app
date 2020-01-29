@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
-const schema = yup.object().shape({
+const schemaAuthenticate = yup.object().shape({
     email: yup
         .string()
         .email()
@@ -25,6 +25,17 @@ const schema = yup.object().shape({
     confirm_password: yup
         .string()
         .required()
+});
+
+const schemaSurvey = yup.object().shape({
+    healthcare: yup
+        .boolean(),
+    education: yup
+        .boolean(),
+    housing: yup
+        .boolean(),
+    cemetary: yup
+        .boolean(),
 });
 
 function Errors({error_messages }) {
@@ -50,6 +61,13 @@ function Recommendation() {
         confirm_password: "",
     });
 
+    const [surveyOneFields, setSurveyOneFields] = useState({
+        healthcare: false,
+        education: false,
+        housing: false,
+        cemetary: false
+    });
+
     const [authErrors, setAuthErrors] = useState({
         email: null,
         first_name: null,
@@ -70,23 +88,29 @@ function Recommendation() {
         return authErrorsValid && authFieldsValid;
     };
 
-    function handleInputChange(event) {
+    function handleAuthInputChange(event) {
         const {target} = event;
         const {name} = target;
         const value = target.type === "checkbox" ? target.checked : target.value;
-        validateField(name, value);
+        validateAuthFields(name, value);
         setAuthFields({...authFields, [name]: value});
     }
 
-    function handleBlur(event) {
+    function handleSurveyOneInputChange(event) {
         const {target} = event;
-        const {name, value} = target;
-        validateField(name, value);
+        const {name} = target;
+        setSurveyOneFields({...surveyOneFields, [name]: target.checked});
     }
 
-    function validateField(name, value) {
+    function handleAuthBlur(event) {
+        const {target} = event;
+        const {name, value} = target;
+        validateAuthFields(name, value);
+    }
+
+    function validateAuthFields(name, value) {
         yup
-            .reach(schema, name)
+            .reach(schemaAuthenticate, name)
             .validate(value)
             .then(valid => {
                 setAuthErrors({...authErrors, [name]: null});
@@ -132,8 +156,8 @@ function Recommendation() {
                                     type="string"
                                     name="first_name"
                                     value={authFields.first_name}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
+                                    onChange={handleAuthInputChange}
+                                    onBlur={handleAuthBlur}
                                     autoFocus
                                 />
                                 <Errors error_messages={authErrors["first_name"]} />
@@ -143,8 +167,8 @@ function Recommendation() {
                                     type="string"
                                     name="last_name"
                                     value={authFields.last_name}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
+                                    onChange={handleAuthInputChange}
+                                    onBlur={handleAuthBlur}
                                 />
                                 <Errors error_messages={authErrors["last_name"]} />
                                 <label htmlFor="email">Email</label>
@@ -153,8 +177,8 @@ function Recommendation() {
                                     type="email"
                                     name="email"
                                     value={authFields.email}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
+                                    onChange={handleAuthInputChange}
+                                    onBlur={handleAuthBlur}
                                 />
                                 <Errors error_messages={authErrors["email"]} /><br/>
                                 <label htmlFor="email">Password</label>
@@ -163,8 +187,8 @@ function Recommendation() {
                                     type="password"
                                     name="password"
                                     value={authFields.password}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
+                                    onChange={handleAuthInputChange}
+                                    onBlur={handleAuthBlur}
                                 />
                                 <Errors error_messages={authErrors["password"]} /><br/>
                                 <label htmlFor="email">Re-enter Password</label>
@@ -173,8 +197,8 @@ function Recommendation() {
                                     type="password"
                                     name="confirm_password"
                                     value={authFields.confirm_password}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
+                                    onChange={handleAuthInputChange}
+                                    onBlur={handleAuthBlur}
                                 />
                                 <Errors error_messages={authErrors["confirm_password"]} /><br/>
                                 <button type="submit" onClick={handleSubmit} disabled={!authenticateIsValid()}>
@@ -203,7 +227,7 @@ function Recommendation() {
                         <Card.Body>
                             <Card.Title>Success Message</Card.Title>
                             <h3>Let's go Next!</h3>
-                            <button onClick={handleNext}>Next</button>
+                            <button onClick={handleNext}>Begin</button>
 
                         </Card.Body>
                     </Card>
@@ -219,9 +243,45 @@ function Recommendation() {
                     <Card>
                         <Card.Body>
                             <Card.Title>Survey</Card.Title>
-                            <h3>What Services are you interested in?</h3>
-                            <h5>(select all that apply)</h5>
                             <form>
+                                <h5>What Services are you interested in?</h5>
+                                <h6>(select all that apply)</h6>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="healthcare"
+                                         checked={surveyOneFields.healthcare}
+                                         onChange={handleSurveyOneInputChange}
+                                    />
+                                    <span>&nbsp;Healthcare</span>
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="education"
+                                        checked={surveyOneFields.education}
+                                        onChange={handleSurveyOneInputChange}
+                                    />
+                                    <span>&nbsp;Education</span>
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="housing"
+                                        checked={surveyOneFields.housing}
+                                        onChange={handleSurveyOneInputChange}
+                                    />
+                                    <span>&nbsp;Housing</span>
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="cemetary"
+                                        checked={surveyOneFields.cemetary}
+                                        onChange={handleSurveyOneInputChange}
+                                    />
+                                    <span>&nbsp;Cemetary</span>
+                                </label>
                                 <button type="submit">
                                     Get Results
                                 </button>
@@ -230,7 +290,7 @@ function Recommendation() {
                         </Card.Body>
                     </Card>
                 </div>
-                {/*<div><pre>{JSON.stringify(fields, null, 2)}</pre></div>*/}
+                {/*<div><pre>{JSON.stringify(surveyOneFields, null, 2)}</pre></div>*/}
                 {/*<div><pre>{JSON.stringify(errors, null, 2)}</pre></div>*/}
             </div>
         );
