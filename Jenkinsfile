@@ -130,7 +130,7 @@ pipeline {
                                 }
                             }
                             docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                                dbImage = docker.build("meetveracity/coding-challenge-db-init", "-f Dockerfile.db-init .")
+                                dbImage = docker.build("docker.vetsez.net/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     dbImage.push(params.releaseVersion)
@@ -157,7 +157,7 @@ pipeline {
                         unstash 'mavenOutput'
                         script {
                             docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                                image = docker.build("meetveracity/coding-challenge-app")
+                                image = docker.build("docker.vetsez.net/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     image.push(params.releaseVersion)
@@ -354,11 +354,11 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                        image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
+                        image = docker.image("docker.vetsez.net/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         image.pull()
                         image.push("development-${env.GIT_COMMIT}")
                         image.push("latest")
-                        initImage = docker.image("meetveracity/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
+                        initImage = docker.image("docker.vetsez.net/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         initImage.pull()
                         initImage.push("development-${env.GIT_COMMIT}")
                         initImage.push("latest")
