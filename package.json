@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
+    "@department-of-veterans-affairs/formation-react": "^5.2.0",
     "@rails/webpacker": "^4.0.7",
     "axios": "^0.19.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
