@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState, useEffect} from "react";
 import * as yup from "yup";
 import axios from '../utils/axios'
 import Form from 'react-bootstrap/Form'
@@ -6,26 +6,6 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
-const schemaAuthenticate = yup.object().shape({
-    email: yup
-        .string()
-        .email()
-        .required(),
-    first_name: yup
-        .string()
-        .required()
-        .min(3),
-    last_name: yup
-        .string()
-        .required()
-        .min(3),
-    password: yup
-        .string()
-        .required(),
-    confirm_password: yup
-        .string()
-        .required()
-});
 
 const schemaSurvey = yup.object().shape({
     healthcare: yup
@@ -38,7 +18,7 @@ const schemaSurvey = yup.object().shape({
         .boolean(),
 });
 
-function Errors({error_messages }) {
+function Errors({error_messages}) {
     if (!error_messages) return null;
 
     return (
@@ -51,7 +31,26 @@ function Errors({error_messages }) {
 }
 
 function Recommendation() {
-    let stepTransitions = {"authenticate" : "confirmation", "confirmation" : "survey", "survey" : "authenticate"};
+
+
+    function schemaAuthenticate() {
+        return yup.object().shape({
+            email: yup
+                .string()
+                .email()
+                .required(),
+            first_name: yup
+                .string()
+                .required()
+                .min(3),
+            last_name: yup
+                .string()
+                .required()
+                .min(3),
+        });
+    }
+
+    let stepTransitions = {"authenticate": "confirmation", "confirmation": "survey", "survey": "authenticate"};
     const [step, setStep] = useState("authenticate");
     const [authFields, setAuthFields] = useState({
         email: "",
@@ -76,7 +75,28 @@ function Recommendation() {
         confirm_password: null
     });
 
-    function authenticateIsValid () {
+    React.useEffect(() => {
+        console.log("password effect");
+
+        function isValidPasswords() {
+            let pw = authFields.password;
+            let cp = authFields.confirm_password;
+            return (pw === cp);
+        }
+
+        setAuthErrors({...authErrors, confirm_password: (isValidPasswords() ? null : ["Passwords must match"])});
+    }, [authFields.password, authFields.confirm_password]);
+
+    React.useEffect(() => {
+        console.log("called every render");
+    });
+
+    React.useEffect(() => {
+        console.log("call once component loads");
+        return () => console.log("component unmount");
+    }, []);
+
+    function authenticateIsValid() {
         let authFieldsValid = true;
         for (const property in authFields) {
             authFieldsValid = authFieldsValid && (authFields[property] !== "");
@@ -92,8 +112,8 @@ function Recommendation() {
         const {target} = event;
         const {name} = target;
         const value = target.type === "checkbox" ? target.checked : target.value;
-        validateAuthFields(name, value);
         setAuthFields({...authFields, [name]: value});
+        validateAuthFields(name, value);
     }
 
     function handleSurveyOneInputChange(event) {
@@ -109,8 +129,18 @@ function Recommendation() {
     }
 
     function validateAuthFields(name, value) {
+        if (name === 'password' || name === 'confirm_password') {
+            if (value === '') {
+                setAuthErrors({...authErrors, [name]: ["this is a required field"]});
+            } else {
+                if (authErrors[name] && (authErrors[name][0] === "this is a required field")) {
+                    setAuthErrors({...authErrors, [name]: null});
+                }
+            }
+            return;
+        }
         yup
-            .reach(schemaAuthenticate, name)
+            .reach(schema, name)
             .validate(value)
             .then(valid => {
                 setAuthErrors({...authErrors, [name]: null});
@@ -144,7 +174,7 @@ function Recommendation() {
 
     function authenticate() {
         return (
-            <div className="Recommendation" >
+            <div className="Recommendation">
                 <div style={{padding: '3px'}}>
                     <Card>
                         <Card.Body>
@@ -160,7 +190,7 @@ function Recommendation() {
                                     onBlur={handleAuthBlur}
                                     autoFocus
                                 />
-                                <Errors error_messages={authErrors["first_name"]} />
+                                <Errors error_messages={authErrors["first_name"]}/>
                                 <label htmlFor="last_name">Last Name</label>
                                 <input
                                     className={authErrors["last_name"] ? "invalid" : ""}
@@ -170,7 +200,7 @@ function Recommendation() {
                                     onChange={handleAuthInputChange}
                                     onBlur={handleAuthBlur}
                                 />
-                                <Errors error_messages={authErrors["last_name"]} />
+                                <Errors error_messages={authErrors["last_name"]}/>
                                 <label htmlFor="email">Email</label>
                                 <input
                                     className={authErrors["email"] ? "invalid" : ""}
@@ -180,7 +210,7 @@ function Recommendation() {
                                     onChange={handleAuthInputChange}
                                     onBlur={handleAuthBlur}
                                 />
-                                <Errors error_messages={authErrors["email"]} /><br/>
+                                <Errors error_messages={authErrors["email"]}/><br/>
                                 <label htmlFor="email">Password</label>
                                 <input
                                     className={authErrors["password"] ? "invalid" : ""}
@@ -190,7 +220,7 @@ function Recommendation() {
                                     onChange={handleAuthInputChange}
                                     onBlur={handleAuthBlur}
                                 />
-                                <Errors error_messages={authErrors["password"]} /><br/>
+                                <Errors error_messages={authErrors["password"]}/><br/>
                                 <label htmlFor="email">Re-enter Password</label>
                                 <input
                                     className={authErrors["confirm_password"] ? "invalid" : ""}
@@ -200,7 +230,7 @@ function Recommendation() {
                                     onChange={handleAuthInputChange}
                                     onBlur={handleAuthBlur}
                                 />
-                                <Errors error_messages={authErrors["confirm_password"]} /><br/>
+                                <Errors error_messages={authErrors["confirm_password"]}/><br/>
                                 <button type="submit" onClick={handleSubmit} disabled={!authenticateIsValid()}>
                                     Register User
                                 </button>
@@ -210,7 +240,9 @@ function Recommendation() {
                     </Card>
                 </div>
                 {/*<div><pre>{JSON.stringify(fields, null, 2)}</pre></div>*/}
-                {/*<div><pre>{JSON.stringify(errors, null, 2)}</pre></div>*/}
+                <div>
+                    {/*<pre>{JSON.stringify(authErrors, null, 2)}</pre>*/}
+                </div>
             </div>
         );
     }
@@ -221,7 +253,7 @@ function Recommendation() {
 
     function confirmation() {
         return (
-            <div className="Recommendation" >
+            <div className="Recommendation">
                 <div style={{padding: '3px'}}>
                     <Card>
                         <Card.Body>
@@ -236,9 +268,10 @@ function Recommendation() {
         )
 
     }
+
     function survey() {
         return (
-            <div className="Recommendation" >
+            <div className="Recommendation">
                 <div style={{padding: '3px'}}>
                     <Card>
                         <Card.Body>
@@ -250,8 +283,8 @@ function Recommendation() {
                                     <input
                                         type="checkbox"
                                         name="healthcare"
-                                         checked={surveyOneFields.healthcare}
-                                         onChange={handleSurveyOneInputChange}
+                                        checked={surveyOneFields.healthcare}
+                                        onChange={handleSurveyOneInputChange}
                                     />
                                     <span>&nbsp;Healthcare</span>
                                 </label>
@@ -291,7 +324,7 @@ function Recommendation() {
                     </Card>
                 </div>
                 {/*<div><pre>{JSON.stringify(surveyOneFields, null, 2)}</pre></div>*/}
-                {/*<div><pre>{JSON.stringify(errors, null, 2)}</pre></div>*/}
+                {/*<div><pre>{JSON.stringify(authErrors, null, 2)}</pre></div>*/}
             </div>
         );
     }
@@ -301,8 +334,7 @@ function Recommendation() {
             return authenticate();
         } else if (step === "confirmation") {
             return confirmation();
-        }
-        else if (step === "survey") {
+        } else if (step === "survey") {
             return survey();
         }
     }
