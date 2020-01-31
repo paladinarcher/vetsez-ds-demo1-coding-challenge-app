@@ -10,6 +10,6 @@ class ApplicationController < ActionController::Base
   def setup_gon
     gon.routes = setup_routes
     gon.packs = packed_assets
-    gon.user = "John Smith"
+    gon.user = ""
   end
 end

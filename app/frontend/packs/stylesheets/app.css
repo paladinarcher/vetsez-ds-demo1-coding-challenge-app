@@ -39,6 +39,91 @@ footer nav ul li { width:16.5%; height:40px; display:table-cell; vertical-align:
 
 footer nav.four-column ul li { width:25%; }
 
-.greg {
-    color: green
+/*  dry-run-1 styling */
+html {
+    box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+.Recommendation {
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    align-items: center;
+    /*height: 100vh;*/
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 300px;
+    background-color:  #f7f7f7;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+}
+label {
+    font-weight: bold;
+    /*color: blue;*/
+    /*margin: 55px;*/
+    padding-top: 5px;
+}
+input {
+    margin-top: 4px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #e6e6e6;
+    box-shadow: inset 0 2px 4px 0 hsla(0, 0%, 0%, 0.08);
+}
+
+input.invalid {
+    border-color: red;
+}
+
+input[type="checkbox"] {
+    width: auto;
+}
+
+button {
+    margin-top: 6px;
+    font-size: 1rem;
+    padding: 4px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #25bdfc;
+    cursor: pointer;
+    width: 100%;
+    color: #fff;
+}
+
+button:hover {
+    background-color: #22ddf6;
+}
+
+button:disabled {
+    background-color: #999;
+    cursor: auto;
+}
+
+span {
+    font-size: 0.75rem;
+}
+
+.errors {
+    margin: 0 0 10px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.errors li {
+    color: red;
+    font-size: 0.75rem;
 }
