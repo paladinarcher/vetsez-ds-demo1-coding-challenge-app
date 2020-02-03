@@ -14,7 +14,7 @@ threadsafe: false # overrides config.threadsafe! detection
 jruby_min_runtimes: 1 # min number of JRuby runtimes to use
 jruby_max_runtimes: 1 # max number of JRuby runtimes to use
 #jruby_compat_version: 1.9 # or 1.8 by default uses the same as trinidad is running
-context_path: /dsbpa # default context path
+context_path: / # default context path
 root_dir: "." # system path where the application is located, by default is PWD
 #rackup: config.ru # rackup script if you are running a (non-Rails) Rack application
 public: public # system path (relative to root) where your public files are located

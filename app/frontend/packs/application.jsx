@@ -4,8 +4,10 @@ import axios from './utils/axios'
 import GH from './utils/gon_helper';
 import {Header, Header2, Main, Footer} from "./components/layout";
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox'
-// require("@department-of-veterans-affairs/formation/dist/formation.min.css"); //cris
-// @import "~@department-of-veterans-affairs/formation/sass/site/m-vet-nav"; //cris
+//import "@department-of-veterans-affairs/formation/dist/formation.min.css"; //cris
+//import "@department-of-veterans-affairs/formation/dist/formation.min.css"; //cris
+//import '@department-of-veterans-affairs/formation/sass/core.scss'
+//;import "@department-of-veterans-affairs/formation/sass/site/m-vet-nav"; //cris
 
 // fix for IE11 allowing us to use axios/fetch for ajax calls
 import {promise, polyfill} from 'es6-promise';
@@ -42,7 +44,7 @@ export default class Application extends React.Component {
                 <div className="usa-width-one-whole">
                 <AlertBox
                     headline='Informational alert'
-                    content="YAY!!!!!!!    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id felis pulvinar ligula ultricies sollicitudin eget nec dui. Cras augue velit, pellentesque sit amet nisl ut, tristique suscipit sem. Cras sollicitudin auctor mattis."
+                    content="YAY!!!!!!!"
                     status="info"
                     isVisible/></div></div>
             ,
