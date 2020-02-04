@@ -4,6 +4,8 @@ import axios from './utils/axios'
 import GH from './utils/gon_helper';
 import {Header, Header2, Main, Footer} from "./components/layout";
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox'
+import Recommendation from './components/recommendation'
+
 //import "@department-of-veterans-affairs/formation/dist/formation.min.css"; //cris
 //import "@department-of-veterans-affairs/formation/dist/formation.min.css"; //cris
 //import '@department-of-veterans-affairs/formation/sass/core.scss'
@@ -18,7 +20,7 @@ export default class Application extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            card: 'welcome'
+            card: 'recommendation'
         };
     }
 
@@ -38,6 +40,7 @@ export default class Application extends React.Component {
 
     render() {
         const cards = {
+            'recommendation': <Recommendation/>,
             'welcome': <div>
                     <button type="button" className="usa-button">Button</button>
                 <div className="va-h-ruled--stars"></div>
