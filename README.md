@@ -84,7 +84,7 @@ startup.bat
 ```
 11.  After this is running, the website should be running locally.  To test, go to:
 ```
-http://localhost:3000/dsbpa
+http://localhost:3000/
 ```
 
 ## Notes
@@ -108,7 +108,7 @@ When deploying to Tomcat rename the war file to 'dsbpa.war' so the initial conte
 
 
 
-## Docker notes
+## Docker notes (runs in docker http://localhost:8080/dsbpa)
 #### Bring docker up in foreground
 ```
 docker-compose up
