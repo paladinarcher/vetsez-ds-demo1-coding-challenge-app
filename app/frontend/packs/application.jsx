@@ -2,14 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from './utils/axios'
 import GH from './utils/gon_helper';
-import {Header, Header2, Main, Footer} from "./components/layout";
+import {Header, Header2, Main, Footer, Footer2} from "./components/layout";
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox'
 import Recommendation from './components/recommendation'
+import RecEngine from './components/rec_engine'
 import FormInputs from './components/cheat_sheet/form_inputs'
-//import "@department-of-veterans-affairs/formation/dist/formation.min.css"; //cris
-//import "@department-of-veterans-affairs/formation/dist/formation.min.css"; //cris
-//import '@department-of-veterans-affairs/formation/sass/core.scss'
-//;import "@department-of-veterans-affairs/formation/sass/site/m-vet-nav"; //cris
 
 // fix for IE11 allowing us to use axios/fetch for ajax calls
 import {promise, polyfill} from 'es6-promise';
@@ -20,7 +17,7 @@ export default class Application extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            card: 'forminputs'
+            card: 'rec_engine'
         };
     }
 
@@ -41,6 +38,7 @@ export default class Application extends React.Component {
     render() {
         const cards = {
             'recommendation': <Recommendation/>,
+            'rec_engine': <RecEngine/>,
             'forminputs': <FormInputs/>,
             'welcome': <div>
                     <button type="button" className="usa-button">Button</button>
@@ -54,7 +52,7 @@ export default class Application extends React.Component {
             ,
         };
         return (
-            <div style={{padding: '20px'}}>
+            <div className="vads-u-font-family--sans" style={{padding: '20px'}}>
                 <Header/>
                 <Main>
                     {cards[this.state.card]}

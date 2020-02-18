@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import divWithClassName from "react-bootstrap/es/utils/divWithClassName";
 
 
 const schemaSurvey = yup.object().shape({
@@ -237,6 +236,8 @@ function Recommendation() {
                                         className={authErrors["cars"] ? "invalid" : ""}
                                         value={authFields.cars}
                                         required
+                                        size='4'
+                                        multiple
                                         onChange={handleAuthInputChange}
                                         onBlur={handleAuthBlur}
                                     >
