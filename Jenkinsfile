@@ -129,7 +129,7 @@ pipeline {
                                     sh "git checkout tags/${params.releaseVersion}"
                                 }
                             }
-                            docker.withRegistry("paladinarcher", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                            docker.withRegistry("", "docker-registry") { //env.DOCKER_REGISTRY_URL
                                 dbImage = docker.build("paladinarcher/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
@@ -156,7 +156,7 @@ pipeline {
                     steps {
                         unstash 'mavenOutput'
                         script {
-                            docker.withRegistry("paladinarcher", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                            docker.withRegistry("", "docker-registry") { //env.DOCKER_REGISTRY_URL
                                 image = docker.build("paladinarcher/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
@@ -353,7 +353,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry("paladinarcher", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                    docker.withRegistry("", "docker-registry") { //env.DOCKER_REGISTRY_URL
                         image = docker.image("paladinarcher/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         image.pull()
                         image.push("development-${env.GIT_COMMIT}")
