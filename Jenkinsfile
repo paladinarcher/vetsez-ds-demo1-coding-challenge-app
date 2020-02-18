@@ -129,8 +129,8 @@ pipeline {
                                     sh "git checkout tags/${params.releaseVersion}"
                                 }
                             }
-                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                                dbImage = docker.build("meetveracity/coding-challenge-db-init", "-f Dockerfile.db-init .")
+                            docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                                dbImage = docker.build("docker.vetsez.net/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     dbImage.push(params.releaseVersion)
@@ -156,8 +156,8 @@ pipeline {
                     steps {
                         unstash 'mavenOutput'
                         script {
-                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                                image = docker.build("meetveracity/coding-challenge-app")
+                            docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                                image = docker.build("docker.vetsez.net/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     image.push(params.releaseVersion)
@@ -194,11 +194,15 @@ pipeline {
 
                                     //Deploy the Chart
                                     sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
-                                    sleep 60
 
                                     //Find the Service Port
-                                    functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
-
+                                    def count = 0
+                                    functionalTestUrl = "http://"
+                                    while (functionalTestUrl=="http://" && count < 90) {
+                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
+                                      if(functionalTestUrl=="http://") { sleep 5 }
+                                      count+=5
+                                    }
                                     echo "Service is available at ${functionalTestUrl}"
                                 }
                             }
@@ -298,10 +302,18 @@ pipeline {
                     sh "helm upgrade --install ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
                     
                     //Wait a few seconds for the external IP to be allocated
-                    sleep 30
+                    def count = 0
+                    def previewUrl = "http://"
+                    while (previewUrl=="http://" && count < 90) {
+                      previewUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].status.loadBalancer.ingress[0].hostname}\"")
+                      if(previewUrl=="http://") { sleep 5 }
+                      count+=5
+                    }
 
+                    if(previewUrl=="http://") {
+                      error("Failed to get a preview URL in ${count} seconds...")
+                    }
                     //Print out the preview instance URL
-                    def previewUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].status.loadBalancer.ingress[0].hostname}\"")
                     echo "Preview instance is available at ${previewUrl}/dsbpa"
 
                     //Add the Preview URL to the PR
@@ -341,12 +353,12 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                        image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}")
+                    docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                        image = docker.image("docker.vetsez.net/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         image.pull()
                         image.push("development-${env.GIT_COMMIT}")
                         image.push("latest")
-                        initImage = docker.image("meetveracity/coding-challenge-db-init:${env.BRANCH_NAME}")
+                        initImage = docker.image("docker.vetsez.net/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         initImage.pull()
                         initImage.push("development-${env.GIT_COMMIT}")
                         initImage.push("latest")
