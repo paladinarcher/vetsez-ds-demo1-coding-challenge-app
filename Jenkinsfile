@@ -129,8 +129,8 @@ pipeline {
                                     sh "git checkout tags/${params.releaseVersion}"
                                 }
                             }
-                            docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
-                                dbImage = docker.build("docker.vetsez.net/coding-challenge-db-init", "-f Dockerfile.db-init .")
+                            docker.withRegistry("paladinarcher", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                                dbImage = docker.build("paladinarcher/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     dbImage.push(params.releaseVersion)
@@ -156,8 +156,8 @@ pipeline {
                     steps {
                         unstash 'mavenOutput'
                         script {
-                            docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
-                                image = docker.build("docker.vetsez.net/coding-challenge-app")
+                            docker.withRegistry("paladinarcher", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                                image = docker.build("paladinarcher/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     image.push(params.releaseVersion)
@@ -353,12 +353,12 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
-                        image = docker.image("docker.vetsez.net/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
+                    docker.withRegistry("paladinarcher", "docker-registry") { //env.DOCKER_REGISTRY_URL
+                        image = docker.image("paladinarcher/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         image.pull()
                         image.push("development-${env.GIT_COMMIT}")
                         image.push("latest")
-                        initImage = docker.image("docker.vetsez.net/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
+                        initImage = docker.image("paladinarcher/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         initImage.pull()
                         initImage.push("development-${env.GIT_COMMIT}")
                         initImage.push("latest")
