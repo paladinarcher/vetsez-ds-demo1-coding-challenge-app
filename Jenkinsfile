@@ -207,10 +207,10 @@ pipeline {
                                     //Find the Service Port
                                     def count = 0
                                     functionalTestUrl = "http://"
-                                    while (functionalTestUrl=="http://" && count < 90) {
+                                    while (functionalTestUrl=="http://" && count < 300) {
                                       functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
                                       if(functionalTestUrl=="http://") { sleep 5 }
-                                      count+=5
+                                      count+=10
                                     }
                                     echo "Service is available at ${functionalTestUrl}"
                                 }
@@ -313,10 +313,10 @@ pipeline {
                     //Wait a few seconds for the external IP to be allocated
                     def count = 0
                     def previewUrl = "http://"
-                    while (previewUrl=="http://" && count < 90) {
+                    while (previewUrl=="http://" && count < 300) {
                       previewUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].status.loadBalancer.ingress[0].hostname}\"")
                       if(previewUrl=="http://") { sleep 5 }
-                      count+=5
+                      count+=10
                     }
 
                     if(previewUrl=="http://") {
