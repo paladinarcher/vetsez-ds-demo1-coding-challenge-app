@@ -129,6 +129,10 @@ pipeline {
                                     sh "git checkout tags/${params.releaseVersion}"
                                 }
                             }
+                            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                              usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                              sh 'echo "username=\'$USERNAME\' password=\'$PASSWORD\'"'
+                            }
                             docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
                                 dbImage = docker.build("paladinarcher/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
