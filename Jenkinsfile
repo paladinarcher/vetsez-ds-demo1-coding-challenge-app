@@ -161,6 +161,7 @@ pipeline {
                     steps {
                         unstash 'mavenOutput'
                         script {
+                            def DOCKER_REGISTRY_URI = env.DOCKER_REGISTRY_URL
                             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
                               usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                               sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
@@ -361,7 +362,11 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                    def DOCKER_REGISTRY_URI = env.DOCKER_REGISTRY_URL
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                          usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                          sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
+                    //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
                         image = docker.image("paladinarcher/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         image.pull()
                         image.push("development-${env.GIT_COMMIT}")
