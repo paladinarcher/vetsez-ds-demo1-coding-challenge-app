@@ -133,8 +133,8 @@ pipeline {
                             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
                               usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                               sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
-                            }
-                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                            //}
+                            //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
                                 dbImage = docker.build("paladinarcher/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
@@ -161,7 +161,10 @@ pipeline {
                     steps {
                         unstash 'mavenOutput'
                         script {
-                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                              usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                              sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
+                            //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
                                 image = docker.build("paladinarcher/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
