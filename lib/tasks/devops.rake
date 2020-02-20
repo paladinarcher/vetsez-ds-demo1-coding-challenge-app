@@ -5,6 +5,7 @@ require "open3"
 
 Rake::TaskManager.record_task_metadata = true
 include Utilities
+WINDOWS ||= (java.lang.System.getProperties['os.name'] =~ /win/i)
 
 
 $UNVERSIONED = 'unversioned'
@@ -70,6 +71,44 @@ namespace :devops do
     ENV['NODE_ENV'] = node_env
   end
 
+  desc 'run eslint'
+  task :lint_react do |task|
+    p task.comment
+    node_env = ENV['NODE_ENV']
+    ENV['NODE_ENV']=nil #leave production, force all dev packages for test
+    sh 'yarn install'
+    rundir = Rails.root.to_s.gsub('/',slash)
+    if WINDOWS
+      command = "cd #{rundir} && .\\eslint.bat"
+    else
+      command = "cd #{rundir} && ./node_modules/.bin/eslint -o ./react_lint/eslint.html -f html --ext jsx ./app/frontend/packs/." #produce file for sonarqube
+    end
+    puts command
+    Open3.popen3({},command) do |stdin, stdout, stderr, waith_thr|
+      error = stderr.read.to_s
+      raise "Eslint failed to run!\n #{error}" unless error.empty?
+      puts stdout.read #should be empty
+      ENV['NODE_ENV'] = node_env
+    end
+   # sh command #Eslint doesn't support quiet exits: https://github.com/eslint/eslint/issues/2949
+  end
+ # cd C:\work\digital_services_bpa\vetsez-ds-demo1-coding-challenge-app && C:\work\digital_services_bpa\vetsez-ds-demo1-coding-challenge-app\target\rubygems\bin\rubocop --fail-level fatal --format html --out rubo_lint\rubocop.html
+  desc 'run rubocop'
+  task :lint_rubocop do |task|
+    p task.comment
+    rundir = Rails.root.to_s
+    output_file = "#{rundir}/rubo_lint/rubocop.html"
+    scripting_container = org.jruby.embed.ScriptingContainer.new
+    args = "--fail-level fatal --format html --out #{output_file}".split
+    script = File.read("#{ENV['GEM_HOME']}/bin/rubocop")#jruby generated windows bat file doesn't actually work
+    scripting_container.setCurrentDirectory(rundir)
+    scripting_container.put("ARGV", args)
+    exit_code = scripting_container.runScriptlet(script)
+    raise "RuboCop found errors too severe to continue! Please see #{output_file}" unless (exit_code == 0)
+  end
+
+
+
   #running in devops.rake ensures the rails environment is test for snapshost builds and production for releases
   desc 'run migrations'
   task :migrations do |task|
@@ -106,6 +145,8 @@ namespace :devops do
     Rake::Task['devops:maven_target'].invoke
     Rake::Task['webpacker:check_yarn'].invoke
     Rake::Task['webpacker:yarn_install'].invoke
+    Rake::Task['devops:lint_react'].invoke
+    Rake::Task['devops:lint_rubocop'].invoke
     Rake::Task['devops:compile_assets'].invoke
     Rake::Task['devops:generate_context_file'].invoke
     Rake::Task['devops:generate_version_file'].invoke

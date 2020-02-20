@@ -2,7 +2,7 @@ require 'logging'
 require 'fileutils'
 require 'socket'
 
-#if nil we are in trinidad
+# if nil we are in trinidad
 CATALINA_HOME = java.lang.System.properties['catalina.home']
 subdir = (File.open('../context.txt').read.reverse.chop.reverse + '/') rescue ''
 LOG_HOME = CATALINA_HOME.nil? ? "#{Rails.root}/logs/#{subdir}" : "#{CATALINA_HOME}/logs/#{subdir}"
@@ -140,7 +140,7 @@ begin
 rescue => ex
   warn "Logger failed to initialize.  Reason is #{ex.to_s}"
   warn ex.backtrace.join("\n")
-  warn 'Shutting down the KOMET/PRISME web server!'
+  warn 'Shutting down the web server!'
   java.lang.System.exit(1)
 end
 
