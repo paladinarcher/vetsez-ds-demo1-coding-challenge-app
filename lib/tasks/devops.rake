@@ -99,7 +99,7 @@ namespace :devops do
     rundir = Rails.root.to_s
     output_file = "#{rundir}/rubo_lint/rubocop.html"
     scripting_container = org.jruby.embed.ScriptingContainer.new
-    args = "--fail-level fatal --format html --out #{output_file}".split
+    args = "--fail-level error --format html --out #{output_file}".split
     script = File.read("#{ENV['GEM_HOME']}/bin/rubocop")#jruby generated windows bat file doesn't actually work
     scripting_container.setCurrentDirectory(rundir)
     scripting_container.put("ARGV", args)
