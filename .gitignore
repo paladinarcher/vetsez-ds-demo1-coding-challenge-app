@@ -56,3 +56,4 @@ test/selenium/reports
 .project
 .settings
 .idea
+/config/initializers/rubymine_jruby_debug.rb

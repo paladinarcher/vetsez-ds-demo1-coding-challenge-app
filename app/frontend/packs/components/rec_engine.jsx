@@ -16,9 +16,6 @@ function Errors({fieldname, error_messages}) {
 
 function RecEngine() {
     const step1Schema = yup.object().shape({
-        // carz: yup
-        //     .string()
-        //     .required("you need to pick at least one car"),
         first_name: yup
             .string()
             .required(),

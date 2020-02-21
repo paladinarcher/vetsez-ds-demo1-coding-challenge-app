@@ -1,0 +1,12 @@
+<% unless current_user %>
+  <div>welcome index</div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+  function gotoWelcome(path) {
+      window.location.replace(path)
+  }
+  <% if current_user %>
+    gotoWelcome('<%= welcome_path %>');
+  <% end %>
+</script>

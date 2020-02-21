@@ -34,3 +34,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #gem install trinidad --pre (do this once)
 gem 'warbler'
 gem 'gon'
+gem 'devise'
