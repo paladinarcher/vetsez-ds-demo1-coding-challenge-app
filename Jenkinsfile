@@ -99,10 +99,10 @@ pipeline {
         }
         stage('Source Code Analysis') {
             steps {
-                withSonarQubeEnv(credentialsId: 'sonarqube-token', installationName: 'SonarQube on K8S') {
-                  sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
+                withSonarQubeEnv('SonarQube on K8S') {
+                  sh 'mvn clean package sonar:sonar'
                 }
-                timeout(time: 1, unit: 'HOURS') {
+                timeout(time: 10, unit: 'MINUTES') {
                   waitForQualityGate abortPipeline: false
                 }
             }
