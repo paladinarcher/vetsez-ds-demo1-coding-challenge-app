@@ -100,6 +100,7 @@ pipeline {
         stage('Source Code Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube on K8S') {
+                  sh 'git status'
                   sh 'mvn sonar:sonar'
                 }
                 timeout(time: 10, unit: 'MINUTES') {
