@@ -101,7 +101,8 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube on K8S') {
                   sh 'ls -lah . && git status && pwd'
-                  sh 'mvn sonar:sonar'
+                  //sh 'mvn sonar:sonar'
+                  sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
                 }
                 timeout(time: 10, unit: 'MINUTES') {
                   waitForQualityGate abortPipeline: false
