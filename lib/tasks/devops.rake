@@ -92,6 +92,7 @@ namespace :devops do
   task :rails_tests do |task|
     p task.comment
     puts "inside rails_tests: env is #{Rails.env}"
+    p "inside rails_tests: rails env is #{ENV['RAILS_ENV']}"
     debug_file = "#{Rails.root}/.jrubyrc".gsub('/',slash) #work on windows
     Rake::Task['test'].invoke
     File.delete(debug_file) if File.exist?(debug_file)
