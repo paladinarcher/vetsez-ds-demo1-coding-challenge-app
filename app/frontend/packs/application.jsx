@@ -1,3 +1,7 @@
+// import all image files in a folder:
+// require.context('./images', true);
+
+/*
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from './utils/axios'
@@ -66,3 +70,5 @@ export default class Application extends React.Component {
 document.addEventListener('DOMContentLoaded', () => {
     ReactDOM.render(<Application/>, document.getElementById('app'));
 });
+*/
+console.log("application jsx");

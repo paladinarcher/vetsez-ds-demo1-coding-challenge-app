@@ -22,7 +22,7 @@
     <header>
       <div class="logo" aria-label="VA Logo">
         <a href="https://www.va.gov" title="Go to VA.gov">
-          <img style="vertical-align: middle" src="<%= asset_pack_path 'media/packs/images/va-logo-white.png' %>"  alt="VA Header Image"/>
+          <img style="vertical-align: middle" src="<%= asset_pack_path image('va-logo-white.png') %>"  alt="VA Header Image"/>
         </a>
         <div style="float: right; display: inline;">
           <% if (current_user) %>
@@ -38,10 +38,14 @@
   </div>
 
   <div class="main">
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <div id="app"></div>
-    <%= yield %>
+    <div class="usa-grid">
+      <div class="usa-width-whole">
+        <p class="notice"><%= notice %></p>
+        <p class="alert"><%= alert %></p>
+        <div id="app"></div>
+        <%= yield %>
+      </div>
+    </div>
   </div>
     <div class="footer-container">
       <footer>

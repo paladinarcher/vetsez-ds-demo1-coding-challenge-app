@@ -1,5 +1,5 @@
 import React from 'react'
-import GH from "../utils/gon_helper";
+import {gonRoute, gonImgPath} from "../utils/gon_helper";
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
@@ -35,7 +35,7 @@ const Header = () => {
             <header>
                 <div className="logo" aria-label="VA Logo">
                     <a href="https://www.va.gov" title="Go to VA.gov">
-                        <img style={{verticalAlign: 'middle'}} src={GH.getImagePath('va-logo-white.png')} alt="VA Header Image"/>
+                        <img style={{verticalAlign: 'middle'}} src={gonImgPath('va-logo-white.png')} alt="VA Header Image"/>
                     </a>
                 </div>
                 {/*<div style={{float: 'right', display: 'inline'}}>{gon.user}</div>*/}
@@ -60,7 +60,7 @@ const Footer = () => {
             <footer>
                 <div className="logo" aria-label="VA Logo">
                     <a href="https://www.va.gov" title="Go to VA.gov">
-                        <img src={GH.getImagePath('va-logo-white.png')} alt="VA Footer Image"/>
+                        <img src={gonImgPath('va-logo-white.png')} alt="VA Footer Image"/>
                     </a>
                 </div>
                 <div>
@@ -92,7 +92,7 @@ const Footer2 = () => {
                     <div className="usa-width-one-fourth">
                         <div className="logo" aria-label="VA Logo">
                             <a href="https://www.va.gov" title="Go to VA.gov">
-                                <img src={GH.getImagePath('va-logo-white.png')} alt="VA Footer Image"/>
+                                <img src={gonImgPath('va-logo-white.png')} alt="VA Footer Image"/>
                             </a>
                         </div>
                     </div>

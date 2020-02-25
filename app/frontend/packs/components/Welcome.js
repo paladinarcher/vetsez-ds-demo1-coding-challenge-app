@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from '../utils/axios'
-import GH from '../utils/gon_helper';
+import {gonRoute} from '../utils/gon_helper';
 
 class Welcome extends React.Component {
     componentDidMount() {
@@ -8,8 +8,7 @@ class Welcome extends React.Component {
     }
 
     testAxios() {
-
-        axios.get(GH.getRoute('fetch_time_path'))
+        axios.post(gonRoute('fetch_time_path'))
             .then(function (response) {
                 console.log("this is an axios response with", response.data.current_time);
             })
@@ -33,9 +32,7 @@ class Welcome extends React.Component {
                 </div>
                 <div className="usa-grid">
                     <div className="usa-width-whole">
-                        <a href={gon.routes.login_path} className='usa-button-primary'>Login</a>&nbsp;|&nbsp;
-                        <a href='./signup'>Sign up</a>&nbsp;|&nbsp;
-                        <a href='./rec_engine'>Recommendation Engine</a>&nbsp;|&nbsp;
+                        <a href={gonRoute('rec_engine_path')} className='usa-button-primary'>Recommendation Engine</a>&nbsp;|&nbsp;
                     </div>
                 </div>
             </div>

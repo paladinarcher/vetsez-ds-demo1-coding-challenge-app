@@ -14,4 +14,14 @@ const ax = axios.create({
     }
 });
 
+ax.interceptors.response.use(function (response) {
+    console.log("------------- axios response -----------------", response);
+    // Do something with response data
+    return response;
+}, function (error) {
+    console.log("------------- axios error -----------------", error);
+    // Do something with response error
+    return Promise.reject(error);
+});
+
 export default ax
