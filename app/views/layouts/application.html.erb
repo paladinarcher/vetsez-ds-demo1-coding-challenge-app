@@ -18,58 +18,17 @@
 -->
 
   </head>
-  <div class="header-container">
-    <header>
-      <div class="logo" aria-label="VA Logo">
-        <a href="https://www.va.gov" title="Go to VA.gov">
-          <img style="vertical-align: middle" src="<%= asset_pack_path image('va-logo-white.png') %>"  alt="VA Header Image"/>
-        </a>
-        <div style="float: right; display: inline;">
-          <% if (current_user) %>
-            Welcome <%= current_user&.email %>!<br>
-            <%= link_to 'Logout', destroy_user_session_path, class: "usa-button-primary va-button-primary" %>
-          <% else %>
-            <%= link_to 'Login', new_user_session_path, :style=>'color:#FFFFFF;' %>&nbsp;|&nbsp;
-            <%= link_to 'Signup', new_user_registration_path, :style=>'color:#FFFFFF;' %>
-          <% end %>
+  <body>
+    <%= render 'layouts/header' %>
+    <div class="main">
+      <div class="usa-grid">
+        <div class="usa-width-whole">
+          <%= render 'layouts/messages' %>
+          <div id="app"></div>
+          <%= yield %>
         </div>
       </div>
-  </header>
-  </div>
-  <div class="main">
-    <div class="usa-grid">
-      <div class="usa-width-whole">
-        <%= render 'layouts/messages' %>
-        <div id="app"></div>
-        <%= yield %>
-      </div>
     </div>
-  </div>
-    <div class="footer-container">
-      <footer>
-        <div class="logo" aria-label="VA Logo">
-          <a href="https://www.va.gov" title="Go to VA.gov">
-            <img style="vertical-align: middle" src="<%= asset_pack_path 'media/packs/images/va-logo-white.png' %>"  alt="VA Header Image"/>
-          </a>
-        </div>
-        <div>
-          <nav role="navigation" aria-label="External Links Navigation">
-            <ul>
-              <li><a href="https://www.section508.va.gov" title="Accessibility" class='link'>Accessibility</a></li>
-              <li><a href="https://www.va.gov/orm/NOFEAR_Select.asp" title="No FEAR Act Data" class='link'>No FEAR Act Data</a></li>
-              <li><a href="https://www.va.gov/opa/Plain_Language.asp" title="Plain Language" class='link'>Plain Language</a></li>
-              <li><a href="https://www.va.gov/oig/" title="Office of Inspector General" class='link'>Office of Inspector General</a></li>
-              <li><a href="https://www.usa.gov/" title="USA.gov" class='link'>USA.gov</a></li>
-              <li><a href="https://www.va.gov/privacy-policy/" title="Privacy, Policies &amp; Legal information" class='link'>Privacy, Policies &amp; Legal information</a></li>
-              <li><a href="https://www.va.gov/foia/" title="Freedom of Information Act (FOIA)" class='link'>Freedom of Information Act (FOIA)</a></li>
-              <li><a href="https://www.va.gov/privacy/" title="VA Privacy Service" class='link'>VA Privacy Service</a></li>
-              <li><a href="https://www.va.gov/scorecard/" title="VA.gov scorecard" class='link'>VA.gov scorecard</a></li>
-              <li><a href="https://www.va.gov/veterans-portrait-project/" title="Veterans Portrait Project" class='link'>Veterans Portrait Project</a></li>
-            </ul>
-          </nav>
-        </div>
-      </footer>
-    </div>
+    <%= render 'layouts/footer' %>
   </body>
 </html>
-
