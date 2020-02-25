@@ -88,6 +88,22 @@ namespace :devops do
     Rake::Task['db:seed'].invoke() #rake db:migrate RAILS_ENV=test
   end
 
+  debug_file = ENV['RAILS_ROOT'] + '/.jrubyrc'
+  desc 'put jruby in debug mode'
+  task :debug_jruby_for_tests do |task|
+    p task.comment
+    debug_file = "#{Rails.root}/.jrubyrc".gsub('/',slash) #work on windows
+    File.open(debug_file, 'w') { |file| file.write("debug.fullTrace=true") }
+  end
+  desc 'run rails tests and eliminate debug mode'
+  task :rails_tests do |task|
+    p task.comment
+    puts "inside rails_tests: env is #{Rails.env}"
+    debug_file = "#{Rails.root}/.jrubyrc".gsub('/',slash) #work on windows
+    Rake::Task['test'].invoke
+    File.delete(debug_file) if File.exist?(debug_file)
+  end
+
   # seed the menu options
   desc 'hook into docker flow for db setup'
   task :db_setup_for_docker => :environment do |task|

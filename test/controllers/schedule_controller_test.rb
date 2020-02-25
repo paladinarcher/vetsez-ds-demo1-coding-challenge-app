@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class ScheduleControllerTest < ActionDispatch::IntegrationTest
+=begin
   test "should get get_facilities" do
     get get_facilities_url
     assert_response :success
@@ -10,7 +11,7 @@ class ScheduleControllerTest < ActionDispatch::IntegrationTest
     get get_appointment_types_url
     assert_response :success
   end
-
+=end
   # test "should get doctors will return array of doctors" do
   #   doc = Doctor.first
   #   appt_type_id = doc.get_appt_type.id
