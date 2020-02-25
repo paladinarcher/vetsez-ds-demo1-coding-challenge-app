@@ -36,12 +36,10 @@
       </div>
   </header>
   </div>
-
   <div class="main">
     <div class="usa-grid">
       <div class="usa-width-whole">
-        <p class="notice"><%= notice %></p>
-        <p class="alert"><%= alert %></p>
+        <%= render 'layouts/messages' %>
         <div id="app"></div>
         <%= yield %>
       </div>
