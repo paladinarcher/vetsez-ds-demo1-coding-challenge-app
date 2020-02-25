@@ -1,5 +1,15 @@
 def functionalTestUrl = null
 
+void setBuildStatus(String message, String state, String context) {
+  step([
+      $class: "GitHubCommitStatusSetter",
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-app"],
+      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+  ]);
+}
+
 pipeline {
     agent {
         node {
@@ -57,6 +67,15 @@ pipeline {
                 //Checkout the tag
                 sh "git checkout tags/${params.releaseVersion}"
             }
+
+            post {
+              success {
+                setBuildStatus("Create Release.", "SUCCESS", "ci/jenkins/createRelease")
+              }
+              failure {
+                setBuildStatus("Create Release.", "FAILURE", "ci/jenkins/createRelease")
+              }
+            }
         }
         stage('Building Application') {
             steps {
@@ -68,10 +87,34 @@ pipeline {
             //         junit '**/target/surefire-reports/*.xml'
             //     }
             // }
+
+            post {
+              success {
+                setBuildStatus("Building Application.", "SUCCESS", "ci/jenkins/buildingApplication")
+              }
+              failure {
+                setBuildStatus("Building Application.", "FAILURE", "ci/jenkins/buildingApplication")
+              }
+            }
         }
         stage('Source Code Analysis') {
             steps {
-                echo "TDB..."
+                withSonarQubeEnv('SonarQube on K8S') {
+                  sh 'ls -lah . && git status && pwd'
+                  //sh 'mvn sonar:sonar'
+                  sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
+                }
+                timeout(time: 10, unit: 'MINUTES') {
+                  waitForQualityGate abortPipeline: false
+                }
+            }
+            post {
+              success {
+                setBuildStatus("Source Code Analysis.", "SUCCESS", "ci/jenkins/sourceCodeAnalysis")
+              }
+              failure {
+                setBuildStatus("Source Code Analysis.", "FAILURE", "ci/jenkins/sourceCodeAnalysis")
+              }
             }
         }
         stage("Build Containers") {
@@ -93,14 +136,27 @@ pipeline {
                                     sh "git checkout tags/${params.releaseVersion}"
                                 }
                             }
-                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                                dbImage = docker.build("meetveracity/coding-challenge-db-init", "-f Dockerfile.db-init .")
+                            def DOCKER_REGISTRY_URI = env.DOCKER_REGISTRY_URL
+                            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                              usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                              sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
+                            //}
+                            //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                                dbImage = docker.build("paladinarcher/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     dbImage.push(params.releaseVersion)
                                 }
                             }
                         }
+                    }
+                    post {
+                      success {
+                        setBuildStatus("Database Migration Container.", "SUCCESS", "ci/jenkins/databaseMigrationContainer")
+                      }
+                      failure {
+                        setBuildStatus("Database Migration Container.", "FAILURE", "ci/jenkins/databaseMigrationContainer")
+                      }
                     }
                 }
                 stage("Application Container") {
@@ -112,14 +168,26 @@ pipeline {
                     steps {
                         unstash 'mavenOutput'
                         script {
-                            docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                                image = docker.build("meetveracity/coding-challenge-app")
+                            def DOCKER_REGISTRY_URI = env.DOCKER_REGISTRY_URL
+                            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                              usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                              sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
+                            //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                                image = docker.build("paladinarcher/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     image.push(params.releaseVersion)
                                 }
                             }
                         }
+                    }
+                    post {
+                      success {
+                        setBuildStatus("Application Container.", "SUCCESS", "ci/jenkins/applicationContainer")
+                      }
+                      failure {
+                        setBuildStatus("Application Container.", "FAILURE", "ci/jenkins/applicationContainer")
+                      }
                     }
                 }
             }
@@ -142,15 +210,25 @@ pipeline {
 
                                     //Deploy the Chart
                                     sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
-                                    sleep 60
 
                                     //Find the Service Port
-                                    functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
-
+                                    def count = 0
+                                    functionalTestUrl = "http://"
+                                    while (functionalTestUrl=="http://" && count < 300) {
+                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
+                                      if(functionalTestUrl=="http://") { sleep 5 }
+                                      count+=10
+                                    }
                                     echo "Service is available at ${functionalTestUrl}"
                                 }
                             }
                             post {
+                              success {
+                                setBuildStatus("Deploy Functional Test Environment.", "SUCCESS", "ci/jenkins/deployFunctionalTestEnvironment")
+                              }
+                              failure {
+                                setBuildStatus("Deploy Functional Test Environment.", "FAILURE", "ci/jenkins/deployFunctionalTestEnvironment")
+                              }
                                 //Clean up our helm checkout
                                 always {
                                     sh 'rm -rf helmChart'
@@ -182,6 +260,12 @@ pipeline {
                                 }
                             }
                             post {
+                              success {
+                                setBuildStatus("Functional Test Execution.", "SUCCESS", "ci/jenkins/functionalTestExecution")
+                              }
+                              failure {
+                                setBuildStatus("Functional Test Execution.", "FAILURE", "ci/jenkins/functionalTestExecution")
+                              }
                                 always {
                                     junit '**/test/selenium/reports/*.xml'
                                 }
@@ -202,6 +286,14 @@ pipeline {
                 stage("Performance Testing") {
                     steps {
                         echo "TDB..."
+                    }
+                    post {
+                      success {
+                        setBuildStatus("Performance Testing.", "SUCCESS", "ci/jenkins/performanceTesting")
+                      }
+                      failure {
+                        setBuildStatus("Performance Testing.", "FAILURE", "ci/jenkins/performanceTesting")
+                      }
                     }
                 }
             }
@@ -226,10 +318,18 @@ pipeline {
                     sh "helm upgrade --install ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
                     
                     //Wait a few seconds for the external IP to be allocated
-                    sleep 30
+                    def count = 0
+                    def previewUrl = "http://"
+                    while (previewUrl=="http://" && count < 300) {
+                      previewUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].status.loadBalancer.ingress[0].hostname}\"")
+                      if(previewUrl=="http://") { sleep 5 }
+                      count+=10
+                    }
 
+                    if(previewUrl=="http://") {
+                      error("Failed to get a preview URL in ${count} seconds...")
+                    }
                     //Print out the preview instance URL
-                    def previewUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].status.loadBalancer.ingress[0].hostname}\"")
                     echo "Preview instance is available at ${previewUrl}/dsbpa"
 
                     //Add the Preview URL to the PR
@@ -242,6 +342,12 @@ pipeline {
                 }
             }
             post {
+              success {
+                setBuildStatus("Review Instance Deployment.", "SUCCESS", "ci/jenkins/reviewInstanceDeployment")
+              }
+              failure {
+                setBuildStatus("Review Instance Deployment.", "FAILURE", "ci/jenkins/reviewInstanceDeployment")
+              }
                 //Clean up our helm checkout
                 always {
                     sh 'rm -rf helmChart'
@@ -263,17 +369,29 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") {
-                        image = docker.image("meetveracity/coding-challenge-app:${env.BRANCH_NAME}")
+                    def DOCKER_REGISTRY_URI = env.DOCKER_REGISTRY_URL
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                          usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                          sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
+                    //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                        image = docker.image("paladinarcher/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         image.pull()
                         image.push("development-${env.GIT_COMMIT}")
                         image.push("latest")
-                        initImage = docker.image("meetveracity/coding-challenge-db-init:${env.BRANCH_NAME}")
+                        initImage = docker.image("paladinarcher/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         initImage.pull()
                         initImage.push("development-${env.GIT_COMMIT}")
                         initImage.push("latest")
                     }
                 }
+            }
+            post {
+              success {
+                setBuildStatus("Promote to Development.", "SUCCESS", "ci/jenkins/promoteToDevelopment")
+              }
+              failure {
+                setBuildStatus("Promote to Development.", "FAILURE", "ci/jenkins/promoteToDevelopment")
+              }
             }
         }
     }
