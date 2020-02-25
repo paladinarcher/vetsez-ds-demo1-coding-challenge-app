@@ -26,7 +26,6 @@ namespace :devops do
 
 
   default_name = to_snake_case(Rails.application.class.parent)
-  default_war = "#{default_name}.war"
   context = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
   $maven_version = env('PROJECT_VERSION', $UNVERSIONED)
   ENV['RAILS_RELATIVE_URL_ROOT'] = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
@@ -34,11 +33,6 @@ namespace :devops do
   ENV['NODE_ENV'] = 'production'
 
   slash = java.io.File.separator #or FILE::ALT_SEPARATOR
-  src_war = "#{Utilities::MAVEN_TARGET_DIRECTORY}#{slash}#{Rails.application.class.parent_name.to_s.downcase}.war"
-  tomcat_war_dst = "#{ENV['TOMCAT_DEPLOY_DIRECTORY']}"
-  app_name = Rails.application.class.parent_name.to_s.downcase
-  tomcat_war = "#{tomcat_war_dst}#{slash}#{app_name}.war"
-  tomcat_base_dir = "#{tomcat_war_dst}#{slash}..#{slash}"
   $war_name = $maven_version.eql?($UNVERSIONED) ? default_name : "#{default_name}-#{$maven_version}"
 
   desc 'build maven\'s target folder if needed'
@@ -88,7 +82,6 @@ namespace :devops do
     Rake::Task['db:seed'].invoke() #rake db:migrate RAILS_ENV=test
   end
 
-  debug_file = ENV['RAILS_ROOT'] + '/.jrubyrc'
   desc 'put jruby in debug mode'
   task :debug_jruby_for_tests do |task|
     p task.comment
