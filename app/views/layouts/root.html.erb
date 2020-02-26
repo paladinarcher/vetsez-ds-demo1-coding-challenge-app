@@ -7,6 +7,10 @@
         window.location.replace(path)
     }
     <% if current_user %>
-    gotoAccount('<%= account_path %>');
+      <% if current_user.approved %>
+        gotoAccount('<%= account_path %>');
+      <% else %>
+        gotoAccount('<%= awaiting_approval_path %>');
+      <% end %>
     <% end %>
 </script>

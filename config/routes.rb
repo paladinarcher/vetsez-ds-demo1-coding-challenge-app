@@ -6,11 +6,11 @@ Rails.application.routes.draw do
     get "/#{path}" => 'react_component#auth'
   }
 
-=begin
-  %w(login signup).each { |path|
-    get "/#{path}" => 'react_component#no_auth'
+
+  %w(awaiting_approval).each { |path|
+    get "/#{path}" => 'react_component#awaiting_approval'
   }
-=end
+
 
   root :to => 'layouts#root'
 
