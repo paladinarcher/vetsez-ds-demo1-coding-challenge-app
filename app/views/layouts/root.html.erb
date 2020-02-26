@@ -1,1 +1,12 @@
-<!-- this is the root page for the application -->
+<% unless current_user %>
+  <div>Landing page not logged in</div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    function gotoWelcome(path) {
+        window.location.replace(path)
+    }
+    <% if current_user %>
+    gotoWelcome('<%= rec_engine_path %>');
+    <% end %>
+</script>

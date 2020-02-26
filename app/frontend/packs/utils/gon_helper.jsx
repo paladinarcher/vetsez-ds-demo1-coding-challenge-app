@@ -1,15 +1,11 @@
-class GonHelper {
-    static getImagePath(img) {
-        console.log("image is ",img);
-        return gon.packs.paths.images[img];
-    }
-
-    static getImageUrl(img) {
-        return gon.packs.urls.images[img];
-    }
-
-    static getRoute(route) {
-        return gon.routes[route];
-    }
+export function gonImgPath(img) {
+    return gon.packs.paths.images[img];
 }
-export default GonHelper;
+
+export function gonImgUrl(img) {
+    return gon.packs.urls.images[img];
+}
+
+export function gonRoute(route) {
+    return gon.routes[route];
+}
