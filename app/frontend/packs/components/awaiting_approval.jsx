@@ -15,7 +15,7 @@ class AwaitingApproval extends React.Component {
                 </div>
                 <div className="usa-grid">
                     <div className="usa-width-whole">
-                        <p>Your login request hsa been submitted and upon approval you will be allowed to access the account page</p>
+                        <p>Your login request has been submitted and upon approval you will be allowed to access the accounts page</p>
                     </div>
                 </div>
             </div>
