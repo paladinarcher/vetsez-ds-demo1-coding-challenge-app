@@ -36,7 +36,6 @@ namespace :devops do
   $maven_version = env('PROJECT_VERSION', $UNVERSIONED)
   ENV['RAILS_RELATIVE_URL_ROOT'] = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
   ENV['RAILS_ENV'] = version_to_rails_mode()
-  Rails.env = ENV['RAILS_ENV']
   ENV['NODE_ENV'] = 'production'
 
   slash = java.io.File.separator #or FILE::ALT_SEPARATOR
@@ -100,7 +99,7 @@ namespace :devops do
     p task.comment
     puts "inside rails_tests: env is #{Rails.env}"
     debug_file = "#{Rails.root}/.jrubyrc".gsub('/',slash) #work on windows
-    
+    Rails.env = ENV['RAILS_ENV']
     Rake::Task['test'].invoke
     File.delete(debug_file) if File.exist?(debug_file)
   end
