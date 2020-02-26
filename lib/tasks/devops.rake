@@ -14,9 +14,15 @@ namespace :devops do
     ENV[env_var].nil? ? default : ENV[env_var]
   end
 
-  def version_to_rails_mode(version)
+  def version_to_rails_mode()
+    version = ENV['PROJECT_VERSION'] #set by maven
+    if (version.to_s.empty?)
+      #I am running outside of maven
+      mode = ENV['RAILS_ENV']
+    else
+      mode = production
+    end
     p "The version is #{version}" if version
-    mode = 'production'
     if (version =~ /snapshot/i)
       mode = 'test'
     end
@@ -29,8 +35,7 @@ namespace :devops do
   context = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
   $maven_version = env('PROJECT_VERSION', $UNVERSIONED)
   ENV['RAILS_RELATIVE_URL_ROOT'] = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
-  ENV['RAILS_ENV'] = version_to_rails_mode(ENV['PROJECT_VERSION'])
-  Rails.env = ENV['RAILS_ENV']
+  ENV['RAILS_ENV'] = version_to_rails_mode()
   ENV['NODE_ENV'] = 'production'
 
   slash = java.io.File.separator #or FILE::ALT_SEPARATOR
