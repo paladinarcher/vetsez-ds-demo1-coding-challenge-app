@@ -8,5 +8,5 @@
 # require './db/comments_seed'
 User.delete_all
 
-User.create!(email: 'ab@example.com', password: 'password1')
-User.create!(email: 'cd@example.com', password: 'password2')
+User.create!(email: 'approved@va.com', password: 'approved', approved: true)
+User.create!(email: 'unapproved@va.com', password: 'unapproved')
