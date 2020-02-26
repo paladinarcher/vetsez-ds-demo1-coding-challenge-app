@@ -91,6 +91,7 @@ namespace :devops do
   # seed the menu options
   desc 'hook into docker flow for db setup'
   task :db_setup_for_docker => :environment do |task|
+    p "rails env is #{ENV['RAILS_ENV']}"
     Rake::Task['db:migrate'].invoke()
     Rake::Task['db:seed'].invoke()
   end
