@@ -7,8 +7,5 @@ class ActiveSupport::TestCase
   #fixtures :all
   puts "test"
 
-  include Devise::Test::IntegrationHelpers
-  include Warden::Test::Helpers
-
   # Add more helper methods to be used by all tests here...
 end
