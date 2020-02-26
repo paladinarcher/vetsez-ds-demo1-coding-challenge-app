@@ -2,15 +2,15 @@ Rails.application.routes.draw do
   devise_for :users
   post 'fetch_time' => 'react_component#fetch_time'
 
-  # root :to => 'welcome#index'
-
-  %w(welcome rec_engine).each { |path|
+  %w(account rec_engine).each { |path|
     get "/#{path}" => 'react_component#auth'
   }
 
+=begin
   %w(login signup).each { |path|
     get "/#{path}" => 'react_component#no_auth'
   }
+=end
 
   root :to => 'layouts#root'
 

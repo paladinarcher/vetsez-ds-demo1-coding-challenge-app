@@ -3,10 +3,10 @@
 <% end %>
 
 <script type="text/javascript" charset="utf-8">
-    function gotoWelcome(path) {
+    function gotoAccount(path) {
         window.location.replace(path)
     }
     <% if current_user %>
-    gotoWelcome('<%= rec_engine_path %>');
+    gotoAccount('<%= account_path %>');
     <% end %>
 </script>
