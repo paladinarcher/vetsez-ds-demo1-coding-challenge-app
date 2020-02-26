@@ -89,9 +89,13 @@ namespace :devops do
   end
 
   # seed the menu options
+  # Building db-init
+  # Step 1/7 : FROM jruby:9.2.8
+  #  ---> 870bb631749c
+  # Step 2/7 : ENV RAILS_ENV=production
   desc 'hook into docker flow for db setup'
   task :db_setup_for_docker => :environment do |task|
-    p "rails env is #{ENV['RAILS_ENV']}"
+    p "rails env in db_setup_for_docker is #{ENV['RAILS_ENV']}"
     Rake::Task['db:migrate'].invoke()
     Rake::Task['db:seed'].invoke()
   end
