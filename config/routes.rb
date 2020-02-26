@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   post 'fetch_time' => 'react_component#fetch_time'
 
-  %w(account rec_engine).each { |path|
+  %w(account rec_engine awaiting_approval).each { |path|
     get "/#{path}" => 'react_component#auth'
   }
 
