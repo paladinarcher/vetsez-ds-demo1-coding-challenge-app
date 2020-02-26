@@ -298,3 +298,8 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 end
+$log.always("I have been seeded with these users:")
+User.all.each do |user|
+  $log.always("I am user #{user.email}")
+end
+$log.always("Done with user enumeration.")
