@@ -28,6 +28,13 @@ header nav ul li ul { text-align:left; }
 header nav ul li ul li { margin-top:0px !important; }
 header nav ul li ul li a { color:#333333; }
 
+.main {
+    min-height: 500px;
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 10px;
+}
+
 .footer-container { width:100%; background-color:#003f72; }
 footer { height:150px; background-color:#003f72; color:#ffffff; width:100%; display:table; max-width:1440px; position:relative; margin:0px auto; }
 footer .logo { width:25%; display:table-cell; vertical-align:middle; padding-left:32px; }
