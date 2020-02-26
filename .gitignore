@@ -5,7 +5,7 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 # Ignore target directory
 /target
-
+/coverage
 # Ignore bundler config.
 /.bundle
 

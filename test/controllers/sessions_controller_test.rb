@@ -1,10 +1,13 @@
 require 'test_helper'
 puts "inside sessions controller test"
 class SessionsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    ActionController::Base.allow_forgery_protection = false
+  end
   # set allow_forgery_protection to false in environments/test.rb
   test "should create session/user for non-existent user" do
     assert_difference('User.count', 1) do
-      post '/sessions', params: {user: {first_name: 'abcd', last_name: 'xy', email: 'ab@xy.com', password: 'password'}}
+      post sessions_url, params: {user: {first_name: 'abcd', last_name: 'xy', email: 'ab@xy.com', password: 'password'}}
     end
     
     assert_equal(session[:user_id], User.last.id, "Session does not contain :user_id key")

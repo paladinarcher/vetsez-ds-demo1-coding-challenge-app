@@ -20,7 +20,7 @@ namespace :devops do
       #I am running outside of maven
       mode = ENV['RAILS_ENV']
     else
-      mode = production
+      mode = 'production'
     end
     p "The version is #{version}" if version
     if (version =~ /snapshot/i)
@@ -99,8 +99,8 @@ namespace :devops do
     p task.comment
     puts "inside rails_tests: env is #{Rails.env}"
     debug_file = "#{Rails.root}/.jrubyrc".gsub('/',slash) #work on windows
-    system('bin/rake test RAILS_ENV=test')
-    #Rake::Task['test'].invoke
+    
+    Rake::Task['test'].invoke
     File.delete(debug_file) if File.exist?(debug_file)
   end
 
