@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   get 'get_facilities' => 'schedule#get_facilities'
   get 'get_appointment_types' => 'schedule#get_appointment_types'
   get 'get_doctors' => 'schedule#get_doctors'
