@@ -21,7 +21,7 @@ namespace :devops do
       #I am running outside of maven
       mode = ENV['RAILS_ENV']
     else
-      mode = production
+      mode = 'production'
     end
     p "The version is #{version}" if version
     mode = 'production'
