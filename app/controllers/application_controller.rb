@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   def internal_error(exception)
     $log.error{LEX("An unhandled exception occurred!", exception)}
+    raise exception
   end
 
   def setup_gon

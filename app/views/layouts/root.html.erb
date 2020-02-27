@@ -1,1 +1,19 @@
-<!-- this is the root page for the application -->
+<% unless current_user %>
+  <div>
+    <h2>Landing Page</h2>
+    <p>not logged in</p>
+  </div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    function gotoAccount(path) {
+        window.location.replace(path)
+    }
+    <% if current_user %>
+      <% if current_user.approved %>
+        gotoAccount('<%= account_path %>');
+      <% else %>
+        gotoAccount('<%= awaiting_approval_path %>');
+      <% end %>
+    <% end %>
+</script>

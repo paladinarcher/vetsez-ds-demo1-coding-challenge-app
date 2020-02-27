@@ -105,10 +105,23 @@ namespace :devops do
   end
 
   # seed the menu options
+  # Building db-init
+  # Step 1/7 : FROM jruby:9.2.8
+  #  ---> 870bb631749c
+  # Step 2/7 : ENV RAILS_ENV=production
   desc 'hook into docker flow for db setup'
   task :db_setup_for_docker => :environment do |task|
+    p "rails env in db_setup_for_docker is #{ENV['RAILS_ENV']}"
     Rake::Task['db:migrate'].invoke()
     Rake::Task['db:seed'].invoke()
+  end
+
+  desc 'compile assets'
+  task :build_assets do |task|
+    p "rails env in build_assets is #{ENV['RAILS_ENV']}"
+    Rake::Task['webpacker:check_yarn'].invoke
+    Rake::Task['webpacker:yarn_install'].invoke
+    Rake::Task['devops:compile_assets'].invoke
   end
 
   desc 'Build war file'
@@ -120,9 +133,6 @@ namespace :devops do
       File.delete(war)
     end
     Rake::Task['devops:maven_target'].invoke
-    Rake::Task['webpacker:check_yarn'].invoke
-    Rake::Task['webpacker:yarn_install'].invoke
-    Rake::Task['devops:compile_assets'].invoke
     Rake::Task['devops:generate_context_file'].invoke
     Rake::Task['devops:generate_version_file'].invoke
     # Rake::Task['devops:create_version'].invoke

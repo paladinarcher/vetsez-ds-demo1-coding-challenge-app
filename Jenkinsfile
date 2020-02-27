@@ -99,7 +99,14 @@ pipeline {
         }
         stage('Source Code Analysis') {
             steps {
-                echo "TDB..."
+                withSonarQubeEnv('SonarQube on K8S') {
+                  sh 'ls -lah . && git status && pwd'
+                  //sh 'mvn sonar:sonar'
+                  sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
+                }
+                timeout(time: 10, unit: 'MINUTES') {
+                  waitForQualityGate abortPipeline: false
+                }
             }
             post {
               success {
@@ -129,8 +136,13 @@ pipeline {
                                     sh "git checkout tags/${params.releaseVersion}"
                                 }
                             }
-                            docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
-                                dbImage = docker.build("docker.vetsez.net/coding-challenge-db-init", "-f Dockerfile.db-init .")
+                            def DOCKER_REGISTRY_URI = env.DOCKER_REGISTRY_URL
+                            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                              usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                              sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
+                            //}
+                            //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                                dbImage = docker.build("paladinarcher/coding-challenge-db-init", "-f Dockerfile.db-init .")
                                 dbImage.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     dbImage.push(params.releaseVersion)
@@ -156,8 +168,12 @@ pipeline {
                     steps {
                         unstash 'mavenOutput'
                         script {
-                            docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
-                                image = docker.build("docker.vetsez.net/coding-challenge-app")
+                            def DOCKER_REGISTRY_URI = env.DOCKER_REGISTRY_URL
+                            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                              usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                              sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
+                            //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                                image = docker.build("paladinarcher/coding-challenge-app")
                                 image.push("${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                                 if (params.releaseVersion != '') {
                                     image.push(params.releaseVersion)
@@ -198,10 +214,10 @@ pipeline {
                                     //Find the Service Port
                                     def count = 0
                                     functionalTestUrl = "http://"
-                                    while (functionalTestUrl=="http://" && count < 90) {
+                                    while (functionalTestUrl=="http://" && count < 300) {
                                       functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
                                       if(functionalTestUrl=="http://") { sleep 5 }
-                                      count+=5
+                                      count+=10
                                     }
                                     echo "Service is available at ${functionalTestUrl}"
                                 }
@@ -304,10 +320,10 @@ pipeline {
                     //Wait a few seconds for the external IP to be allocated
                     def count = 0
                     def previewUrl = "http://"
-                    while (previewUrl=="http://" && count < 90) {
+                    while (previewUrl=="http://" && count < 300) {
                       previewUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].status.loadBalancer.ingress[0].hostname}\"")
                       if(previewUrl=="http://") { sleep 5 }
-                      count+=5
+                      count+=10
                     }
 
                     if(previewUrl=="http://") {
@@ -353,12 +369,16 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry("https://docker.vetsez.net/", "docker-registry") { //env.DOCKER_REGISTRY_URL
-                        image = docker.image("docker.vetsez.net/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
+                    def DOCKER_REGISTRY_URI = env.DOCKER_REGISTRY_URL
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-registry',
+                          usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                          sh 'docker login --password=${PASSWORD} --username=${USERNAME} ${DOCKER_REGISTRY_URI}'
+                    //docker.withRegistry(env.DOCKER_REGISTRY_URL, "docker-registry") { //env.DOCKER_REGISTRY_URL
+                        image = docker.image("paladinarcher/coding-challenge-app:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         image.pull()
                         image.push("development-${env.GIT_COMMIT}")
                         image.push("latest")
-                        initImage = docker.image("docker.vetsez.net/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
+                        initImage = docker.image("paladinarcher/coding-challenge-db-init:${env.BRANCH_NAME}-${env.GIT_COMMIT}")
                         initImage.pull()
                         initImage.push("development-${env.GIT_COMMIT}")
                         initImage.push("latest")

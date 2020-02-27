@@ -1,10 +1,16 @@
 Rails.application.routes.draw do
-  get 'get_facilities' => 'schedule#get_facilities'
-  get 'get_appointment_types' => 'schedule#get_appointment_types'
-  get 'get_doctors' => 'schedule#get_doctors'
-  post 'form_inputs' => 'layouts#form_inputs'
+  devise_for :users
+  post 'fetch_time' => 'react_component#fetch_time'
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  %w(account rec_engine).each { |path|
+    get "/#{path}" => 'react_component#auth'
+  }
+
+
+  %w(awaiting_approval).each { |path|
+    get "/#{path}" => 'react_component#awaiting_approval'
+  }
+
 
   root :to => 'layouts#root'
 

@@ -126,6 +126,17 @@
         </executions>
       </plugin>
 
+<!--      <plugin>-->
+<!--        <groupId>org.sonarsource.scanner.maven</groupId>-->
+<!--        <artifactId>sonar-maven-plugin</artifactId>-->
+<!--        <version>3.6.0.1398</version>-->
+<!--      </plugin>-->
+<!--      <plugin>-->
+<!--        <groupId>org.jacoco</groupId>-->
+<!--        <artifactId>jacoco-maven-plugin</artifactId>-->
+<!--        <version>0.8.4</version>-->
+<!--      </plugin>-->
+
       <plugin>
         <groupId>org.torquebox.mojo</groupId>
         <artifactId>jruby9-exec-maven-plugin</artifactId>
@@ -196,6 +207,20 @@
               <command>rake</command>
               <execArgs>PROJECT_VERSION=${project.version}</execArgs>
               <args>devops:seed</args>
+            </configuration>
+          </execution>
+          <execution>
+            <id>compile assets</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <execArgs>PROJECT_VERSION=${project.version} </execArgs>
+              <command>rake</command>
+              <args>devops:build_assets</args>
             </configuration>
           </execution>
           <execution>
@@ -283,4 +308,35 @@
       </plugin>
     </plugins>
   </build>
+
+<!--  <profiles>-->
+<!--    <profile>-->
+<!--      <id>coverage</id>-->
+<!--      <activation>-->
+<!--        <activeByDefault>true</activeByDefault>-->
+<!--      </activation>-->
+<!--      <build>-->
+<!--        <plugins>-->
+<!--          <plugin>-->
+<!--            <groupId>org.jacoco</groupId>-->
+<!--            <artifactId>jacoco-maven-plugin</artifactId>-->
+<!--            <executions>-->
+<!--              <execution>-->
+<!--                <id>prepare-agent</id>-->
+<!--                <goals>-->
+<!--                  <goal>prepare-agent</goal>-->
+<!--                </goals>-->
+<!--              </execution>-->
+<!--              <execution>-->
+<!--                <id>report</id>-->
+<!--                <goals>-->
+<!--                  <goal>report</goal>-->
+<!--                </goals>-->
+<!--              </execution>-->
+<!--            </executions>-->
+<!--          </plugin>-->
+<!--        </plugins>-->
+<!--      </build>-->
+<!--    </profile>-->
+<!--  </profiles>-->
 </project>

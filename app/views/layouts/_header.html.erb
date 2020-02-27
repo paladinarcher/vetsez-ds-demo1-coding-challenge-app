@@ -1,0 +1,18 @@
+<div class="header-container">
+  <header>
+    <div class="logo" aria-label="VA Logo">
+      <a href="https://www.va.gov" title="Go to VA.gov">
+        <img style="vertical-align: middle" src="<%= asset_pack_path image('va-logo-white.png') %>"  alt="VA Header Image"/>
+      </a>
+      <div style="float: right; display: inline;">
+        <% if (current_user) %>
+          Welcome <%= current_user&.email %>!<br>
+          <%= link_to 'Logout', destroy_user_session_path, :style=>'color:#FFFFFF;' %>
+        <% else %>
+          <%= link_to 'Login', new_user_session_path, :style=>'color:#FFFFFF;' %>&nbsp;|&nbsp;
+          <%= link_to 'Signup', new_user_registration_path, :style=>'color:#FFFFFF;' %>
+        <% end %>
+      </div>
+    </div>
+  </header>
+</div>

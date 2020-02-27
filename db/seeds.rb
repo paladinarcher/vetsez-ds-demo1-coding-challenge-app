@@ -6,3 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 # require './db/comments_seed'
+User.delete_all
+
+User.create!(email: 'approved@va.com', password: 'approved', approved: true)
+User.create!(email: 'unapproved@va.com', password: 'unapproved')
