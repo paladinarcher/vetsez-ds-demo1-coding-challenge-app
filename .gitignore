@@ -5,7 +5,9 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 # Ignore target directory
 /target
-
+/coverage
+/react_lint
+/rubo_lint
 # Ignore bundler config.
 /.bundle
 
