@@ -100,6 +100,14 @@ namespace :devops do
     Rake::Task['db:seed'].invoke()
   end
 
+  desc 'compile assets'
+  task :build_assets do |task|
+    p "rails env in build_assets is #{ENV['RAILS_ENV']}"
+    Rake::Task['webpacker:check_yarn'].invoke
+    Rake::Task['webpacker:yarn_install'].invoke
+    Rake::Task['devops:compile_assets'].invoke
+  end
+
   desc 'Build war file'
   task :build_war do |task|
     p task.comment
@@ -109,9 +117,6 @@ namespace :devops do
       File.delete(war)
     end
     Rake::Task['devops:maven_target'].invoke
-    Rake::Task['webpacker:check_yarn'].invoke
-    Rake::Task['webpacker:yarn_install'].invoke
-    Rake::Task['devops:compile_assets'].invoke
     Rake::Task['devops:generate_context_file'].invoke
     Rake::Task['devops:generate_version_file'].invoke
     # Rake::Task['devops:create_version'].invoke
