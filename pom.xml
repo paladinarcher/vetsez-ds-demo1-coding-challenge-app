@@ -210,6 +210,20 @@
             </configuration>
           </execution>
           <execution>
+            <id>compile assets</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <execArgs>PROJECT_VERSION=${project.version} </execArgs>
+              <command>rake</command>
+              <args>devops:build_assets</args>
+            </configuration>
+          </execution>
+          <execution>
             <id>run tests</id>
             <phase>compile</phase>
             <goals>
