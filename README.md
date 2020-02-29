@@ -4,11 +4,11 @@
 ##### Note for Windows 10 Pro users:  When installing programs, ensure that none of file paths have spaces in them (e.g. C:\Users\Program Location vs C:\Users\ProgramLocation).  The first one will cause problems with Ruby on Rails.
 
 1. Download and install the current stable versions of:  
-JAVA 11 JDK, JRuby ((<= 9.2.8.0) - Desired Executable Setup File), Maven, Yarn, PostgreSQL, and Node  
+JAVA 11 JDK, JRuby ((ver 9.2.8.0) - Desired Executable Setup File), Maven, Yarn, PostgreSQL, and Node  
 (When acquiring the JDK and JRuby, ensure they are both the 64-bit versions and allow paths to be modified)
 ```
 https://www.oracle.com/java/technologies/javase-jdk11-downloads.html
-https://www.jruby.org/download
+https://www.jruby.org/files/downloads/9.2.8.0/index.html
 https://maven.apache.org/download.cgi  (install instructions at https://maven.apache.org/install.html)
 https://yarnpkg.com/lang/en/docs/install/#windows-stable
 https://nodejs.org/en/download/  
@@ -32,7 +32,8 @@ set JRUBY_OPTS=--dev -J-Xmx2g -J-Djava.awt.headless=true -J-Dcatalina.base=./log
 >set JRUBY_HOME=<Full absolute path of the install folder for ruby>
 >set JRUBY_JAR=<Full absolute path of the install folder for ruby and full name of JAR File that was copied earlier>
 >set JAVA_HOME=<Full absolute path of the install folder for the Java JDK>
-set PATH=%GEM_HOME%\bin;%JRUBY_HOME%\bin;%JAVA_HOME%\bin;.\bin;%PATH%;
+>set POSTGRESQL=<Full absolute path of the install folder for the PostgreSQL install>
+set PATH=%GEM_HOME%\bin;%JRUBY_HOME%\bin;%JAVA_HOME%\bin;%POSTGRESQL%;.\bin;%PATH%;
 set JAVA_OPTS=%JAVA_OPTS% --add-opens java.base/java.io=org.jruby.dist
 set JAVA_OPTS=%JAVA_OPTS% --add-opens java.base/java.nio.channels=org.jruby.dist
 set JAVA_OPTS=%JAVA_OPTS% --add-opens java.base/sun.nio.ch=org.jruby.dist
