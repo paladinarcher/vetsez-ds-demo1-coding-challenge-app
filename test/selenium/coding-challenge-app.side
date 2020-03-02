@@ -2,7 +2,7 @@
   "id": "79da7ef6-dfde-4b59-85ea-d6b19ca627be",
   "version": "2.0",
   "name": "coding-challenge-app",
-  "url": "http://localhost:8080/dsbpa/",
+  "url": "http://localhost:8080/",
   "tests": [{
     "id": "93fe55fc-1943-45ae-bbec-749199a85b59",
     "name": "Login with approved user",
@@ -319,13 +319,6 @@
     "id": "1de87e94-8e55-4d32-bfb1-611fae4ef462",
     "name": "Duplicate User",
     "commands": [{
-      "id": "5331c6e5-fd63-4e58-8dd1-01de21b492f4",
-      "comment": "",
-      "command": "open",
-      "target": "http://localhost:8080/dsbpa/",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "76fb8c49-cd77-4f88-86ae-cd369906ae65",
       "comment": "",
       "command": "click",
@@ -601,13 +594,37 @@
     }]
   }, {
     "id": "3bb677f5-f036-4cad-ad6a-879d2368a05b",
-    "name": "Echo",
+    "name": "Base URL test",
     "commands": [{
-      "id": "db965d3b-a5cd-4459-953f-0e2375eba72e",
+      "id": "e39d58ef-918d-49ab-bc56-5f917f8a4a16",
       "comment": "",
-      "command": "echo",
-      "target": "test",
+      "command": "open",
+      "target": "/dsbpa/",
       "targets": [],
+      "value": ""
+    }, {
+      "id": "4561d4bb-472a-4087-b41c-bf91fdb593ab",
+      "comment": "",
+      "command": "click",
+      "target": "css=header > .logo",
+      "targets": [
+        ["css=header > .logo", "css:finder"],
+        ["xpath=//header/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "819ebb1b-a7c2-4a74-b4fc-d241f4c7e977",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Signup",
+      "targets": [
+        ["linkText=Signup", "linkText"],
+        ["css=a:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Signup')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_up')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Signup')]", "xpath:innerText"]
+      ],
       "value": ""
     }]
   }],
