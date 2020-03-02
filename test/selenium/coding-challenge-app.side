@@ -599,7 +599,7 @@
       "id": "e39d58ef-918d-49ab-bc56-5f917f8a4a16",
       "comment": "",
       "command": "open",
-      "target": "/dsbpa/",
+      "target": "http://ft-pr-53-coding-challenge-app.development.svc.cluster.local:80/dsbpa/",
       "targets": [],
       "value": ""
     }, {
@@ -634,7 +634,7 @@
       "id": "70f6793d-4907-4d8b-a930-2e721afdc80a",
       "comment": "",
       "command": "open",
-      "target": "http://ft-pr-53-coding-challenge-app.development.svc.cluster.local:80 ",
+      "target": "http://ft-pr-53-coding-challenge-app.development.svc.cluster.local:80/dsbpa/",
       "targets": [],
       "value": ""
     }]
