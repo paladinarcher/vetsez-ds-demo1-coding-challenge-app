@@ -56,3 +56,7 @@ test/selenium/reports
 .project
 .settings
 .idea
+
+#Ignore options file
+/options.bat
+

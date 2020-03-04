@@ -57,3 +57,6 @@ legend {
     font-weight: bold;
     font-size: large;
 }
+
+
+table tr th.sortable { cursor:pointer; }
