@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from './utils/axios'
-import GH from './utils/gon_helper';
+import {gonRoute} from './utils/gon_helper';
 import {Header, Header2, Main, Footer, Footer2} from "./components/layout";
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox'
 import Recommendation from './components/recommendation'
@@ -22,7 +22,7 @@ export default class Application extends React.Component {
     }
 
     testAxios() {
-        axios.get(GH.getRoute('fetch_time_path'))
+        axios.get(gonRoute('fetch_time_path'))
             .then(function (response) {
                 console.log("this is an axios response with", response.data.time);
             })
@@ -41,14 +41,14 @@ export default class Application extends React.Component {
             'rec_engine': <RecEngine/>,
             'forminputs': <FormInputs/>,
             'welcome': <div>
-                    <button type="button" className="usa-button">Button</button>
+                <button type="button" className="usa-button">Button</button>
                 <div className="va-h-ruled--stars"></div>
                 <div className="usa-width-one-whole">
-                <AlertBox
-                    headline='Informational alert'
-                    content="YAY!!!!!!!"
-                    status="info"
-                    isVisible/></div></div>
+                    <AlertBox
+                        headline='Informational alert'
+                        content="YAY!!!!!!!"
+                        status="info"
+                        isVisible/></div></div>
             ,
         };
         return (
