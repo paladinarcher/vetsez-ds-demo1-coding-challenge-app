@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <!-- in order to get your jars run this -->
   <!-- mvn initialize -->
@@ -125,7 +126,7 @@
           </execution>
         </executions>
       </plugin>
-
+<!--
       <plugin>
         <groupId>org.sonarsource.scanner.maven</groupId>
         <artifactId>sonar-maven-plugin</artifactId>
@@ -136,7 +137,7 @@
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>0.8.4</version>
       </plugin>
-
+-->
       <plugin>
         <groupId>org.torquebox.mojo</groupId>
         <artifactId>jruby9-exec-maven-plugin</artifactId>
@@ -210,6 +211,20 @@
             </configuration>
           </execution>
           <execution>
+            <id>jruby in debug mode</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <jrubyVerbose>true</jrubyVerbose>
+              <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
+              <execArgs>PROJECT_VERSION=${project.version}</execArgs>
+              <command>rake</command>
+              <args>devops:debug_jruby_for_tests</args>
+            </configuration>
+          </execution>
+          <execution>
             <id>run tests</id>
             <phase>compile</phase>
             <goals>
@@ -218,8 +233,9 @@
             <configuration>
               <jrubyVerbose>true</jrubyVerbose>
               <jrubyJvmArgs>-Xmx4000m -Djava.awt.headless=true</jrubyJvmArgs>
-              <execArgs>PROJECT_VERSION=${project.version} </execArgs>
+              <execArgs>PROJECT_VERSION=${project.version}</execArgs>
               <command>rake</command>
+              <args>devops:rails_tests</args>
             </configuration>
           </execution>
 
@@ -232,9 +248,10 @@
             <configuration>
               <jrubyVerbose>true</jrubyVerbose>
               <jrubyJvmArgs>-Djava.awt.headless=true</jrubyJvmArgs>
-              <execArgs>PROJECT_VERSION=${project.version} </execArgs>
+              <execArgs>PROJECT_VERSION=${project.version}</execArgs>
               <command>rake</command>
-              <args>devops:build_war</args> <!--//Used only during a build on windows. This must be the last argument.-->
+              <args>devops:build_war
+              </args> <!--//Used only during a build on windows. This must be the last argument.-->
             </configuration>
           </execution>
         </executions>
@@ -271,7 +288,7 @@
         <version>1.0-m4.3</version>
         <dependencies>
           <dependency>
-            <groupId>xerces</groupId>	<!-- workaround jgitflow https://ecosystem.atlassian.net/browse/MJF-251 -->
+            <groupId>xerces</groupId>    <!-- workaround jgitflow https://ecosystem.atlassian.net/browse/MJF-251 -->
             <artifactId>xercesImpl</artifactId>
             <version>2.11.0</version>
           </dependency>
@@ -279,7 +296,7 @@
       </plugin>
     </plugins>
   </build>
-
+<!--
   <profiles>
     <profile>
       <id>coverage</id>
@@ -310,4 +327,5 @@
       </build>
     </profile>
   </profiles>
+-->
 </project>

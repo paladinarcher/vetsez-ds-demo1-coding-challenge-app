@@ -7,6 +7,8 @@ ruby '2.5.3'
 gem 'rails', '~> 5.2.2'
 # Use jdbcpostgresql as the database for Active Record
 gem 'activerecord-jdbcpostgresql-adapter'
+# User active model serializer 
+gem 'active_model_serializers'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -20,7 +22,7 @@ gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 gem 'trinidad', '~> 1.5.0.B2', require: nil, group: :development
@@ -34,3 +36,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #gem install trinidad --pre (do this once)
 gem 'warbler'
 gem 'gon'
+# test coverage
+gem 'simplecov', require: false, group: [:test, :development]

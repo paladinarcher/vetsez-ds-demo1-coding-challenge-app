@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :users, only: [:index, :create, :show, :destroy]
+  resources :sessions, only: [:create]
+  # get 'get_facilities' => 'schedule#get_facilities'
+  # get 'get_appointment_types' => 'schedule#get_appointment_types'
+  # get 'get_doctors' => 'schedule#get_doctors'
   get 'get_facilities' => 'schedule#get_facilities'
   get 'get_appointment_types' => 'schedule#get_appointment_types'
   get 'get_doctors' => 'schedule#get_doctors'
