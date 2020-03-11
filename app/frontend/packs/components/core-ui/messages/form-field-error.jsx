@@ -2,6 +2,7 @@ import React from 'react';
 
 function FormFieldError({fieldname, error_messages}) {
     if (!error_messages) {
+        console.warn('All required props not given to this component');
         return null;
     }        
 

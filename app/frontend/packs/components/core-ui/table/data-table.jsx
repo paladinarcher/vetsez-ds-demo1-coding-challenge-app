@@ -7,6 +7,7 @@ function DataTable({data, columns, caption, pagination}) {
     const [currentPage, setCurrentPage] = useState(1);
 
     if (!data || !columns) {
+        console.warn('All required props not given to this component');
         return null;
     }  
     

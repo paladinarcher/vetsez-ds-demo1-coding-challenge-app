@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 
 function FormRadio({name, radioButtons, radioLabel, onChange, formFields} = {}) {
+    if (!name || !formFields || !radioButtons) {
+        console.warn('All required props not given to this component');
+        return null;
+    } 
+
     const [inputValue, setInputValue] = useState(formFields[name]);
 
     function handleInputChange(event){
