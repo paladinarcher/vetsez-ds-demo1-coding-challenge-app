@@ -2,28 +2,641 @@
   "id": "79da7ef6-dfde-4b59-85ea-d6b19ca627be",
   "version": "2.0",
   "name": "coding-challenge-app",
-  "url": "http://localhost:8080/dsbpa/",
+  "url": "",
   "tests": [{
-    "id": "ad3e5b6b-f541-4ca4-a588-2848eb1657b6",
-    "name": "Testing Page Title",
+    "id": "93fe55fc-1943-45ae-bbec-749199a85b59",
+    "name": "Login with approved user",
     "commands": [{
-      "id": "f574cb90-2944-499f-bee0-96da535d5b18",
+      "id": "fb56aab2-ea46-436f-8679-0a46ea43da83",
       "comment": "",
       "command": "open",
       "target": "http://localhost:8080/dsbpa/",
       "targets": [],
       "value": ""
     }, {
-      "id": "0deccb82-6724-423a-a8d4-6958e476618b",
+      "id": "373644e1-a94b-4e73-8347-68f1fb011902",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Login",
+      "targets": [
+        ["linkText=Login", "linkText"],
+        ["css=div:nth-child(2) > a:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Login')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_in')]", "xpath:href"],
+        ["xpath=//div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a3a2aec8-b8ce-436f-947a-91974a591c21",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_email",
+      "targets": [
+        ["id=user_email", "id"],
+        ["name=user[email]", "name"],
+        ["css=#user_email", "css:finder"],
+        ["xpath=//input[@id='user_email']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "approved@va.com"
+    }, {
+      "id": "36bd7e6d-f2ad-41f0-9812-607cd47580b8",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password",
+      "targets": [
+        ["id=user_password", "id"],
+        ["name=user[password]", "name"],
+        ["css=#user_password", "css:finder"],
+        ["xpath=//input[@id='user_password']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "approved"
+    }, {
+      "id": "62dba669-dcfd-4d2a-87ac-134e17bb1f66",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=user_password",
+      "targets": [
+        ["id=user_password", "id"],
+        ["name=user[password]", "name"],
+        ["css=#user_password", "css:finder"],
+        ["xpath=//input[@id='user_password']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "11a56e1e-ffe1-4006-a185-e04ae1c4e6f3",
       "comment": "",
       "command": "assertText",
-      "target": "css=div:nth-child(2) > div",
+      "target": "css=.usa-heading",
       "targets": [
-        ["css=div:nth-child(2) > div", "css:finder"],
-        ["xpath=//div[@id='app']/div/div[2]/div", "xpath:idRelative"],
-        ["xpath=//div[2]/div", "xpath:position"]
+        ["css=.usa-heading", "css:finder"],
+        ["xpath=//div[@id='app']/div/div/div/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'Account Details')]", "xpath:innerText"]
       ],
-      "value": "Welcome!"
+      "value": "Account Details"
+    }, {
+      "id": "bace4e2a-d38b-45b8-bda4-9258b246be96",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Logout",
+      "targets": [
+        ["linkText=Logout", "linkText"],
+        ["css=a:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Logout')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_out')]", "xpath:href"],
+        ["xpath=//div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Logout')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "81f5855a-a859-4207-82ac-034a2abadc3a",
+    "name": "Redirect after signup",
+    "commands": [{
+      "id": "66ec7045-0848-4afb-8030-b0ee5f6e4cae",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8080/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4c05485a-b84f-428b-9105-719282f808d9",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Signup",
+      "targets": [
+        ["linkText=Signup", "linkText"],
+        ["css=a:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Signup')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_up')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Signup')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0f113fb5-b362-4223-bdfb-71c730ce9fad",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_email",
+      "targets": [
+        ["id=user_email", "id"],
+        ["name=user[email]", "name"],
+        ["css=#user_email", "css:finder"],
+        ["xpath=//input[@id='user_email']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "user@selenium.com"
+    }, {
+      "id": "030a73cf-302b-4e57-96ec-278f9968f038",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password",
+      "targets": [
+        ["id=user_password", "id"],
+        ["name=user[password]", "name"],
+        ["css=#user_password", "css:finder"],
+        ["xpath=//input[@id='user_password']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "user@selenium.com"
+    }, {
+      "id": "a0a5b1a8-3175-4270-bb16-f43206ee36fa",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password_confirmation",
+      "targets": [
+        ["id=user_password_confirmation", "id"],
+        ["name=user[password_confirmation]", "name"],
+        ["css=#user_password_confirmation", "css:finder"],
+        ["xpath=//input[@id='user_password_confirmation']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "user@selenium.com"
+    }, {
+      "id": "343b70fc-ce4c-4b85-866a-356ea68207fc",
+      "comment": "",
+      "command": "click",
+      "target": "name=commit",
+      "targets": [
+        ["name=commit", "name"],
+        ["css=.actions > input", "css:finder"],
+        ["xpath=//input[@name='commit']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "132ba975-18af-40ac-950e-5b632b6a1d30",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8080/dsbpa/users/sign_up",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "04423333-efb2-4fb3-bdfb-86efa2429e8d",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.usa-heading",
+      "targets": [
+        ["css=.usa-heading", "css:finder"],
+        ["xpath=//div[@id='app']/div/div/div/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'Awaiting Approval')]", "xpath:innerText"]
+      ],
+      "value": "Awaiting Approval"
+    }, {
+      "id": "62b70416-45d5-418a-8353-ceb893c33af4",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8080/dsbpa/account",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2f81f909-9f56-4387-b7b5-1f467cd858e0",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.usa-heading",
+      "targets": [
+        ["css=.usa-heading", "css:finder"],
+        ["xpath=//div[@id='app']/div/div/div/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'Awaiting Approval')]", "xpath:innerText"]
+      ],
+      "value": "Awaiting Approval"
+    }, {
+      "id": "95b7ac22-f0ca-4931-aea6-8089d3b7ccde",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Logout",
+      "targets": [
+        ["linkText=Logout", "linkText"],
+        ["css=a:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Logout')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_out')]", "xpath:href"],
+        ["xpath=//div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Logout')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "4a524362-aa70-4726-a346-c60e95692f89",
+    "name": "Passwords must match",
+    "commands": [{
+      "id": "911926b1-7b7c-49e1-922a-fb57f7c122c8",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8080/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "46a3eba3-8fd7-424b-9be1-ebfb8a3f1e72",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Signup",
+      "targets": [
+        ["linkText=Signup", "linkText"],
+        ["css=a:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Signup')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_up')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Signup')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "646df3b7-0bcf-451c-86fb-6f3e090f8b34",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_email",
+      "targets": [
+        ["id=user_email", "id"],
+        ["name=user[email]", "name"],
+        ["css=#user_email", "css:finder"],
+        ["xpath=//input[@id='user_email']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "testuser@test.com"
+    }, {
+      "id": "68119284-3bbc-451b-97bb-a0625f67720b",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password",
+      "targets": [
+        ["id=user_password", "id"],
+        ["name=user[password]", "name"],
+        ["css=#user_password", "css:finder"],
+        ["xpath=//input[@id='user_password']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "test@test.com"
+    }, {
+      "id": "00ecd04a-bd01-4aaf-9874-cba131bf9f19",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password_confirmation",
+      "targets": [
+        ["id=user_password_confirmation", "id"],
+        ["name=user[password_confirmation]", "name"],
+        ["css=#user_password_confirmation", "css:finder"],
+        ["xpath=//input[@id='user_password_confirmation']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "test@test.co"
+    }, {
+      "id": "33468510-5a8e-4a92-b433-278224c03442",
+      "comment": "",
+      "command": "click",
+      "target": "name=commit",
+      "targets": [
+        ["name=commit", "name"],
+        ["css=.actions > input", "css:finder"],
+        ["xpath=//input[@name='commit']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2e9203f7-31e2-47e4-ae9b-fddb33736bab",
+      "comment": "",
+      "command": "",
+      "target": "css=ul:nth-child(2) > li:nth-child(2)",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "1de87e94-8e55-4d32-bfb1-611fae4ef462",
+    "name": "Duplicate User",
+    "commands": [{
+      "id": "76fb8c49-cd77-4f88-86ae-cd369906ae65",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Signup",
+      "targets": [
+        ["linkText=Signup", "linkText"],
+        ["css=a:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Signup')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_up')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Signup')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e42382b7-501b-4e16-a9ff-43770f79072c",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_email",
+      "targets": [
+        ["id=user_email", "id"],
+        ["name=user[email]", "name"],
+        ["css=#user_email", "css:finder"],
+        ["xpath=//input[@id='user_email']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "unapproved@va.com"
+    }, {
+      "id": "83dbe60b-4bfc-4ccd-8128-a24e032b518d",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password",
+      "targets": [
+        ["id=user_password", "id"],
+        ["name=user[password]", "name"],
+        ["css=#user_password", "css:finder"],
+        ["xpath=//input[@id='user_password']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "unapproved"
+    }, {
+      "id": "54a6f32c-31ad-4ce8-a097-1fe4af4d4ca7",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password_confirmation",
+      "targets": [
+        ["id=user_password_confirmation", "id"],
+        ["name=user[password_confirmation]", "name"],
+        ["css=#user_password_confirmation", "css:finder"],
+        ["xpath=//input[@id='user_password_confirmation']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "unapproved"
+    }, {
+      "id": "31382d95-c8b2-4e2d-a914-a0ea43b5bb01",
+      "comment": "",
+      "command": "click",
+      "target": "name=commit",
+      "targets": [
+        ["name=commit", "name"],
+        ["css=.actions > input", "css:finder"],
+        ["xpath=//input[@name='commit']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "983580ef-5cdc-4c13-9d0d-61a7c08b16ee",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=ul:nth-child(2) > li",
+      "targets": [
+        ["css=ul:nth-child(2) > li", "css:finder"],
+        ["xpath=//div[@id='error_explanation']/ul/li", "xpath:idRelative"],
+        ["xpath=//li", "xpath:position"],
+        ["xpath=//li[contains(.,'Email has already been taken')]", "xpath:innerText"]
+      ],
+      "value": "Email has already been taken"
+    }]
+  }, {
+    "id": "4d8c08bc-084c-41a4-bc69-5530a8dd0403",
+    "name": "Password too short",
+    "commands": [{
+      "id": "12ffb7f8-3c49-40ce-942e-51946937a356",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8080/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7a8575ff-d347-49b7-be19-b36a48a19150",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Signup",
+      "targets": [
+        ["linkText=Signup", "linkText"],
+        ["css=a:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Signup')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_up')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Signup')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "cd30774d-8ae3-4737-96ff-918e35af4697",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_email",
+      "targets": [
+        ["id=user_email", "id"],
+        ["name=user[email]", "name"],
+        ["css=#user_email", "css:finder"],
+        ["xpath=//input[@id='user_email']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "user2@selenium.com"
+    }, {
+      "id": "d8d7c0ce-805c-4351-96c5-9f6b3832fe32",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password",
+      "targets": [
+        ["id=user_password", "id"],
+        ["name=user[password]", "name"],
+        ["css=#user_password", "css:finder"],
+        ["xpath=//input[@id='user_password']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "1"
+    }, {
+      "id": "90d10744-da29-456e-876d-af09a8762ebb",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password_confirmation",
+      "targets": [
+        ["id=user_password_confirmation", "id"],
+        ["name=user[password_confirmation]", "name"],
+        ["css=#user_password_confirmation", "css:finder"],
+        ["xpath=//input[@id='user_password_confirmation']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "1"
+    }, {
+      "id": "9fb09bb6-cb85-48c3-849c-0ca01de00a50",
+      "comment": "",
+      "command": "click",
+      "target": "name=commit",
+      "targets": [
+        ["name=commit", "name"],
+        ["css=.actions > input", "css:finder"],
+        ["xpath=//input[@name='commit']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "10961618-bffb-4f3c-8baf-f8952a15eba1",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=ul:nth-child(3) > li",
+      "targets": [
+        ["css=ul:nth-child(3) > li", "css:finder"],
+        ["xpath=//div[@id='error_explanation']/div/ul/li", "xpath:idRelative"],
+        ["xpath=//li", "xpath:position"],
+        ["xpath=//li[contains(.,'Password is too short (minimum is 6 characters)')]", "xpath:innerText"]
+      ],
+      "value": "Password is too short (minimum is 6 characters)"
+    }]
+  }, {
+    "id": "20b81014-7768-41b0-8ed9-a720f3ee8e82",
+    "name": "Redirect to sign up if accessing account URL",
+    "commands": [{
+      "id": "de945367-a527-4b93-a451-620dfb5483c5",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8080/dsbpa/account",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e8493b56-79ec-43d2-b7e7-098e2fd1cba0",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h2",
+      "targets": [
+        ["css=h2", "css:finder"],
+        ["xpath=//h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": "Log in"
+    }]
+  }, {
+    "id": "354590d0-98d0-4d4f-9a62-c9db56864789",
+    "name": "Failed login",
+    "commands": [{
+      "id": "eea73e53-a188-4fed-8d80-18ef784280a1",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8080/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e5601e7a-b6e1-4435-a7e5-6f181cce1ada",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Login",
+      "targets": [
+        ["linkText=Login", "linkText"],
+        ["css=div:nth-child(2) > a:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Login')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_in')]", "xpath:href"],
+        ["xpath=//div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "860e4133-f0cd-4362-b7fc-1fcd7bc8a469",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_email",
+      "targets": [
+        ["id=user_email", "id"],
+        ["name=user[email]", "name"],
+        ["css=#user_email", "css:finder"],
+        ["xpath=//input[@id='user_email']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "fakeuser@fake.com"
+    }, {
+      "id": "208f55a6-b434-4058-acc0-383d06cdbfa2",
+      "comment": "",
+      "command": "type",
+      "target": "id=user_password",
+      "targets": [
+        ["id=user_password", "id"],
+        ["name=user[password]", "name"],
+        ["css=#user_password", "css:finder"],
+        ["xpath=//input[@id='user_password']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "fake"
+    }, {
+      "id": "e65f7ed2-42f9-497d-8c1b-af7772f75c8f",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=user_password",
+      "targets": [
+        ["id=user_password", "id"],
+        ["name=user[password]", "name"],
+        ["css=#user_password", "css:finder"],
+        ["xpath=//input[@id='user_password']", "xpath:attributes"],
+        ["xpath=//form[@id='new_user']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "01bccf13-5366-43cb-b2a4-750a2f79a83f",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h2",
+      "targets": [
+        ["css=h2", "css:finder"],
+        ["xpath=//h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": "Log in"
+    }]
+  }, {
+    "id": "3bb677f5-f036-4cad-ad6a-879d2368a05b",
+    "name": "Base URL test",
+    "commands": [{
+      "id": "e39d58ef-918d-49ab-bc56-5f917f8a4a16",
+      "comment": "",
+      "command": "open",
+      "target": "http://ft-pr-53-coding-challenge-app.development.svc.cluster.local:80/dsbpa/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4561d4bb-472a-4087-b41c-bf91fdb593ab",
+      "comment": "",
+      "command": "click",
+      "target": "css=header > .logo",
+      "targets": [
+        ["css=header > .logo", "css:finder"],
+        ["xpath=//header/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "819ebb1b-a7c2-4a74-b4fc-d241f4c7e977",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Signup",
+      "targets": [
+        ["linkText=Signup", "linkText"],
+        ["css=a:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Signup')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/dsbpa/users/sign_up')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Signup')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "1392d266-0fe3-42a3-8170-19f42614b863",
+    "name": "Server URL test",
+    "commands": [{
+      "id": "70f6793d-4907-4d8b-a930-2e721afdc80a",
+      "comment": "",
+      "command": "open",
+      "target": "http://ft-pr-53-coding-challenge-app.development.svc.cluster.local:80/dsbpa/",
+      "targets": [],
+      "value": ""
     }]
   }],
   "suites": [{
@@ -32,7 +645,7 @@
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": ["ad3e5b6b-f541-4ca4-a588-2848eb1657b6"]
+    "tests": ["1de87e94-8e55-4d32-bfb1-611fae4ef462", "354590d0-98d0-4d4f-9a62-c9db56864789", "93fe55fc-1943-45ae-bbec-749199a85b59", "4d8c08bc-084c-41a4-bc69-5530a8dd0403", "4a524362-aa70-4726-a346-c60e95692f89", "81f5855a-a859-4207-82ac-034a2abadc3a", "20b81014-7768-41b0-8ed9-a720f3ee8e82", "3bb677f5-f036-4cad-ad6a-879d2368a05b", "1392d266-0fe3-42a3-8170-19f42614b863"]
   }],
   "urls": ["http://localhost:8080/", "http://localhost:8080/dsbpa/"],
   "plugins": []

@@ -27,7 +27,7 @@ gem 'trinidad', '~> 1.5.0.B2', require: nil, group: :development
 gem 'logging'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
+gem 'devise'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
