@@ -1,0 +1,41 @@
+version: "3.3"
+
+services:
+  dsbpa-maven:
+    image: cshupp/mvn-openjdk11-yarn-postgres:version1
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.build
+    environment:
+      - DATABASE_USER=dsbpa
+      - DATABASE_PASSWORD=dsbpa
+      - DATABASE_HOST=localhost
+      - DATABASE_PORT=5432
+      - DATABASE_SCHEMA=dsbpa_test
+    volumes:
+      - ./:/app
+      - ../mvn_repo:/mvn_repo
+    working_dir: /app
+    command: perl ./docker_support/start_build.pl
+    #perl -e "system('mvn -Dmaven.repo.local=/mvn_repo clean package')"
+#  db:
+#    image: library/postgres:12-alpine
+#    environment:
+#      - POSTGRES_PASSWORD=dsbpa
+#      - POSTGRES_USER=dsbpa
+#      - POSTGRES_DB=dsbpa_test
+#      - DATABASE_HOST=postgres
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      dsbpa-maven:
+#        aliases:
+#          - postgres
+#networks:
+#  dsbpa-maven:
+
+  #docker exec -it  87fd917abb9e  bash
+  #docker build -f ./Dockerfile.build .
+  #psql -d database -h postgres -c "select 'it is running'"
+  # Run via
+  # docker-compose -f docker-build.yml up

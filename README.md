@@ -1,7 +1,7 @@
 # README
 
 ## Setup for Ruby on Rails
-##### Note for Windows 10 Pro users:  When installing programs, ensure that none of file paths have spaces in them (e.g. C:\Users\Program Location vs C:\Users\ProgramLocation).  The first one will cause problems with Ruby on Rails.
+##### Note for Windows 10 Pro users:  When installing programs, ensure that none of file paths have spaces in them (e.g. C:\Users\Program Location vs C:\Users\ProgramLocation).  Spaces in paths can make setting up bat files more difficult.
 
 1. Download and install the current stable versions of:  
 JAVA 11 JDK, JRuby ((ver 9.2.8.0) - Desired Executable Setup File), Maven, Yarn, PostgreSQL, and Node  
