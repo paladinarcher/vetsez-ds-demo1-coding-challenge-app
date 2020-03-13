@@ -209,7 +209,7 @@ pipeline {
                                     sh "git clone \"https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-devops.git\" helmChart"
 
                                     //Deploy the Chart
-                                    sh "helm install -n ${releaseName} --tiller-namespace flux --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
+                                    sh "helm install -n ${releaseName} --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
 
                                     //Find the Service Port
                                     def count = 0
@@ -276,7 +276,7 @@ pipeline {
                         always {
                             script {
                                 node('helm') {
-                                    sh ("helm delete --tiller-namespace flux --purge ft-${env.BRANCH_NAME.toLowerCase()}")
+                                    sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
                                 }
                             }
                         }
