@@ -23,4 +23,4 @@ print "Running:\n";
 print $command."\n";
 system($command);
 #start maven
-system("mvn clean package");
+system("mvn -Dmaven.repo.local=../mvn_repo clean package");

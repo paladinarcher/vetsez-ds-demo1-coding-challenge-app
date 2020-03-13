@@ -17,7 +17,6 @@ services:
       - ../mvn_repo:/mvn_repo
     working_dir: /app
     command: perl ./docker_support/start_build.pl
-    #perl -e "system('mvn -Dmaven.repo.local=/mvn_repo clean package')"
 #  db:
 #    image: library/postgres:12-alpine
 #    environment:
