@@ -33,7 +33,7 @@ set JRUBY_OPTS=--dev -J-Xmx2g -J-Djava.awt.headless=true -J-Dcatalina.base=./log
 >set JRUBY_JAR=<Full absolute path of the install folder for ruby and full name of JAR File that was copied earlier>
 >set JAVA_HOME=<Full absolute path of the install folder for the Java JDK>
 >set POSTGRESQL=<Full absolute path of the install folder for the PostgreSQL install>
-set PATH=%GEM_HOME%\bin;%JRUBY_HOME%\bin;%JAVA_HOME%\bin;%POSTGRESQL%;.\bin;%PATH%;
+set PATH=%GEM_HOME%\bin;%JRUBY_HOME%\bin;%JAVA_HOME%\bin;%POSTGRESQL%\bin;.\bin;%PATH%;
 set JAVA_OPTS=%JAVA_OPTS% --add-opens java.base/java.io=org.jruby.dist
 set JAVA_OPTS=%JAVA_OPTS% --add-opens java.base/java.nio.channels=org.jruby.dist
 set JAVA_OPTS=%JAVA_OPTS% --add-opens java.base/sun.nio.ch=org.jruby.dist
