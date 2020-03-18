@@ -99,14 +99,15 @@ pipeline {
         }
         stage('Source Code Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube on K8S') {
-                  sh 'ls -lah . && git status && pwd'
-                  sh 'mvn sonar:sonar'
+                //withSonarQubeEnv('SonarQube on K8S') {
+                  //sh 'ls -lah . && git status && pwd'
+                  //sh 'mvn sonar:sonar'
                   //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
-                }
-                timeout(time: 10, unit: 'MINUTES') {
-                  waitForQualityGate abortPipeline: false
-                }
+                //}
+                //timeout(time: 10, unit: 'MINUTES') {
+                  //waitForQualityGate abortPipeline: false
+                //}
+                echo "Removing SonarQube due to instability, we'll add something back in when we figure it all out."
             }
             post {
               success {
