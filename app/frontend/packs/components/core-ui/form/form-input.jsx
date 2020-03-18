@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import FormFieldError from '../messages/form-field-error';
 
 function FormInput({type, name, label, isRequired, onChange, onBlur, formErrors} = {}) {
-    const [inputValue, setInputValue] = useState('');
-
+    const [inputValue, setInputValue] = React.useState('');
     const inputIsRequired = isRequired || false;
 
     function handleInputChange(event){

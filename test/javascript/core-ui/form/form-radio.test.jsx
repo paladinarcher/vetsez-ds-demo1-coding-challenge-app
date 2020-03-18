@@ -25,6 +25,10 @@ test('form radio component with no props should render nothing', () => {
     expect(wrapper.find('label').exists()).toBe(false);
 });
 
+test('form radio component with no props should render nothing', () => {
+    expect(FormRadio()).toBe(null);
+});
+
 test('form radio component with no radio button list should render nothing', () => {
     const wrapper = shallow(<FormRadio name="testradio" radioLabel="Mock Radio Buttons" formFields={mockFormFields} />);
     expect(wrapper.find('fieldset').exists()).toBe(false);

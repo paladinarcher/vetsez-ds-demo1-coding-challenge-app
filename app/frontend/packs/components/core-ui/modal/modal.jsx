@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
 function Modal({id, buttonText, modalTitle, children} = {}) {
+    if (!id || !buttonText) {
+        console.warn('All required props not given to this component');
+        return null;
+    } 
+
     const [displayModal, setDisplayModal] = useState(false);
 
     function openModal() {
