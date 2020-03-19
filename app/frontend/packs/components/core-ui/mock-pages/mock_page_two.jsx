@@ -99,11 +99,11 @@ function MockPageTwo() {
                 : 
                     <React.Fragment>
                         <FormInput type="text" name="firstname" label="First Name" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} /> 
+                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
                         <FormInput type="text" name="lastname" label="Last Name" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} />  
+                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
                         <FormInput type="text" name="email" label="Email" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} />    
+                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
         
                         <p>Because you chose to apply for your Post-9/11 benefit, you have to relinquish (give up) 1 other benefit you may be eligible for.<br/>Your decision is irrevocable (you can’t change your mind).</p>  
 

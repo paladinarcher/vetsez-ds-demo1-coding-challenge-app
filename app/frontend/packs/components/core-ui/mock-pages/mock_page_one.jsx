@@ -179,7 +179,7 @@ function MockPageOne() {
                         <Button id="stepsDone"text="Done" action={gotoHomePage} />
                     }
                 </div>
-                {JSON.stringify(formFields)}
+                {/*{JSON.stringify(formFields)}*/}
             </div>
         </div>
     )
