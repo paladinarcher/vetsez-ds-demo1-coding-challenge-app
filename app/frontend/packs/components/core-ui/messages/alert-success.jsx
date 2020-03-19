@@ -2,6 +2,7 @@ import React from 'react';
 
 function AlertSuccess({message}) {
     if (!message) {
+        console.warn('All required props not given to this component');
         return null;
     }        
 

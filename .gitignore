@@ -60,3 +60,5 @@ test/selenium/reports
 #Ignore options file
 /options.bat
 
+#Ignore coverage folder
+/coverage

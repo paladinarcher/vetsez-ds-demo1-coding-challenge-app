@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import Button from '../buttons/button';
 
-function DataTable({data, columns, caption, pagination}) {
-    const [sortKey, setSortKey] = useState('');
-    const [rowsPerPage, setRowsPerPage] = useState(2);
-    const [currentPage, setCurrentPage] = useState(1);
-
+function DataTable({data, columns, caption, pagination, paginationRowsPerPage} = {}) {
     if (!data || !columns) {
+        console.warn('All required props not given to this component');
         return null;
     }  
+
+    let defaultRowsPerPage = paginationRowsPerPage || 5;
+
+    const [sortKey, setSortKey] = useState('');
+    const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
+    const [currentPage, setCurrentPage] = useState(1);
     
     function gotoPreviousPage() {
         if(currentPage > 1) {
@@ -73,17 +75,19 @@ function DataTable({data, columns, caption, pagination}) {
                     { renderSortedRows() }
                 </tbody>
             </table>
-            <div className="va-pagination">
-                <span className="va-pagination-prev">
-                    <a aria-label="Go to previous page in table" role="button" tabIndex="0" onClick={gotoPreviousPage}>Previous</a>
-                </span>
-                <div className="va-pagination-inner">
-                    { renderPageButtons() }
+            { pagination ?
+                <div className="va-pagination">
+                    <span className="va-pagination-prev">
+                        <a aria-label="Go to previous page in table" role="button" tabIndex="0" onClick={gotoPreviousPage}>Previous</a>
+                    </span>
+                    <div className="va-pagination-inner">
+                        { renderPageButtons() }
+                    </div>
+                    <span className="va-pagination-next">
+                        <a aria-label="Go to next page in table" role="button" tabIndex="0" onClick={gotoNextPage}>Next</a>
+                    </span>
                 </div>
-                <span className="va-pagination-next">
-                    <a aria-label="Go to next page in table" role="button" tabIndex="0" onClick={gotoNextPage}>Next</a>
-                </span>
-            </div>
+            : null }
         </React.Fragment>
     );
 }
