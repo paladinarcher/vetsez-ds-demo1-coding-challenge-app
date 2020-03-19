@@ -4,16 +4,24 @@ import * as yup from 'yup';
 
 import { FormInput, FormRadio } from '../form';
 import Button from '../buttons/button';
+import FormSelect from "../form/form-select";
 
 function MockPageOne() {
     const [step, setStep] = useState(1);
-    const [formFields, setFormFields] = useState({'benefit':'benefit1', 'firstname':'', 'lastname':'', 'email':''});
-    const [formErrors, setFormErrors] = useState({'benefit':null, 'firstname':null, 'lastname':null, 'email':null});
+    const [stepper, setStepper] = useState('step1');
+    const [formFields, setFormFields] = useState({'benefit':'benefit1', 'firstname':'', 'lastname':'', 'email':'', 'cars': ''});
+    const [formErrors, setFormErrors] = useState({'benefit':null, 'firstname':null, 'lastname':null, 'email':null, 'cars':null});
+
+    const stepSchema = {
+        step1: {'benefit':'benefit1', 'cars': ''},
+        step2: {'firstname':null, 'lastname':null, 'email':null},
+    }
 
     const mockFormSchema = yup.object().shape({
         firstname: yup.string().required(),
         lastname: yup.string().required(),
         email: yup.string().email().required(),
+        cars: yup.string().required(),
     });
 
     const formRadioButtons = [
@@ -57,29 +65,37 @@ function MockPageOne() {
     function previousFormStep() {
         setStep(step-1);
     }
+
+    function validateFormFields() {
+        setValidatingField(true);
+        for (const ff of Object.keys(stepSchema[stepper])) {
+            validateFormField(ff, formFields[ff]);
+        }
+    }
+
     function nextFormStep() {
         let isStepValid = true;
         let requiredStepFields = [];
         let formStepFields = [];
 
         if(step === 1) {
-            requiredStepFields = [];
-            formStepFields = ['benefit'];
+            requiredStepFields = ['cars'];
+            formStepFields = ['benefit', 'cars'];
         } else if (step === 2) {
             requiredStepFields = ['firstname', 'lastname', 'email'];
             formStepFields = ['firstname', 'lastname', 'email'];
         }
 
-        // Check for any required form fields that are blank because yup validation is asychornous
+        // Check for any required form fields that are blank because yup validation is asynchronous
         const thisFormErrors = {...formErrors};
 
         for(let i=0; i<requiredStepFields.length; i++) {
             if(formFields[requiredStepFields[i]] === "") {
                 isStepValid = false;
-                thisFormErrors[requiredStepFields[i]] = ["This field is required"];
+                thisFormErrors[requiredStepFields[i]] = ["this is a required field"];
             }
         }  
-             
+
         setFormErrors(thisFormErrors);
 
         // Check state for existing form errors from user input
@@ -98,6 +114,12 @@ function MockPageOne() {
     function gotoHomePage() {
         history.push('/account');
     }
+
+    const cars =[
+        {key:'subaru', label:'Subaru'},
+        {key:'fiat', label:'Fiat'},
+        {key:'toyota', label:'Toyota'},
+    ];
 
     return (
         <div className="usa-grid">
@@ -118,6 +140,9 @@ function MockPageOne() {
                     <FormRadio name="benefit" radioButtons={formRadioButtons} radioLabel="Select the benefit that is the best match for you" 
                         onChange={handleInputChange} formFields={formFields} />
 
+                    <FormSelect name="cars" label="Cars" isRequired={true} onChange={handleInputChange}
+                                onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}
+                                defaultOptionLabel='---Select a car---' optionsJsonString={cars}/>
                 </React.Fragment> : null }
 
                 { step == 2 ?
@@ -126,11 +151,11 @@ function MockPageOne() {
                         <p>Please fill in your name and email address.</p>
 
                         <FormInput type="text" name="firstname" label="First Name" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} /> 
+                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
                         <FormInput type="text" name="lastname" label="Last Name" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} />  
+                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
                         <FormInput type="text" name="email" label="Email" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} />    
+                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
 
                     </React.Fragment> 
                 : null }
@@ -153,7 +178,8 @@ function MockPageOne() {
                     :
                         <Button id="stepsDone"text="Done" action={gotoHomePage} />
                     }
-                </div>          
+                </div>
+                {JSON.stringify(formFields)}
             </div>
         </div>
     )
