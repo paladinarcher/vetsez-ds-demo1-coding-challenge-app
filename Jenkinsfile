@@ -210,13 +210,13 @@ pipeline {
                                     sh "git clone \"https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-devops.git\" helmChart"
 
                                     //Deploy the Chart
-                                    sh "helm install -n ${releaseName} --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
+                                    sh "helm install ${releaseName} --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace demo helmChart/k8s/coding-challenge-app"
 
                                     //Find the Service Port
                                     def count = 0
                                     functionalTestUrl = "http://"
                                     while (functionalTestUrl=="http://" && count < 300) {
-                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
+                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace demo services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
                                       if(functionalTestUrl=="http://") { sleep 5 }
                                       count+=10
                                     }
@@ -277,7 +277,7 @@ pipeline {
                         always {
                             script {
                                 node('helm') {
-                                    sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
+                                    sh ("helm delete ft-${env.BRANCH_NAME.toLowerCase()} --namespace demo")
                                 }
                             }
                         }
@@ -316,7 +316,7 @@ pipeline {
                     sh "git clone \"https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-devops.git\" helmChart"
 
                     //Deploy the Chart
-                    sh "helm upgrade --tiller-namespace flux --install ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
+                    sh "helm upgrade --tiller-namespace flux --install ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace demo helmChart/k8s/coding-challenge-app"
                     
                     //Wait a few seconds for the external IP to be allocated
                     def count = 0
