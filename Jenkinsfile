@@ -205,6 +205,7 @@ pipeline {
                             }
                             steps {
                                 script {
+                                  sh "helm version"
                                     def releaseName = "ft-${env.BRANCH_NAME.toLowerCase()}"
                                     //Download the Chart
                                     sh "git clone \"https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-devops.git\" helmChart"
