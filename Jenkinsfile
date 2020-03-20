@@ -217,7 +217,7 @@ pipeline {
                                     def count = 0
                                     functionalTestUrl = "http://"
                                     while (functionalTestUrl=="http://" && count < 300) {
-                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace demo services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
+                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace demo services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.demo.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
                                       if(functionalTestUrl=="http://") { sleep 5 }
                                       count+=10
                                     }
