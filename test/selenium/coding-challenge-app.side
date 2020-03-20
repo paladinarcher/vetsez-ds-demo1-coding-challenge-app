@@ -2,7 +2,7 @@
   "id": "79da7ef6-dfde-4b59-85ea-d6b19ca627be",
   "version": "2.0",
   "name": "coding-challenge-app",
-  "url": "http://localhost:8080/dsbpa/",
+  "url": "/dsbpa/",
   "tests": [{
     "id": "ad3e5b6b-f541-4ca4-a588-2848eb1657b6",
     "name": "Testing Page Title",
@@ -10,7 +10,7 @@
       "id": "f574cb90-2944-499f-bee0-96da535d5b18",
       "comment": "",
       "command": "open",
-      "target": "http://localhost:8080/dsbpa/",
+      "target": "/dsbpa/",
       "targets": [],
       "value": ""
     }, {
@@ -34,6 +34,6 @@
     "timeout": 300,
     "tests": ["ad3e5b6b-f541-4ca4-a588-2848eb1657b6"]
   }],
-  "urls": ["http://localhost:8080/", "http://localhost:8080/dsbpa/"],
+  "urls": ["", "/dsbpa/"],
   "plugins": []
 }
