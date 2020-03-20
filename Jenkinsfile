@@ -219,9 +219,27 @@ pipeline {
                                     while (functionalTestUrl=="http://" && count < 300) {
                                       functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace demo services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.demo.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
                                       if(functionalTestUrl=="http://") { sleep 5 }
-                                      count+=10
+                                      count+=5
                                     }
                                     echo "Service is available at ${functionalTestUrl}"
+
+                                    if(functionalTestUrl=="http://") {
+                                      error("Failed to get a preview URL in ${count} seconds...")
+                                    }
+
+                                    //Wait for instance to be ready
+                                    count = 0
+                                    def readReps = ""
+                                    while (readReps=="" && count < 300) {
+                                      readReps = sh(returnStdout: true, script: "kubectl get deployments.apps --field-selector=metadata.name=${releaseName} -n demo -o jsonpath='{.items[*].status.readyReplicas}'")
+                                      if(readReps=="") { sleep 5 }
+                                      count+=5
+                                    }
+                                    echo "Service is available at ${functionalTestUrl}"
+
+                                    if(readReps=="") {
+                                      error("Failed to get the deployment up in ${count} seconds...")
+                                    }
                                 }
                             }
                             post {
