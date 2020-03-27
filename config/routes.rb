@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   post 'fetch_time' => 'react#fetch_time'
 
-  %w(mock1 mock2 mock3).each { |path|
+  %w(mock1 mock2 mock3 mock4).each { |path|
     get "/#{path}" => 'react#auth'
   }
 
