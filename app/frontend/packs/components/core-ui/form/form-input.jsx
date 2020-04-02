@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import FormFieldError from '../messages/form-field-error';
 
-function FormInput({type, name, label, isRequired, onChange, onBlur, formErrors, formFields} = {}) {
-    const [inputValue, setInputValue] = useState(formFields[name]);
-    const inputIsRequired = isRequired || false;
+function FormInput({type, name, label, isRequired, onChange, onBlur, formErrors, inputStateFromParent} = {}) {
+    const [inputValue, setInputValue] = React.useState(inputStateFromParent ? inputStateFromParent : "");
 
     function handleInputChange(event){
         setInputValue(event.target.value);
@@ -26,7 +25,7 @@ function FormInput({type, name, label, isRequired, onChange, onBlur, formErrors,
                 <FormFieldError fieldname={name} error_messages={formErrors[name]}/>
             : null }
             <input id={name} name={name} value={inputValue} type={type} autoComplete="off"
-                aria-required={inputIsRequired} aria-labelledby={name +"-label"} aria-describedby={name +"-label"}
+                aria-required={isRequired || false} aria-labelledby={name +"-label"} aria-describedby={name +"-label"}
                 aria-invalid={!!formErrors && formErrors[name]} className={formErrors && formErrors[name] ? "invalid" : null}
                 onChange={handleInputChange} onBlur={handleInputBlur} />
         </div>

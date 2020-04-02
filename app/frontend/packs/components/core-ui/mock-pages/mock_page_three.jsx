@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Modal from '../modal/modal';
-import DataTable from '../table/data-table';
+import { DataTable, Modal } from '../../core-ui';
 
 function MockPageThree() {
     // Testing

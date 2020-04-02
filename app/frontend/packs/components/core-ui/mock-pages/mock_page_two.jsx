@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 import * as yup from 'yup';
 
-import { FormInput, FormRadio } from '../form';
-import { AlertSuccess } from '../messages';
-import Button from '../buttons/button';
-
+import { AlertSuccess, Button, FormCheckbox, FormInput, FormRadio } from '../../core-ui';
 
 function MockPageTwo() {
     const [displaySuccess, setDisplaySuccess] = useState(false);
 
-    const [formFields, setFormFields] = useState({'benefit':'benefit1', 'firstname':'', 'lastname':'', 'email':''});
+    const [formFields, setFormFields] = useState({'benefit':'benefit1', 'firstname':'', 'lastname':'', 'email':'', 'patientConsent':false});
     const [formErrors, setFormErrors] = useState({'benefit':null, 'firstname':null, 'lastname':null, 'email':null});
 
     const mockFormSchema = yup.object().shape({
         firstname: yup.string().required(),
         lastname: yup.string().required(),
         email: yup.string().email().required(),
+        patientConsent: yup.boolean().required()
     });
 
     const formRadioButtons = [
         {id:"benefit1", label:"Post 9/11 GI Bill (Chapter 33)"},
-        {id:"benefit2", label:"Mongtomery GI Bill (MGIB-AD, Chapter 30"},
+        {id:"benefit2", label:"Mongtomery GI Bill (MGIB-AD, Chapter 30)"},
         {id:"benefit3", label:"Mongtomery GI Bill (MGIB-SR, Chapter 1606)"},
         {id:"benefit4", label:"Post-Vietnam Era Veterans' Educational Assistance Program (VEAP, Chapter 32)"} 
     ];
@@ -29,7 +27,7 @@ function MockPageTwo() {
         const {target} = event;
         const {name, id, type} = target;
     
-        if (type === 'checkbox' || type === 'radio') {
+        if (type === 'radio' || type === 'checkbox') {
             setFormFields({...formFields, [name]: type === 'radio' ? id : target.checked});
         } else {
             setFormFields({...formFields, [name]: target.value});
@@ -99,16 +97,19 @@ function MockPageTwo() {
                 : 
                     <React.Fragment>
                         <FormInput type="text" name="firstname" label="First Name" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
+                            onBlur={handleInputBlur} formErrors={formErrors} />
                         <FormInput type="text" name="lastname" label="Last Name" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
+                            onBlur={handleInputBlur} formErrors={formErrors} />
                         <FormInput type="text" name="email" label="Email" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
+                            onBlur={handleInputBlur} formErrors={formErrors} />
         
                         <p>Because you chose to apply for your Post-9/11 benefit, you have to relinquish (give up) 1 other benefit you may be eligible for.<br/>Your decision is irrevocable (you can’t change your mind).</p>  
 
                         <FormRadio name="benefit" radioButtons={formRadioButtons} radioLabel="Select the benefit that is the best match for you" 
-                            onChange={handleInputChange} formFields={formFields} />
+                            onChange={handleInputChange} />
+
+                        <FormCheckbox name="patientConsent" label="I consent to the use of the information in this form for benefits administration" 
+                            isRequired={true} onChange={handleInputChange} />
 
                         <Button id="submitForm" type="primary" text="Submit" action={doSubmitForm} />
                     </React.Fragment>

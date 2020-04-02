@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { FormInput, FormRadio } from '../form';
-import Button from '../buttons/button';
-import FormSelect from "../form/form-select";
+import { Button, FormInput, FormRadio, FormSelect } from '../../core-ui';
 
 function MockPageOne() {
     const [step, setStep] = useState(1);
@@ -26,7 +24,7 @@ function MockPageOne() {
 
     const formRadioButtons = [
         {id:"benefit1", label:"Post 9/11 GI Bill (Chapter 33)"},
-        {id:"benefit2", label:"Mongtomery GI Bill (MGIB-AD, Chapter 30"},
+        {id:"benefit2", label:"Mongtomery GI Bill (MGIB-AD, Chapter 30)"},
         {id:"benefit3", label:"Mongtomery GI Bill (MGIB-SR, Chapter 1606)"},
         {id:"benefit4", label:"Post-Vietnam Era Veterans' Educational Assistance Program (VEAP, Chapter 32)"} 
     ];
@@ -138,7 +136,7 @@ function MockPageOne() {
                     <p>Your decision is irrevocable (you can’t change your mind).</p>  
 
                     <FormRadio name="benefit" radioButtons={formRadioButtons} radioLabel="Select the benefit that is the best match for you" 
-                        onChange={handleInputChange} formFields={formFields} />
+                        onChange={handleInputChange} inputStateFromParent={formFields['benefit']} />
 
                     <FormSelect name="cars" label="Cars" isRequired={true} onChange={handleInputChange}
                                 onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}
@@ -151,11 +149,11 @@ function MockPageOne() {
                         <p>Please fill in your name and email address.</p>
 
                         <FormInput type="text" name="firstname" label="First Name" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
+                            onBlur={handleInputBlur} formErrors={formErrors} inputStateFromParent={formFields['firstname']} />
                         <FormInput type="text" name="lastname" label="Last Name" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
+                            onBlur={handleInputBlur} formErrors={formErrors} inputStateFromParent={formFields['lastname']} />
                         <FormInput type="text" name="email" label="Email" isRequired={true} onChange={handleInputChange} 
-                            onBlur={handleInputBlur} formErrors={formErrors} formFields={formFields}/>
+                            onBlur={handleInputBlur} formErrors={formErrors} inputStateFromParent={formFields['email']} />
 
                     </React.Fragment> 
                 : null }
