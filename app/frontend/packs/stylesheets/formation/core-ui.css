@@ -1,0 +1,7 @@
+@import "./formation.min.css";
+
+table tr th { cursor:pointer; }
+
+.combobox-container ul { position:absolute; margin-top:-0.1em; width:100%; max-width:46rem; padding:0rem; border:0.1rem solid #5b616b; border-top:0rem; list-style-type:none; background-color:#ffffff; }
+.combobox-container li { padding:0em 0.7em; cursor:pointer; }
+.combobox-container li.selected { color:#ffffff; background-color:#0071bb; }

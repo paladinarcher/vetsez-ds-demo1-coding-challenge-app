@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as yup from 'yup';
 
-import { AlertSuccess, Button, FormCheckbox, FormInput, FormRadio } from '../../core-ui';
+import { AlertSuccess, Button, FormCheckbox, FormInput, FormRadio, StatesInput } from '../../core-ui';
 
 function MockPageTwo() {
     const [displaySuccess, setDisplaySuccess] = useState(false);

@@ -1,4 +1,5 @@
-@import "./formation.min.css";
+@import "./core-ui.css";
+
 hr { width:100%; height:20px; background: #fff;}
 
 nav { width:70%; }
@@ -67,5 +68,3 @@ legend {
     font-weight: bold;
     font-size: large;
 }
-
-table tr th { cursor:pointer; }
