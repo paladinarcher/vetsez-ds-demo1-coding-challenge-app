@@ -2,7 +2,7 @@
   "id": "79da7ef6-dfde-4b59-85ea-d6b19ca627be",
   "version": "2.0",
   "name": "coding-challenge-app",
-  "url": "http://localhost:8080/dsbpa/",
+  "url": "/dsbpa/",
   "tests": [{
     "id": "93fe55fc-1943-45ae-bbec-749199a85b59",
     "name": "Login with approved user",
@@ -10,7 +10,7 @@
       "id": "fb56aab2-ea46-436f-8679-0a46ea43da83",
       "comment": "",
       "command": "open",
-      "target": "http://localhost:8080/dsbpa/",
+      "target": "/dsbpa/",
       "targets": [],
       "value": ""
     }, {
@@ -608,6 +608,6 @@
     "timeout": 300,
     "tests": ["1de87e94-8e55-4d32-bfb1-611fae4ef462", "354590d0-98d0-4d4f-9a62-c9db56864789", "93fe55fc-1943-45ae-bbec-749199a85b59", "4d8c08bc-084c-41a4-bc69-5530a8dd0403", "4a524362-aa70-4726-a346-c60e95692f89", "81f5855a-a859-4207-82ac-034a2abadc3a", "20b81014-7768-41b0-8ed9-a720f3ee8e82"]
   }],
-  "urls": ["http://localhost:8080/", "http://localhost:8080/dsbpa/"],
+  "urls": ["", "/dsbpa/"],
   "plugins": []
 }

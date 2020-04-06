@@ -99,14 +99,15 @@ pipeline {
         }
         stage('Source Code Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube on K8S') {
-                  sh 'ls -lah . && git status && pwd'
+                //withSonarQubeEnv('SonarQube on K8S') {
+                  //sh 'ls -lah . && git status && pwd'
                   //sh 'mvn sonar:sonar'
-                  sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
-                }
-                timeout(time: 10, unit: 'MINUTES') {
-                  waitForQualityGate abortPipeline: false
-                }
+                  //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
+                //}
+                //timeout(time: 10, unit: 'MINUTES') {
+                  //waitForQualityGate abortPipeline: false
+                //}
+                echo "Removing SonarQube due to instability, we'll add something back in when we figure it all out."
             }
             post {
               success {
@@ -204,22 +205,43 @@ pipeline {
                             }
                             steps {
                                 script {
+                                  sh "helm version"
                                     def releaseName = "ft-${env.BRANCH_NAME.toLowerCase()}"
                                     //Download the Chart
                                     sh "git clone \"https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-devops.git\" helmChart"
 
                                     //Deploy the Chart
-                                    sh "helm install -n ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
+                                    sh "helm install ${releaseName} --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace demo helmChart/k8s/coding-challenge-app"
 
                                     //Find the Service Port
                                     def count = 0
                                     functionalTestUrl = "http://"
                                     while (functionalTestUrl=="http://" && count < 300) {
-                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace development services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.development.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
+                                      functionalTestUrl = sh(returnStdout: true, script: "kubectl get --namespace demo services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"http://{.items[0].metadata.name}.demo.svc.cluster.local:{.items[0].spec.ports[0].port}\"")
                                       if(functionalTestUrl=="http://") { sleep 5 }
-                                      count+=10
+                                      count+=5
+                                    }
+
+                                    if(functionalTestUrl=="http://") {
+                                      error("Failed to get a preview URL in ${count} seconds...")
                                     }
                                     echo "Service is available at ${functionalTestUrl}"
+
+                                    def deploymentName = sh(returnStdout: true, script: "kubectl get --namespace demo services -l app.kubernetes.io/instance=${releaseName} -o jsonpath=\"{.items[0].metadata.name}\"")
+
+                                    //Wait for instance to be ready
+                                    count = 0
+                                    def readReps = ""
+                                    while (readReps=="" && count < 300) {
+                                      readReps = sh(returnStdout: true, script: "kubectl get deployments.apps --field-selector=metadata.name=${deploymentName} -n demo -o jsonpath='{.items[*].status.readyReplicas}'")
+                                      if(readReps=="") { sleep 5 }
+                                      count+=5
+                                    }
+                                    echo "Service is available at ${functionalTestUrl}"
+
+                                    if(readReps=="") {
+                                      error("Failed to get the deployment up in ${count} seconds...")
+                                    }
                                 }
                             }
                             post {
@@ -276,7 +298,7 @@ pipeline {
                         always {
                             script {
                                 node('helm') {
-                                    sh ("helm delete --purge ft-${env.BRANCH_NAME.toLowerCase()}")
+                                    sh ("helm delete ft-${env.BRANCH_NAME.toLowerCase()} --namespace demo")
                                 }
                             }
                         }
@@ -315,7 +337,7 @@ pipeline {
                     sh "git clone \"https://github.com/paladinarcher/vetsez-ds-demo1-coding-challenge-devops.git\" helmChart"
 
                     //Deploy the Chart
-                    sh "helm upgrade --install ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace development helmChart/k8s/coding-challenge-app"
+                    sh "helm upgrade --tiller-namespace flux --install ${releaseName}  --set \"image.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"initImage.tag=${env.BRANCH_NAME}-${env.GIT_COMMIT}\" --set \"image.pullPolicy=Always\" --set \"initImage.pullPolicy=Always\" --set \"postgresql.persistence.enabled=false\" --namespace demo helmChart/k8s/coding-challenge-app"
                     
                     //Wait a few seconds for the external IP to be allocated
                     def count = 0
