@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_30_151448) do
+ActiveRecord::Schema.define(version: 2020_04_30_184126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,23 @@ ActiveRecord::Schema.define(version: 2020_04_30_151448) do
     t.index ["approved"], name: "index_users_on_approved"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "weekly_status_details", force: :cascade do |t|
+    t.string "project_organization"
+    t.string "project_code"
+    t.string "project_title"
+    t.integer "task_number"
+    t.string "task"
+    t.string "project_type"
+    t.string "person"
+    t.date "task_date"
+    t.string "comments"
+    t.float "hours"
+    t.bigint "weekly_status_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["weekly_status_id"], name: "index_weekly_status_details_on_weekly_status_id"
   end
 
   create_table "weekly_statuses", force: :cascade do |t|
