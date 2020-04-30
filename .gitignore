@@ -43,6 +43,9 @@ yarn-debug.log*
 # Ignore logs
 /logs
 
+# Ignore logs
+/storage
+
 # Ignore generated files
 /context.txt
 /version.txt

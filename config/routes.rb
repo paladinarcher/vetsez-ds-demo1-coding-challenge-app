@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get  "weekly_status" =>'weekly_status#index'
+  post  "weekly_status_upload" =>'weekly_status#upload'
+
   devise_for :users
   post 'fetch_time' => 'react_component#fetch_time'
 

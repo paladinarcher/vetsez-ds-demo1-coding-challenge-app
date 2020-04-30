@@ -10,10 +10,6 @@
         window.location.replace(path)
     }
     <% if current_user %>
-      <% if current_user.approved %>
-        gotoAccount('<%= account_path %>');
-      <% else %>
-        gotoAccount('<%= awaiting_approval_path %>');
-      <% end %>
+      gotoAccount('<%= weekly_status_path %>');
     <% end %>
 </script>
