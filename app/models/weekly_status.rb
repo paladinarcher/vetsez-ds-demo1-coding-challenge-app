@@ -7,14 +7,12 @@ class WeeklyStatus < ApplicationRecord
   has_one_attached :weekly_csv
   has_many :weekly_status_details, dependent: :destroy
   attr_accessor :local_details
+  scope :latest_start_of_week, ->(start_of_week) { where("week_start_date = ?", WeeklyStatus.get_start_of_week(start_of_week)).last }
+
   def create_details
     @local_details = []
     csv =  CSV.parse(self.weekly_csv.download,headers:true)
-    # headers = csv.headers
-    #     # headers_map = {}
-    #     # headers.split(',').each_with_index do |key, index|
-    #     #   headers_map[key] = index
-    #     # end
+    earliest_date = 10.years.from_now
 
     csv.by_row.each do |row|
       wsd = WeeklyStatusDetail.new
@@ -31,9 +29,26 @@ class WeeklyStatus < ApplicationRecord
       wsd.send(:hours=,row["Hours"].to_f)
       wsd.weekly_status = self
       @local_details << wsd
+
+      if parsed_date < earliest_date
+        earliest_date = parsed_date
+      end
     end
+
+    self.week_start_date = WeeklyStatus.get_start_of_week(earliest_date)
+  end
+
+  def self.get_start_of_week(date)
+    dow = date.cwday
+    ret = date
+
+    if dow > 0
+      ret = (date - dow)
+    end
+    ret
   end
 end
+
 
 =begin
 w = WeeklyStatus.all.last
@@ -41,4 +56,8 @@ w = WeeklyStatus.all.last
  a.download
 a.content_type
  a.download.split.first
+
+# to get the latest summary upload (in case they uploaded multiple times for a given week)
+ latest = WeeklyStatus.latest_start_of_week(Date.strptime('4/30/2020', '%m/%d/%Y'))
+
 =end
