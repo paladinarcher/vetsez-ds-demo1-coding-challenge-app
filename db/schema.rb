@@ -51,8 +51,10 @@ ActiveRecord::Schema.define(version: 2020_04_30_151448) do
   end
 
   create_table "weekly_statuses", force: :cascade do |t|
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_weekly_statuses_on_user_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

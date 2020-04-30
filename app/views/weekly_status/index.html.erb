@@ -1,0 +1,4 @@
+<%= form_tag weekly_status_upload_path, method: :post do %>
+  <label for="file">File to Upload</label> <%= file_field_tag "file" %>
+  <%= submit_tag %>
+<% end %>
