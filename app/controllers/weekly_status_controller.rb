@@ -2,9 +2,18 @@ class WeeklyStatusController < ApplicationController
   def index
   end
 
+  def show
+    @weekly_status = WeeklyStatus.find(params[:id])
+
+    unless current_user.eql? @weekly_status.user
+
+    end
+  end
+
   def upload
+    ws = WeeklyStatus.new
+
     if !params[ :file ].nil?
-      ws = WeeklyStatus.new
       file = params[:file]
       ws.weekly_csv.attach(io: file.tempfile, filename: file.original_filename )
       ws.user = current_user
@@ -14,7 +23,15 @@ class WeeklyStatusController < ApplicationController
           detail.save!
         end
       end
+    else
+      ws = nil
     end
-    redirect_to weekly_status_path
+
+    if ws.nil?
+      redirect_to weekly_status_path
+    else
+      @weekly_status = ws
+      redirect_to @weekly_status
+    end
   end
 end
