@@ -10,12 +10,6 @@ class WeeklyStatus < ApplicationRecord
   def create_details
     @local_details = []
     csv =  CSV.parse(self.weekly_csv.download,headers:true)
-    # headers = csv.headers
-    #     # headers_map = {}
-    #     # headers.split(',').each_with_index do |key, index|
-    #     #   headers_map[key] = index
-    #     # end
-
     csv.by_row.each do |row|
       wsd = WeeklyStatusDetail.new
       wsd.send(:project_organization=,row["ProjectOrganization"])
