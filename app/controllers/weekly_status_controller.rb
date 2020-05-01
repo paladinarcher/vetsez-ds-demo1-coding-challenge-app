@@ -6,7 +6,7 @@ class WeeklyStatusController < ApplicationController
     @weekly_status = WeeklyStatus.find(params[:id])
 
     unless current_user.eql? @weekly_status.user
-
+      # @weekly_status = WeeklyStatus.latest_start_of_week(, current_user)
     end
   end
 

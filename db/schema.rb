@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_233415) do
   create_table "weekly_statuses", force: :cascade do |t|
     t.bigint "user_id"
     t.date "week_start_date"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_weekly_statuses_on_user_id"

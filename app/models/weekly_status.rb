@@ -3,6 +3,7 @@ require 'csv'
 
 class WeeklyStatus < ApplicationRecord
   before_save :create_details
+  after_save :inactivate_previous
   belongs_to :user
   has_one_attached :weekly_csv
   has_many :weekly_status_details, dependent: :destroy
@@ -10,6 +11,13 @@ class WeeklyStatus < ApplicationRecord
 
   def self.latest_start_of_week(start_of_week, user)
     WeeklyStatus.where("week_start_date = ? and user_id = ?", WeeklyStatus.get_start_of_week(start_of_week), user.id).last
+  end
+
+  def inactivate_previous
+    WeeklyStatus.where("week_start_date = ? and user_id = ? and id != ?",
+                       self.week_start_date,
+                       self.user_id,
+                       self.id).update_all({active: false})
   end
 
   def create_details
@@ -22,8 +30,8 @@ class WeeklyStatus < ApplicationRecord
       wsd.send(:project_organization=,row["ProjectOrganization"])
       wsd.send(:project_code=,row["ProjectCode"])
       wsd.send(:project_title=,row["ProjectTitle"])
-      wsd.send(:task_number=,row["TaskNumber"])
-      wsd.send(:task=,row["Task"].to_i)
+      wsd.send(:task_number=,row["TaskNumber"].to_i)
+      wsd.send(:task=,row["Task"])
       wsd.send(:project_type=,row["ProjectType"])
       wsd.send(:person=,row["Person"])
       parsed_date = Date.strptime(row["Date"], '%m/%d/%Y')
@@ -62,6 +70,6 @@ a.content_type
  a.download.split.first
 
 # to get the latest summary upload (in case they uploaded multiple times for a given week)
- latest = WeeklyStatus.latest_start_of_week(Date.strptime('4/30/2020', '%m/%d/%Y'), User.find(3))
+ latest = WeeklyStatus.latest_start_of_week(Date.strptime('4/30/2 020', '%m/%d/%Y'), User.find(3))
 
 =end
