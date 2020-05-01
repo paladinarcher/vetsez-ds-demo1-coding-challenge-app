@@ -7,7 +7,10 @@ class WeeklyStatus < ApplicationRecord
   has_one_attached :weekly_csv
   has_many :weekly_status_details, dependent: :destroy
   attr_accessor :local_details
-  scope :latest_start_of_week, ->(start_of_week) { where("week_start_date = ?", WeeklyStatus.get_start_of_week(start_of_week)).last }
+
+  def self.latest_start_of_week(start_of_week, user)
+    WeeklyStatus.where("week_start_date = ? and user_id = ?", WeeklyStatus.get_start_of_week(start_of_week), user.id).last
+  end
 
   def create_details
     @local_details = []
@@ -51,6 +54,7 @@ end
 
 
 =begin
+load './app/models/weekly_status.rb'
 w = WeeklyStatus.all.last
  a = w.weekly_csv
  a.download
@@ -58,6 +62,6 @@ a.content_type
  a.download.split.first
 
 # to get the latest summary upload (in case they uploaded multiple times for a given week)
- latest = WeeklyStatus.latest_start_of_week(Date.strptime('4/30/2020', '%m/%d/%Y'))
+ latest = WeeklyStatus.latest_start_of_week(Date.strptime('4/30/2020', '%m/%d/%Y'), User.find(3))
 
 =end

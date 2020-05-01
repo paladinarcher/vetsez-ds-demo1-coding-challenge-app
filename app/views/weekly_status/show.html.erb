@@ -1,0 +1,31 @@
+<h1>Show</h1>
+<%#= form_tag weekly_status_upload_path, method: :post, multipart: true do %>
+<!--  <label for="file">File to Upload</label> <%#= file_field_tag "file" %>-->
+  <%#= submit_tag %>
+<%# end %>
+
+<table class="hovertable">
+  <tr>
+    <th width="210px">project_code</th>
+    <th>project title</th>
+    <th width="140px">task_number</th>
+    <th width="200px">task</th>
+    <th width="200px">person</th>
+    <th width="200px">task date</th>
+    <th width="200px">hours</th>
+    <th width="200px">comments</th>
+  </tr>
+
+  <% @weekly_status.weekly_status_details.each do |ws| %>
+    <tr>
+      <td><%=h ws.project_code %></td>
+      <td><%=h ws.project_title %></td>
+      <td><%=h ws.task_number %></td>
+      <td><%=h ws.task  %></td>
+      <td><%=h ws.person  %></td>
+      <td><%=h ws.task_date  %></td>
+      <td><%=h ws.hours  %></td>
+      <td><%=h ws.comments  %></td>
+    </tr>
+  <% end %>
+</table>

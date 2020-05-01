@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  get  "weekly_status" =>'weekly_status#index'
+  resources :recipes
+  resources :weekly_status
+
+  get  "weekly_status_index" =>'weekly_status#index'
+  # match '/weekly_status/:id' => 'weekly_status#show', via: :get
   post  "weekly_status_upload" =>'weekly_status#upload'
 
   devise_for :users
