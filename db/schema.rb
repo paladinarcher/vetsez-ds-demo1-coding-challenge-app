@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_30_233415) do
+ActiveRecord::Schema.define(version: 2020_05_04_193650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,9 +77,28 @@ ActiveRecord::Schema.define(version: 2020_04_30_233415) do
   create_table "weekly_statuses", force: :cascade do |t|
     t.bigint "user_id"
     t.date "week_start_date"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_weekly_statuses_on_user_id"
+  end
+
+  create_table "weekly_summaries", force: :cascade do |t|
+    t.bigint "weekly_status_id"
+    t.string "project_organization"
+    t.string "project_code"
+    t.string "project_title"
+    t.string "task_number"
+    t.string "task"
+    t.string "project_type"
+    t.string "person"
+    t.float "total_hours"
+    t.string "weekly_summary_comment"
+    t.string "blockers"
+    t.string "next_planned_activity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["weekly_status_id"], name: "index_weekly_summaries_on_weekly_status_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

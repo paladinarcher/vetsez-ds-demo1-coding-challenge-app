@@ -3,11 +3,19 @@ class WeeklyStatusController < ApplicationController
   end
 
   def show
-    @weekly_status = WeeklyStatus.find(params[:id])
-
-    unless current_user.eql? @weekly_status.user
-
+    ws_id = params[:id]
+    if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
+      summaries = WeeklyStatus.weekly_summary(ws_id)
+      @summaries = []
+      summaries.each do |ws|
+        @summaries << WeeklySummary.new(ws)
+      end
+      @summaries.each(&:save!)
+    else
+      @summaries = WeeklySummary.where("weekly_status_id = ?", ws_id)
     end
+
+    @summaries
   end
 
   def upload
