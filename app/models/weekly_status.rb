@@ -9,8 +9,8 @@ class WeeklyStatus < ApplicationRecord
   has_many :weekly_status_details, dependent: :destroy
   has_many :weekly_summaries, dependent: :destroy
   attr_accessor :local_details
+  accepts_nested_attributes_for :weekly_summaries, allow_destroy: true
 
-  @@time_adjuster = 1.week.from_now
 
   def self.latest_start_of_week(start_of_week, user)
     WeeklyStatus.where("week_start_date = ? and user_id = ? and active = true", WeeklyStatus.get_start_of_week(start_of_week), user.id)

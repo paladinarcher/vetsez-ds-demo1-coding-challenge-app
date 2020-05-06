@@ -4,18 +4,30 @@ class WeeklyStatusController < ApplicationController
 
   def show
     ws_id = params[:id]
+    @weekly_status = WeeklyStatus.find_by_id(ws_id)
     if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
       summaries = WeeklyStatus.weekly_summary(ws_id)
       @summaries = []
       summaries.each do |ws|
         @summaries << WeeklySummary.new(ws)
       end
-      @summaries.each(&:save!)
+      WeeklySummary.transaction do
+        @summaries.each(&:save!)
+      end
     else
       @summaries = WeeklySummary.where("weekly_status_id = ?", ws_id)
     end
+    @weekly_status.weekly_summaries = @summaries
+  end
 
-    @summaries
+  def update
+    ws_id = params[:id]
+    @weekly_status = WeeklyStatus.find_by_id(ws_id)
+    if (@weekly_status.update_attributes(weekly_params))
+      $log.debug("I updated the weekly summaries")
+    else
+      $log.error("I failed to update the weekly summaries")
+    end
   end
 
   def upload
@@ -42,4 +54,16 @@ class WeeklyStatusController < ApplicationController
       redirect_to @weekly_status
     end
   end
+
+  private
+  def weekly_params
+    params.require(:weekly_status).permit!#.permit(get_whitelist)
+  end
+
+  # def get_whitelist
+  #   params_array = WeeklyStatus.column_names
+  #   weekly_array = [:weekly_summaries_attributes => WeeklySummary.column_names]
+  #   params_array << weekly_array
+  # end
+
 end
