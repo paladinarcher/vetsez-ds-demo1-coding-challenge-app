@@ -1,0 +1,53 @@
+<%= row.id %>
+<%= row.class %>
+
+<%#= form_for row do |f| %>
+  <div class="usa-grid">
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Project Organization:</span><br>
+      <%= row.project_organization %>
+    </div>
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Project Code:</span><br>
+      <%= row.project_code %>
+    </div>
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Project Title:</span><br>
+      <%= row.project_title %>
+    </div>
+  </div>
+  <div class="usa-grid">
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Project Type:</span><br>
+      <%= row.project_type %>
+    </div>
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Task Number:</span><br>
+      <%= row.task_number %>
+    </div>
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Task:</span><br>
+      <%= row.task %>
+    </div>
+  </div>
+  <div class="usa-grid">
+    <div class="usa-width-one-whole">
+      <span style="font-weight: bold">Weekly Summary Comment:</span><br>
+      <%= text_area_tag 'weekly_summary_comment', row.weekly_summary_comment  %>
+    </div>
+  </div>
+  <div class="usa-grid">
+    <div class="usa-width-one-whole">
+      <span style="font-weight: bold">Blockers:</span><br>
+      <%= text_area_tag 'weekly_summary_comment', row.blockers  %>
+    </div>
+  </div>
+  <div class="usa-grid">
+    <div class="usa-width-one-whole">
+      <span style="font-weight: bold">Next Planned Activity:</span><br>
+      <%= text_area_tag 'weekly_summary_comment', row.next_planned_activity  %>
+    </div>
+  </div>
+<!--  weekly_summary_comment: <%#= f.text_area :weekly_summary_comment %><br />-->
+  <%#= f.submit %>
+<%# end %>
