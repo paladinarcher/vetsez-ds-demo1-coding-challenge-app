@@ -1,8 +1,8 @@
 <h1>Weekly Summary</h1>
 <%= form_for(@weekly_status, :url => { :action => "update" }) do |f| %>
 <%= f.fields_for :weekly_summaries do |builder| %>
-    <%count ||=0; count +=1%>
-    <div  style="background-color: <%= (count % 2).odd? ? 'lightblue' : 'cornsilk' %>">
+    <%@count ||=0; @count +=1%>
+    <div  style="background-color: <%= (@count % 2).odd? ? 'lightblue' : 'cornsilk' %>">
 <%= render partial: "weekly_status/wsr_row", locals: {row: builder} %>
     <br>
       </div>
