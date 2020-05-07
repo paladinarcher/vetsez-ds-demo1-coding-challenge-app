@@ -1,17 +1,17 @@
-<script type="text/javascript" charset="utf-8">
-    function toggle_div(id) {
-        const e = document.getElementById(id);
-        if (e.style.display === "none") {
-            e.style.display = 'block';
-        } else {
-            e.style.display = 'none';
-        }
-    }
-</script>
+<!--<script type="text/javascript" charset="utf-8">-->
+<!--    function UIHelper.toggle_div(id) {-->
+<!--        const e = document.getElementById(id);-->
+<!--        if (e.style.display === "none") {-->
+<!--            e.style.display = 'block';-->
+<!--        } else {-->
+<!--            e.style.display = 'none';-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
 
 <div style="background-color: #3f57a6; color: white; border: #8b8b8b solid thin">
   <div style="float: right">
-    <a onclick="toggle_div('toggle_<%=row.object.id %>')">Show/Hide</a>
+    <a onclick="UIHelper.toggle_div('toggle_<%=row.object.id %>')">Show/Hide</a>
   </div>
 </div>
 <div class="usa-grid">

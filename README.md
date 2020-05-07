@@ -24,6 +24,10 @@ The 'rubo_lint' directory will contain RuboCop's results.
 docker-compose up --build
 ```
 
+6. In a browser:
+```bazaar
+http://localhost:8080/dsbpa/
+```
 
 
 ## Local Setup for Ruby on Rails
