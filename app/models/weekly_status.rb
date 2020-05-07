@@ -188,6 +188,10 @@ class WeeklyStatus < ApplicationRecord
     self.week_start_date = WeeklyStatus.get_start_of_week(earliest_date)
   end
 
+  def sorted_summaries
+    weekly_summaries.order(project_code: :asc, task_number: :asc)
+  end
+
   def self.get_start_of_week(date)
     dow = date.cwday
     ret = date

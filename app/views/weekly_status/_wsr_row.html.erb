@@ -1,3 +1,19 @@
+<script type="text/javascript" charset="utf-8">
+    function toggle_div(id) {
+        const e = document.getElementById(id);
+        if (e.style.display === "none") {
+            e.style.display = 'block';
+        } else {
+            e.style.display = 'none';
+        }
+    }
+</script>
+
+<div style="background-color: #3f57a6; color: white; border: #8b8b8b solid thin">
+  <div style="float: right">
+    <a onclick="toggle_div('toggle_<%=row.object.id %>')">Show/Hide</a>
+  </div>
+</div>
 <div class="usa-grid">
   <div class="usa-width-one-third">
     <span style="font-weight: bold">Project Organization:</span><br>
@@ -12,36 +28,38 @@
     <%= row.object.project_title %>
   </div>
 </div>
-<div class="usa-grid">
-  <div class="usa-width-one-third">
-    <span style="font-weight: bold">Project Type:</span><br>
-    <%= row.object.project_type %>
+  <div class="usa-grid">
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Project Type:</span><br>
+      <%= row.object.project_type %>
+    </div>
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Task Number:</span><br>
+      <%= row.object.task_number %>
+    </div>
+    <div class="usa-width-one-third">
+      <span style="font-weight: bold">Task:</span><br>
+      <%= row.object.task %>
+    </div>
   </div>
-  <div class="usa-width-one-third">
-    <span style="font-weight: bold">Task Number:</span><br>
-    <%= row.object.task_number %>
-  </div>
-  <div class="usa-width-one-third">
-    <span style="font-weight: bold">Task:</span><br>
-    <%= row.object.task %>
-  </div>
-</div>
-<div class="usa-grid">
-  <div class="usa-width-one-whole">
-    <span style="font-weight: bold">Weekly Summary Comment:</span><br>
-    <%= row.text_area :weekly_summary_comment %>
-  </div>
-</div>
-<div class="usa-grid">
-  <div class="usa-width-one-whole">
-    <span style="font-weight: bold">Blockers:</span><br>
-    <%= row.text_area :blockers  %>
-  </div>
-</div>
-<div class="usa-grid">
-  <div class="usa-width-one-whole">
-    <span style="font-weight: bold">Next Planned Activity:</span><br>
-    <%= row.text_area :next_planned_activity %>
+  <div id="toggle_<%=row.object.id %>">
+    <div class="usa-grid">
+      <div class="usa-width-one-whole">
+        <span style="font-weight: bold">Weekly Summary Comment:</span><br>
+        <%= row.text_area :weekly_summary_comment %>
+      </div>
+    </div>
+    <div class="usa-grid">
+      <div class="usa-width-one-whole">
+        <span style="font-weight: bold">Blockers:</span><br>
+        <%= row.text_area :blockers  %>
+      </div>
+    </div>
+    <div class="usa-grid">
+      <div class="usa-width-one-whole">
+        <span style="font-weight: bold">Next Planned Activity:</span><br>
+        <%= row.text_area :next_planned_activity %>
+      </div>
   </div>
 </div>
 

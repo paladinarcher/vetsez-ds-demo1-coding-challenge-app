@@ -4,7 +4,7 @@ class WeeklyStatusController < ApplicationController
 
   def show
     ws_id = params[:id]
-    @weekly_status = WeeklyStatus.find_by_id(ws_id)
+
     if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
       summaries = WeeklyStatus.weekly_summary(ws_id)
       @summaries = []
@@ -14,10 +14,14 @@ class WeeklyStatusController < ApplicationController
       WeeklySummary.transaction do
         @summaries.each(&:save!)
       end
-    else
-      @summaries = WeeklySummary.where("weekly_status_id = ?", ws_id)
     end
-    @weekly_status.weekly_summaries = @summaries
+    # a = summaries.sort {|a,b| b.project_code.strip <=> a.project_code.strip }.map {|e| e.project_code}
+    # s = WeeklyStatus.find(ws_id).weekly_summaries.order(project_code: :asc, task_number: :asc)
+    @weekly_status = WeeklyStatus.find_by_id(ws_id)
+    @summaries = WeeklyStatus.find(ws_id).weekly_summaries.order(project_code: :asc, task_number: :asc)
+    @weekly_status.weekly_summaries = @summaries.sort do |a,b|
+      a.project_code.strip <=> b.project_code.strip
+    end
   end
 
   def update
@@ -28,6 +32,8 @@ class WeeklyStatusController < ApplicationController
     else
       $log.error("I failed to update the weekly summaries")
     end
+    @summaries = WeeklyStatus.find(ws_id).weekly_summaries.order(project_code: :desc, task_number: :asc)
+    render 'weekly_status/show'
   end
 
   def upload
