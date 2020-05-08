@@ -60,9 +60,10 @@ class WeeklyStatus < ApplicationRecord
     summary
   end
 
+=begin
   #    result = WeeklyStatus.greg(user_id: 4, week_start_date: '04/26/2020')
   #    load './app/models/weekly_status.rb'
-  def self.greg(user_id:, week_start_date:)
+  def self.query_example(user_id:, week_start_date:)
     sql = %Q{
       select * from (
         select week_start_date, project_organization, project_code, project_title, task_number, task, person, sum(hours) as hr, '' as summary_comment
@@ -96,6 +97,32 @@ class WeeklyStatus < ApplicationRecord
     result = ApplicationRecord.connection.exec_query(sql, 'user_weekly_summary', binds)
     result.to_hash
   end
+  def self.resolve_sql_bindings(**args)
+    bindings = []
+    idx = 0
+    args.each_pair do |name, value|
+      idx = idx + 1
+      if value.is_a? Integer
+        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Integer.new)
+      elsif value.is_a? String
+        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::String.new)
+      elsif value.is_a?(TrueClass) || value.is_a?(FalseClass)
+        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Boolean.new)
+      elsif value.is_a? Float
+        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Float.new)
+      elsif value.is_a? Date
+        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Date.new)
+      elsif value.is_a? DateTime
+        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::DateTime.new)
+      elsif value.is_a? Time
+        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Time.new)
+      else
+        raise 'error - not supported'
+      end
+    end
+    bindings
+  end
+=end
 
   # summary_rows = WeeklyStatus.calc_summary(result)
   def WeeklyStatus.calc_summary(result)
@@ -126,33 +153,7 @@ class WeeklyStatus < ApplicationRecord
     summary
   end
 
-  def self.resolve_sql_bindings(**args)
-    bindings = []
-    idx = 0
-    args.each_pair do |name, value|
-      idx = idx + 1
-      if value.is_a? Integer
-        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Integer.new)
-      elsif value.is_a? String
-        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::String.new)
-      elsif value.is_a?(TrueClass) || value.is_a?(FalseClass)
-        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Boolean.new)
-      elsif value.is_a? Float
-        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Float.new)
-      elsif value.is_a? Date
-        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Date.new)
-      elsif value.is_a? DateTime
-        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::DateTime.new)
-      elsif value.is_a? Time
-        bindings << ActiveRecord::Relation::QueryAttribute.new(name.to_s, value, ActiveRecord::Type::Time.new)
-      else
-        raise 'error - not supported'
-      end
-    end
-    bindings
-  end
-
-  def inactivate_previous
+    def inactivate_previous
     WeeklyStatus.where("week_start_date = ? and user_id = ? and id != ?",
                        self.week_start_date,
                        self.user_id,
@@ -186,10 +187,6 @@ class WeeklyStatus < ApplicationRecord
     end
 
     self.week_start_date = WeeklyStatus.get_start_of_week(earliest_date)
-  end
-
-  def sorted_summaries
-    weekly_summaries.order(project_code: :asc, task_number: :asc)
   end
 
   def self.get_start_of_week(date)
