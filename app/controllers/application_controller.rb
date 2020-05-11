@@ -12,5 +12,6 @@ class ApplicationController < ActionController::Base
     gon.routes = setup_routes
     gon.packs = packed_assets
     gon.user = ""
+    gon.js = {}
   end
 end
