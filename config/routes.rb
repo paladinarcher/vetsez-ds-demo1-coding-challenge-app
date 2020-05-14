@@ -1,11 +1,10 @@
 Rails.application.routes.draw do
   resources :recipes
   resources :weekly_status
-  # resources :weekly_summary
-
 
   get  "weekly_status_index" =>'weekly_status#index'
-  # match '/weekly_status/:id' => 'weekly_status#show', via: :get
+
+  match '/weekly_status_details/:id' => 'weekly_status#details', via: :get
   post  "weekly_status_upload" =>'weekly_status#upload'
 
   post  "weekly_summary_update" =>'weekly_status#weekly_summary_update'

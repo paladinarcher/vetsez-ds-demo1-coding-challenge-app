@@ -1,5 +1,26 @@
-<h1>Index</h1>
+<h3>Weekly Status Uploads for <%=current_user.email %></h3>
 <%= form_tag weekly_status_upload_path, method: :post, multipart: true do %>
-  <label for="file">File to Upload</label> <%= file_field_tag "file" %>
-  <%= submit_tag %>
+  <label for="file">Select CSV File to Upload:</label> <%= file_field_tag "file", :class=>"btn btn-secondary" %><br><br>
+  <%= submit_tag("Upload CSV File", :id=>"button", :class=>"btn btn-primary", :name=>"submit") %>
 <% end %>
+<br>
+<br>
+<h3>Previous Uploads</h3>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Week Start Date</th>
+    <th colspan="3">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% @weekly_statuses.each do |weekly_status| %>
+      <tr>
+        <td><%= weekly_status.week_start_date %></td>
+        <td><%= link_to 'Edit Summary', weekly_status_path(weekly_status) %></td>
+        <td><%= link_to "List Details", :controller => "weekly_status", :action => "details", :id => weekly_status %></td>
+        <td><%= link_to 'Download', rails_blob_path(weekly_status.weekly_csv, disposition: 'attachment') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

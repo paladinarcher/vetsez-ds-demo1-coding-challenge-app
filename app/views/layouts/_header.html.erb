@@ -1,16 +1,18 @@
 <div class="header-container">
   <header>
-    <div class="logo" aria-label="VA Logo">
-      <a href="https://www.va.gov" title="Go to VA.gov">
-        <img style="vertical-align: middle" src="<%= asset_pack_path image('va-logo-white.png') %>"  alt="VA Header Image"/>
-      </a>
+    <div aria-label="VetsEZ Works Logo" style="padding: 15px">
+      <img style="vertical-align: middle" src="<%= asset_pack_path image('vetsez-logo.png') %>"  alt="VetsEZ Logo"/>
       <div style="float: right; display: inline;">
         <% if (current_user) %>
-          Welcome <%= current_user&.email %>!<br>
-          <%= link_to 'Logout', destroy_user_session_path, :style=>'color:#FFFFFF;' %>
+          <h5>Welcome <%= current_user&.email %>!<br></h5>
+          <div style="float: right">
+            <%= link_to 'Logout', destroy_user_session_path %>
+          </div>
         <% else %>
-          <%= link_to 'Login', new_user_session_path, :style=>'color:#FFFFFF;' %>&nbsp;|&nbsp;
-          <%= link_to 'Signup', new_user_registration_path, :style=>'color:#FFFFFF;' %>
+          <div style="float: right">
+            <%= link_to 'Login', new_user_session_path %>&nbsp;|&nbsp;
+            <%= link_to 'Signup', new_user_registration_path %>
+          </div>
         <% end %>
       </div>
     </div>

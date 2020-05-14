@@ -1,0 +1,26 @@
+<%=link_to 'Back', weekly_status_index_path, class: 'btn btn-primary' %><br><br>
+<h3>Weekly Status Details for <%= @details.first.weekly_status.week_start_date %></h3>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Project Code</th>
+    <th>Project Title</th>
+    <th>Task Number:Title</th>
+    <th>Task Date</th>
+    <th>Hours</th>
+    <th colspan="2">Comment</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% @details.each do |row| %>
+      <tr>
+        <td><%= row.project_code %></td>
+        <td><%= row.project_title %></td>
+        <td><%= "#{row.task_number}: #{row.task}" %></td>
+        <td><%= row.task_date %></td>
+        <td><%= row.hours %></td>
+        <td><%= row.comments %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

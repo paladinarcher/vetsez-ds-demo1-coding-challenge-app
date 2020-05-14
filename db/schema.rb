@@ -51,13 +51,13 @@ ActiveRecord::Schema.define(version: 2020_05_04_193650) do
   end
 
   create_table "weekly_status_details", force: :cascade do |t|
-    t.string "project_organization"
     t.string "project_code"
     t.string "project_title"
     t.integer "task_number"
     t.string "task"
     t.string "project_type"
     t.string "person"
+    t.string "email"
     t.date "task_date"
     t.string "comments"
     t.float "hours"
@@ -78,13 +78,13 @@ ActiveRecord::Schema.define(version: 2020_05_04_193650) do
 
   create_table "weekly_summaries", force: :cascade do |t|
     t.bigint "weekly_status_id"
-    t.string "project_organization"
     t.string "project_code"
     t.string "project_title"
     t.string "task_number"
     t.string "task"
     t.string "project_type"
     t.string "person"
+    t.string "email"
     t.float "total_hours"
     t.string "weekly_summary_comment"
     t.string "blockers"

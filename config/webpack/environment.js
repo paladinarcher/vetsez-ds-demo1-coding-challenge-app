@@ -1,14 +1,13 @@
-const { environment } = require('@rails/webpacker')
-const webpack = require('webpack')
-module.exports = environment
-environment.plugins.prepend(
-    'Provide',
-    new webpack.ProvidePlugin({
+const { environment } = require('@rails/webpacker');
+const webpack = require('webpack');
+
+environment.plugins.prepend('Provide', new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
-        jquery: 'jquery'
-    })
-)
+        jquery: 'jquery',
+        Popper: ['popper.js','default'],
+    }));
+
 //https://github.com/rails/webpacker/issues/1174
 const config = require('@rails/webpacker/package/config')
 const ManifestPlugin = require('webpack-manifest-plugin')
@@ -21,6 +20,8 @@ environment.plugins.append('Manifest', new ManifestPlugin({
         return f
     }
 }))
+
+module.exports = environment;
 
 //environment['output'] = {};
 // environment['config']['output']['library'] = 'packed';

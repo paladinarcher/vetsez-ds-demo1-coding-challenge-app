@@ -162,31 +162,34 @@ class WeeklyStatus < ApplicationRecord
 
   def create_details
     @local_details = []
-    csv =  CSV.parse(self.weekly_csv.download,headers:true)
-    earliest_date = 10.years.from_now
 
-    csv.by_row.each do |row|
-      wsd = WeeklyStatusDetail.new
-      wsd.send(:project_organization=,row["ProjectOrganization"])
-      wsd.send(:project_code=,row["ProjectCode"])
-      wsd.send(:project_title=,row["ProjectTitle"])
-      wsd.send(:task_number=,row["TaskNumber"].to_i)
-      wsd.send(:task=,row["Task"])
-      wsd.send(:project_type=,row["ProjectType"])
-      wsd.send(:person=,row["Person"])
-      parsed_date = Date.strptime(row["Date"], '%m/%d/%Y')
-      wsd.send(:task_date=,parsed_date)
-      wsd.send(:comments=,row["Comments"])
-      wsd.send(:hours=,row["Hours"].to_f)
-      wsd.weekly_status = self
-      @local_details << wsd
+    if self.new_record?
+      csv =  CSV.parse(self.weekly_csv.download,headers:true)
+      earliest_date = 10.years.from_now.to_date
 
-      if parsed_date < earliest_date
-        earliest_date = parsed_date
+      csv.by_row.each do |row|
+        wsd = WeeklyStatusDetail.new
+        wsd.send(:project_code=,row["ProjectCode"].to_s.strip)
+        wsd.send(:project_title=,row["ProjectTitle"].to_s.strip)
+        wsd.send(:task_number=,row["TaskNumber"].to_i)
+        wsd.send(:task=,row["Task"].to_s.strip)
+        wsd.send(:project_type=,row["ProjectType"].to_s.strip)
+        wsd.send(:person=,row["Person"].to_s.strip)
+        wsd.send(:email=,row["Email"].to_s.strip)
+        parsed_date = Date.strptime(row["Date"].to_s.strip, '%m/%d/%Y')
+        wsd.send(:task_date=,parsed_date)
+        wsd.send(:comments=,row["Comments"].to_s.strip)
+        wsd.send(:hours=,row["Hours"].to_f)
+        wsd.weekly_status = self
+        @local_details << wsd
+
+        if parsed_date < earliest_date
+          earliest_date = parsed_date
+        end
       end
-    end
 
-    self.week_start_date = WeeklyStatus.get_start_of_week(earliest_date)
+      self.week_start_date = WeeklyStatus.get_start_of_week(earliest_date)
+    end
   end
 
   def self.get_start_of_week(date)

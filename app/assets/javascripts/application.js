@@ -12,4 +12,4 @@
 //
 //= require_tree .
 // Can do this as long as we have no load order dependencies in the util directory (Currently we do not)
-//= require ./util/ui_helper
+// require ./util/ui_helper

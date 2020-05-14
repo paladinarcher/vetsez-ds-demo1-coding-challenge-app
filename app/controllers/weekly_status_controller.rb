@@ -1,5 +1,6 @@
 class WeeklyStatusController < ApplicationController
   def index
+    @weekly_statuses = WeeklyStatus.where('user_id = ? and active = true', current_user.id).order(week_start_date: :desc)
   end
 
   def show
@@ -15,43 +16,42 @@ class WeeklyStatusController < ApplicationController
         @summaries.each(&:save!)
       end
     end
-    # a = summaries.sort {|a,b| b.project_code.strip <=> a.project_code.strip }.map {|e| e.project_code}
-    # s = WeeklyStatus.find(ws_id).weekly_summaries.order(project_code: :asc, task_number: :asc)
-    @weekly_status = WeeklyStatus.find_by_id(ws_id)
-    @summaries = WeeklyStatus.find(ws_id).weekly_summaries.order(project_code: :asc, task_number: :asc)
-    @weekly_status.weekly_summaries = @summaries.sort do |a,b|
-      a.project_code.strip <=> b.project_code.strip
-    end
+    @weekly_status = WeeklyStatus.find(ws_id)
+  end
+
+  def details
+    ws_id = params[:id]
+    @details = WeeklyStatus.find(ws_id).weekly_status_details.order(project_code: :asc, task_number: :asc, task_date: :asc)
   end
 
   def update
     ws_id = params[:id]
-    @weekly_status = WeeklyStatus.find_by_id(ws_id)
+    @weekly_status = WeeklyStatus.find(ws_id)
+
     if (@weekly_status.update_attributes(weekly_params))
-      $log.debug("I updated the weekly summaries")
+      $log.debug("I updated the weekly summaries for #{ws_id}")
     else
-      $log.error("I failed to update the weekly summaries")
+      $log.error("I failed to update the weekly summaries for #{ws_id}")
     end
-    @summaries = WeeklyStatus.find(ws_id).weekly_summaries.order(project_code: :desc, task_number: :asc)
     render 'weekly_status/show'
   end
 
   def upload
-    ws = WeeklyStatus.new
+      ws = WeeklyStatus.new
 
-    if !params[ :file ].nil?
-      file = params[:file]
-      ws.weekly_csv.attach(io: file.tempfile, filename: file.original_filename )
-      ws.user = current_user
-      WeeklyStatus.transaction do
-        ws.save!
-        ws.local_details.each do |detail|
-          detail.save!
+      if !params[ :file ].nil?
+        file = params[:file]
+        ws.weekly_csv.attach(io: file.tempfile, filename: file.original_filename )
+        ws.user = current_user
+        WeeklyStatus.transaction do
+          ws.save!
+          ws.local_details.each do |detail|
+            detail.save!
+          end
         end
+      else
+        ws = nil
       end
-    else
-      ws = nil
-    end
 
     if ws.nil?
       redirect_to weekly_status_path
@@ -63,8 +63,16 @@ class WeeklyStatusController < ApplicationController
 
   private
   def weekly_params
-    params.require(:weekly_status).permit!#.permit(get_whitelist)
+    params.require(:weekly_status).permit(
+        weekly_summaries_attributes: %w(id weekly_summary_comment blockers next_planned_activity)
+        # weekly_summaries_attributes: WeeklySummary.column_names
+    )
   end
+
+  # def weekly_params
+  #   this is a permit all!!
+  #   params.require(:weekly_status).permit! #.permit(get_whitelist)
+  # end
 
   # def get_whitelist
   #   params_array = WeeklyStatus.column_names
