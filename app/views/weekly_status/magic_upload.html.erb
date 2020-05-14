@@ -1,0 +1,19 @@
+<h1>Magic Results</h1>
+<%= @result if @result.eql?('sad') %>
+
+<table style="width: 9000px">
+  <tr>
+    <thead>
+    <% @headers.each do |hdr| %>
+      <th><%= hdr %></th>
+    <% end %>
+    </thead>
+  </tr>
+  <% @rows.each do |row| %>
+    <tr>
+      <% row.each do |col| %>
+        <td><%= col.last %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

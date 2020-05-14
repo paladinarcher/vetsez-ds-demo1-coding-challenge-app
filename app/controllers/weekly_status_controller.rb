@@ -1,3 +1,5 @@
+require './lib/unanet/unanet.rb' # move to initializer
+
 class WeeklyStatusController < ApplicationController
   def index
     @weekly_statuses = WeeklyStatus.where('user_id = ? and active = true', current_user.id).order(week_start_date: :desc)
@@ -35,6 +37,24 @@ class WeeklyStatusController < ApplicationController
     end
     render 'weekly_status/show'
   end
+
+  def magic_upload
+    username = params['unanet-username-input']
+    pwd = params['unanet-password-input']
+    url = params['unanet-url-input']
+    fetcher = Unanet::FetchSummaries.new(user: username, password: pwd)
+    summaries = fetcher.get_report
+    @result = 'sad'
+    @headers = []
+    @rows = []
+
+    if summaries.success
+      @result = 'happy'
+      @headers = summaries.csv[summaries.csv.keys[-2]].headers
+      @rows = summaries.csv[summaries.csv.keys[-2]].by_row
+    end
+  end
+
 
   def upload
       ws = WeeklyStatus.new

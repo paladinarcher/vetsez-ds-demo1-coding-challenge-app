@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get  "weekly_status_index" =>'weekly_status#index'
 
   match '/weekly_status_details/:id' => 'weekly_status#details', via: :get
+  post  "magic_upload" =>'weekly_status#magic_upload'
   post  "weekly_status_upload" =>'weekly_status#upload'
 
   post  "weekly_summary_update" =>'weekly_status#weekly_summary_update'

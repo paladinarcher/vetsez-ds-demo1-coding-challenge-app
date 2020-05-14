@@ -12,6 +12,7 @@ module Unanet
 
     VALIDATE_URL = CONFIG['urls']['validate_url']
     REPORT_URL = CONFIG['urls']['report_url']
+    LOOKBACK = CONFIG['config']['lookback']
     ENTRY_DATE_HEADER = 'Timesheet Cell Work Date'
 
     def initialize(user:, password:)
@@ -135,4 +136,7 @@ c[c.keys.last].by_row.first[FetchSummaries::ENTRY_DATE_HEADER]
 c[c.keys.last].by_row[2][FetchSummaries::ENTRY_DATE_HEADER]
 Unanet.get_start_of_week Date.strptime(c.by_row.first[FetchSummaries::ENTRY_DATE_HEADER], '%m/%d/%Y')
 Unanet.get_start_of_week Date.strptime(c.by_row[20][FetchSummaries::ENTRY_DATE_HEADER], '%m/%d/%Y')
+
+summaries.csv[summaries.csv.keys[-2]].by_row.first
+
 =end
