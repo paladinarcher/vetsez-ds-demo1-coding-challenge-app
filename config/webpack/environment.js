@@ -1,16 +1,17 @@
 const { environment } = require('@rails/webpacker');
 const webpack = require('webpack');
 
+//https://github.com/rails/webpacker/issues/1174
+const config = require('@rails/webpacker/package/config');
+const ManifestPlugin = require('webpack-manifest-plugin');
+
 environment.plugins.prepend('Provide', new webpack.ProvidePlugin({
     $: 'jquery/src/jquery',
     jQuery: 'jquery/src/jquery',
     jquery: 'jquery/src/jquery',
     Popper: ['popper.js','default'],
-    }));
+}));
 
-//https://github.com/rails/webpacker/issues/1174
-const config = require('@rails/webpacker/package/config')
-const ManifestPlugin = require('webpack-manifest-plugin')
 environment.plugins.append('Manifest', new ManifestPlugin({
     publicPath: config.publicPath,
     writeToFileEmit: true,

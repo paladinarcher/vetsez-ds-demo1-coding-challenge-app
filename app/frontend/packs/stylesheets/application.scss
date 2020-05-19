@@ -27,6 +27,29 @@ label {
   padding-top: 10px;
 }
 
+.field label {
+  font-weight: bold;
+  font-size: medium;
+}
+
+.greg label {
+  color: red;
+}
+.greg input {
+  border-bottom: red thin solid;
+}
+
+.flash_alert {
+  background-color: lightpink;
+  border: 2px navy solid;
+  border-radius: 4px;
+}
+
+.flash_notice {
+  background-color: lightgreen;
+  border: 2px navy solid;
+  border-radius: 4px;
+}
 /*
 
 $white: white;

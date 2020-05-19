@@ -1,19 +1,30 @@
 <% flash.each do |key, value| %>
   <% if key == 'alert' %>
-    <div class="usa-alert usa-alert-error" role="alert">
-      <div class="usa-alert-body">
-        <h3 class="usa-alert-heading">Error <%= key %></h3>
+    <div class="container flash_alert" role="alert">
+      <div class="row">
+      <div class="col">
+        <h3>Error <%= key.capitalize %></h3>
         <p><%= value %></p>
       </div>
-    </div>
-    <% else %>
-<!--
-      <div class="usa-alert usa-alert-success">
-        <div class="usa-alert-body">
-          <h3 class="usa-alert-heading">Success  <%#= key %></h3>
-          <p><%#=value %></p>
-        </div>
       </div>
--->
+    </div>
+    <%# else %>
+<!--      <div class="container flash_notice">-->
+<!--        <div class="row">-->
+<!--          <h3 class="col">Success  <%#= key.capitalize %></h3>-->
+<!--          <p><%#=value %></p>-->
+<!--        </div>-->
+<!--      </div>-->
     <% end %>
 <% end %>
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    //  cris
+    <% flash.each do |key, value| %>
+      let type = '<%= key.eql?('notice') ? 'success' : 'danger'  %>'
+      <% if key != 'alert' %>
+        $.notify('<%=value %>', {type: 'success'});
+      <% end %>
+    <% end %>
+  });
+</script>
