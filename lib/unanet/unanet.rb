@@ -3,17 +3,19 @@ require 'faraday-cookie_jar'
 require 'nokogiri'
 require 'yaml'
 require 'csv'
+require_relative 'UnanetReports'
 
 module Unanet
 
   CONFIG = YAML.load(File.read("./config/unanet.yml"))
 
   class FetchSummaries
+    include Unanet::Reports::Columns
 
     VALIDATE_URL = CONFIG['urls']['validate_url']
     REPORT_URL = CONFIG['urls']['report_url']
     LOOKBACK = CONFIG['config']['lookback']
-    ENTRY_DATE_HEADER = 'Timesheet Cell Work Date'
+
 
     def initialize(user:, password:)
       @user = user
@@ -85,7 +87,7 @@ module Unanet
       buckets = {}
       headers = csv.headers
       csv.by_row.each do |row|
-        date = Unanet.get_start_of_week Date.strptime(row[FetchSummaries::ENTRY_DATE_HEADER], '%m/%d/%Y')
+        date = Unanet.get_start_of_week Date.strptime(row[TIMESHEET_CELL_WORK_DATE], '%m/%d/%Y')
         buckets[date] ||= [headers]
         buckets[date] << row
       end
