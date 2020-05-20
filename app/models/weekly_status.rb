@@ -161,6 +161,7 @@ class WeeklyStatus < ApplicationRecord
     if self.new_record?
       if @csv_magic
         csv = @csv_magic
+      else
         csv =  CSV.parse(self.weekly_csv.download,headers:true)
       end
 
