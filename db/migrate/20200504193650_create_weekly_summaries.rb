@@ -13,6 +13,7 @@ class CreateWeeklySummaries < ActiveRecord::Migration[5.2]
       t.string :weekly_summary_comment
       t.string :blockers
       t.string :next_planned_activity
+      t.boolean :reviewed, default: false
       t.timestamps
     end
   end

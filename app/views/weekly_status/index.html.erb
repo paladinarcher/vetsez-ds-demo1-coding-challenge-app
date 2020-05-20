@@ -27,7 +27,7 @@
         <td><%= weekly_status.week_start_date %></td>
         <td><%= link_to 'Edit Summary', weekly_status_path(weekly_status) %></td>
         <td><%= link_to "List Details", :controller => "weekly_status", :action => "details", :id => weekly_status %></td>
-        <td><%= link_to 'Download', rails_blob_path(weekly_status.weekly_csv, disposition: 'attachment') %></td>
+<!--        <td><%#= link_to 'Download', rails_blob_path(weekly_status.weekly_csv, disposition: 'attachment') %></td>-->
       </tr>
     <% end %>
   </tbody>

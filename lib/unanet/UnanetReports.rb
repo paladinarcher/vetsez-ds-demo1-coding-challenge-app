@@ -10,7 +10,7 @@ module Unanet
       PERSON_TIME_ENTRY_INCREMENT = 'Person Time Entry Increment'
       PERSON_TIME_PERIOD_TYPE = 'Person Time Period Type'
       PERSON_TIME_PERIOD_NAME = 'Person Time Period Name'
-      TIMESHEET_CELL_PROJECT_CODE = 'Time Cell Project Code'
+      TIMESHEET_CELL_PROJECT_CODE = 'Timesheet Cell Project Code'
       TIMESHEET_CELL_TASK_NAME = 'Timesheet Cell Task Name'
       TIMESHEET_CELL_PROJECT_TITLE = 'Timesheet Cell Project Title'
       TIMESHEET_TIME_PERIOD_BEGIN_DATE = 'Timesheet Time Period Begin Date'
@@ -23,6 +23,5 @@ module Unanet
       TIMESHEET_CELL_LABOR_CATEGORY_NAME = 'Timesheet Cell Labor Category Name'
       TIMESHEET_CELL_COMMENTS = 'Timesheet Cell Comments'
     end
-    #
   end
 end

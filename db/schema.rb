@@ -51,29 +51,36 @@ ActiveRecord::Schema.define(version: 2020_05_04_193650) do
   end
 
   create_table "weekly_status_details", force: :cascade do |t|
-    t.string "project_code"
-    t.string "project_title"
-    t.integer "task_number"
-    t.string "task"
-    t.string "project_type"
-    t.string "person"
-    t.string "email"
-    t.date "task_date"
-    t.string "comments"
-    t.float "hours"
+    t.string "person_code"
+    t.string "person_last_name"
+    t.string "person_first_name"
+    t.string "person_email_id"
+    t.string "person_active"
+    t.string "person_default_pay_code"
+    t.string "person_time_entry_increment"
+    t.string "person_time_period_type"
+    t.string "person_time_period_name"
+    t.string "timesheet_cell_project_code"
+    t.string "timesheet_cell_task_name"
+    t.string "timesheet_cell_project_title"
+    t.date "timesheet_time_period_begin_date"
+    t.date "timesheet_time_period_end_date"
+    t.date "timesheet_cell_work_date"
+    t.string "timesheet_status"
+    t.float "timesheet_cell_hours"
+    t.string "timesheet_cell_classification"
+    t.string "timesheet_cell_labor_category_name"
+    t.string "timesheet_cell_comments"
     t.bigint "weekly_status_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["weekly_status_id"], name: "index_weekly_status_details_on_weekly_status_id"
   end
 
   create_table "weekly_statuses", force: :cascade do |t|
-    t.bigint "user_id"
+    t.string "user_email"
     t.date "week_start_date"
-    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_weekly_statuses_on_user_id"
+    t.index ["user_email", "week_start_date"], name: "idx_weekly_statuses", unique: true
   end
 
   create_table "weekly_summaries", force: :cascade do |t|
@@ -89,6 +96,7 @@ ActiveRecord::Schema.define(version: 2020_05_04_193650) do
     t.string "weekly_summary_comment"
     t.string "blockers"
     t.string "next_planned_activity"
+    t.boolean "reviewed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["weekly_status_id"], name: "index_weekly_summaries_on_weekly_status_id"

@@ -14,12 +14,12 @@
   <tbody>
     <% @details.each do |row| %>
       <tr>
-        <td><%= row.project_code %></td>
-        <td><%= row.project_title %></td>
-        <td><%= "#{row.task_number}: #{row.task}" %></td>
-        <td><%= row.task_date %></td>
-        <td><%= row.hours %></td>
-        <td><%= row.comments %></td>
+        <td><%= row.timesheet_cell_project_code %></td>
+        <td><%= row.timesheet_cell_project_title %></td>
+        <td><%= row.timesheet_cell_task_name %></td>
+        <td><%= row.timesheet_cell_work_date %></td>
+        <td><%= row.timesheet_cell_hours %></td>
+        <td><%= row.timesheet_cell_comments %></td>
       </tr>
     <% end %>
   </tbody>

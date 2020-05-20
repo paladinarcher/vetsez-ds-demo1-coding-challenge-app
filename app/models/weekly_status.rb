@@ -1,14 +1,16 @@
 require 'date'
 require 'csv'
+require './lib/unanet/UnanetReports'
 
 class WeeklyStatus < ApplicationRecord
+  include Unanet::Reports::Columns
+
   before_save :create_details
-  after_save :inactivate_previous
-  belongs_to :user
   has_one_attached :weekly_csv
   has_many :weekly_status_details, dependent: :destroy
   has_many :weekly_summaries, dependent: :destroy
   attr_accessor :local_details
+  attr_accessor :csv_magic
   accepts_nested_attributes_for :weekly_summaries, allow_destroy: true
 
 
@@ -153,38 +155,59 @@ class WeeklyStatus < ApplicationRecord
     summary
   end
 
-    def inactivate_previous
-    WeeklyStatus.where("week_start_date = ? and user_id = ? and id != ?",
-                       self.week_start_date,
-                       self.user_id,
-                       self.id).update_all({active: false})
-  end
-
   def create_details
     @local_details = []
 
     if self.new_record?
-      csv =  CSV.parse(self.weekly_csv.download,headers:true)
+      if @csv_magic
+        csv = @csv_magic
+        csv =  CSV.parse(self.weekly_csv.download,headers:true)
+      end
+
       earliest_date = 10.years.from_now.to_date
 
       csv.by_row.each do |row|
+        keep_going = row[PERSON_CODE] rescue false
+        next unless keep_going
+
         wsd = WeeklyStatusDetail.new
-        wsd.send(:project_code=,row["ProjectCode"].to_s.strip)
-        wsd.send(:project_title=,row["ProjectTitle"].to_s.strip)
-        wsd.send(:task_number=,row["TaskNumber"].to_i)
-        wsd.send(:task=,row["Task"].to_s.strip)
-        wsd.send(:project_type=,row["ProjectType"].to_s.strip)
-        wsd.send(:person=,row["Person"].to_s.strip)
-        wsd.send(:email=,row["Email"].to_s.strip)
-        parsed_date = Date.strptime(row["Date"].to_s.strip, '%m/%d/%Y')
-        wsd.send(:task_date=,parsed_date)
-        wsd.send(:comments=,row["Comments"].to_s.strip)
-        wsd.send(:hours=,row["Hours"].to_f)
+        wsd.send(:person_code=,row[PERSON_CODE].to_s.strip)
+        wsd.send(:person_last_name=,row[PERSON_LAST_NAME].to_s.strip)
+        wsd.send(:person_first_name=,row[PERSON_FIRST_NAME].to_s.strip)
+        wsd.send(:person_email_id=,row[PERSON_EMAIL_ID].to_s.strip)
+        wsd.send(:person_active=,row[PERSON_ACTIVE].to_s.strip)
+        wsd.send(:person_default_pay_code=,row[PERSON_DEFAULT_PAY_CODE].to_s.strip)
+        wsd.send(:person_time_entry_increment=,row[PERSON_TIME_ENTRY_INCREMENT].to_s.strip)
+        wsd.send(:person_time_period_type=,row[PERSON_TIME_PERIOD_TYPE].to_s.strip)
+        wsd.send(:person_time_period_name=,row[PERSON_TIME_PERIOD_NAME].to_s.strip)
+        wsd.send(:timesheet_cell_project_code=,row[TIMESHEET_CELL_PROJECT_CODE].to_s.strip) #key uniq
+        wsd.send(:timesheet_cell_task_name=,row[TIMESHEET_CELL_TASK_NAME].to_s.strip) #key uniq
+        wsd.send(:timesheet_cell_project_title=,row[TIMESHEET_CELL_PROJECT_TITLE].to_s.strip) #key uniq
+
+        parsed_date = Date.strptime(row[TIMESHEET_TIME_PERIOD_BEGIN_DATE].to_s.strip, '%m/%d/%Y')
+        wsd.send(:timesheet_time_period_begin_date=,parsed_date)
+
+        parsed_date = Date.strptime(row[TIMESHEET_TIME_PERIOD_END_DATE].to_s.strip, '%m/%d/%Y')
+        wsd.send(:timesheet_time_period_end_date=,parsed_date)
+
+        work_date = Date.strptime(row[TIMESHEET_CELL_WORK_DATE].to_s.strip, '%m/%d/%Y')
+        wsd.send(:timesheet_cell_work_date=,work_date)
+
+        wsd.send(:timesheet_status=,row[TIMESHEET_STATUS].to_s.strip)
+
+        # parsed_date = Date.strptime(row[TIMESHEET_STATUS_DATE].to_s.strip, '%m/%d/%Y')
+        # wsd.send(:timesheet_status_date=,parsed_date)
+
+        wsd.send(:timesheet_cell_hours=,row[TIMESHEET_CELL_HOURS].to_f)
+        wsd.send(:timesheet_cell_classification=,row[TIMESHEET_CELL_CLASSIFICATION].to_s.strip)
+        wsd.send(:timesheet_cell_labor_category_name=,row[TIMESHEET_CELL_LABOR_CATEGORY_NAME].to_s.strip)
+        wsd.send(:timesheet_cell_comments=,row[TIMESHEET_CELL_COMMENTS].to_s.strip)
+
         wsd.weekly_status = self
         @local_details << wsd
 
-        if parsed_date < earliest_date
-          earliest_date = parsed_date
+        if work_date < earliest_date
+          earliest_date = work_date
         end
       end
 
