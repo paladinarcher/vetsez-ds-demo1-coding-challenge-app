@@ -6,11 +6,10 @@ class WeeklyStatus < ApplicationRecord
   include Unanet::Reports::Columns
 
   before_save :create_details
-  has_one_attached :weekly_csv
   has_many :weekly_status_details, dependent: :destroy
   has_many :weekly_summaries, dependent: :destroy
   attr_accessor :local_details
-  attr_accessor :csv_magic
+  attr_accessor :csv_data
   accepts_nested_attributes_for :weekly_summaries, allow_destroy: true
 
   def self.latest_start_of_week(start_of_week, user)
@@ -57,7 +56,7 @@ class WeeklyStatus < ApplicationRecord
           # append comments if the project_code and task number is the same as the summary row
           if summary_row['timesheet_cell_project_code'].eql?(pc) && summary_row['timesheet_cell_task_name'].eql?(tn)
             summary_row['weekly_summary_comment'] << daily_comment
-          # add the summary_row to the array and build a new summary_row and continue looping
+            # add the summary_row to the array and build a new summary_row and continue looping
           else
             summary << summary_row
             summary_row = build_summary_row(row)
@@ -67,7 +66,7 @@ class WeeklyStatus < ApplicationRecord
       # append on the last summary_row that was built
       summary << summary_row
     else
-    #  no details?!
+      #  no details?!
     end
     summary
   end
@@ -169,73 +168,36 @@ class WeeklyStatus < ApplicationRecord
 
   def create_details
     @local_details = []
+    earliest_date = 10.years.from_now.to_date
 
-    if self.new_record?
-      if @csv_magic
-        csv = @csv_magic
-      else
-        csv =  CSV.parse(self.weekly_csv.download,headers:true)
+    @csv_data.by_row.each do |row|
+      # keep_going = row[PERSON_CODE] rescue false
+      # next unless keep_going
+      wsd = WeeklyStatusDetail.new
+      wsd.person_timesheet_approval_group_name = row[PERSON_TIMESHEET_APPROVAL_GROUP_NAME].to_s.strip
+      wsd.send(:person_last_name=, row[PERSON_LAST_NAME].to_s.strip)
+      wsd.send(:person_first_name=, row[PERSON_FIRST_NAME].to_s.strip)
+      wsd.send(:person_email_id=, row[PERSON_EMAIL_ID].to_s.strip)
+      wsd.send(:person_default_pay_code=, row[PERSON_DEFAULT_PAY_CODE].to_s.strip)
+      wsd.send(:timesheet_cell_project_code=, row[TIMESHEET_CELL_PROJECT_CODE].to_s.strip) #key uniq
+      wsd.send(:timesheet_cell_task_name=, row[TIMESHEET_CELL_TASK_NAME].to_s.strip) #key uniq
+      wsd.send(:timesheet_cell_project_title=, row[TIMESHEET_CELL_PROJECT_TITLE].to_s.strip) #key uniq
+
+      work_date = Date.strptime(row[TIMESHEET_CELL_WORK_DATE].to_s.strip, '%m/%d/%Y')
+      wsd.send(:timesheet_cell_work_date=, work_date)
+
+      wsd.send(:timesheet_cell_hours=, row[TIMESHEET_CELL_HOURS].to_f)
+      wsd.send(:timesheet_cell_comments=, row[TIMESHEET_CELL_COMMENTS].to_s.strip)
+
+      wsd.weekly_status = self
+      @local_details << wsd
+
+      if work_date < earliest_date
+        earliest_date = work_date
       end
-
-      earliest_date = 10.years.from_now.to_date
-
-      csv.by_row.each do |row|
-        keep_going = row[PERSON_CODE] rescue false
-        next unless keep_going
-
-        wsd = WeeklyStatusDetail.new
-        wsd.send(:person_code=,row[PERSON_CODE].to_s.strip)
-        wsd.send(:person_last_name=,row[PERSON_LAST_NAME].to_s.strip)
-        wsd.send(:person_first_name=,row[PERSON_FIRST_NAME].to_s.strip)
-        wsd.send(:person_email_id=,row[PERSON_EMAIL_ID].to_s.strip)
-        wsd.send(:person_active=,row[PERSON_ACTIVE].to_s.strip)
-        wsd.send(:person_default_pay_code=,row[PERSON_DEFAULT_PAY_CODE].to_s.strip)
-        wsd.send(:person_time_entry_increment=,row[PERSON_TIME_ENTRY_INCREMENT].to_s.strip)
-        wsd.send(:person_time_period_type=,row[PERSON_TIME_PERIOD_TYPE].to_s.strip)
-        wsd.send(:person_time_period_name=,row[PERSON_TIME_PERIOD_NAME].to_s.strip)
-        wsd.send(:timesheet_cell_project_code=,row[TIMESHEET_CELL_PROJECT_CODE].to_s.strip) #key uniq
-        wsd.send(:timesheet_cell_task_name=,row[TIMESHEET_CELL_TASK_NAME].to_s.strip) #key uniq
-        wsd.send(:timesheet_cell_project_title=,row[TIMESHEET_CELL_PROJECT_TITLE].to_s.strip) #key uniq
-
-        parsed_date = Date.strptime(row[TIMESHEET_TIME_PERIOD_BEGIN_DATE].to_s.strip, '%m/%d/%Y')
-        wsd.send(:timesheet_time_period_begin_date=,parsed_date)
-
-        parsed_date = Date.strptime(row[TIMESHEET_TIME_PERIOD_END_DATE].to_s.strip, '%m/%d/%Y')
-        wsd.send(:timesheet_time_period_end_date=,parsed_date)
-
-        work_date = Date.strptime(row[TIMESHEET_CELL_WORK_DATE].to_s.strip, '%m/%d/%Y')
-        wsd.send(:timesheet_cell_work_date=,work_date)
-
-        wsd.send(:timesheet_status=,row[TIMESHEET_STATUS].to_s.strip)
-
-        # parsed_date = Date.strptime(row[TIMESHEET_STATUS_DATE].to_s.strip, '%m/%d/%Y')
-        # wsd.send(:timesheet_status_date=,parsed_date)
-
-        wsd.send(:timesheet_cell_hours=,row[TIMESHEET_CELL_HOURS].to_f)
-        wsd.send(:timesheet_cell_classification=,row[TIMESHEET_CELL_CLASSIFICATION].to_s.strip)
-        wsd.send(:timesheet_cell_labor_category_name=,row[TIMESHEET_CELL_LABOR_CATEGORY_NAME].to_s.strip)
-        wsd.send(:timesheet_cell_comments=,row[TIMESHEET_CELL_COMMENTS].to_s.strip)
-
-        wsd.weekly_status = self
-        @local_details << wsd
-
-        if work_date < earliest_date
-          earliest_date = work_date
-        end
-      end
-
-      self.week_start_date = WeeklyStatus.get_start_of_week(earliest_date)
     end
-  end
 
-  def self.get_start_of_week(date)
-    dow = date.cwday
-    ret = date
-
-    if dow > 0
-      ret = (date - dow)
-    end
-    ret
+    self.week_start_date = Unanet.get_start_of_week(earliest_date)
   end
 end
 

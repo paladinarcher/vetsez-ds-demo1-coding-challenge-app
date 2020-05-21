@@ -69,9 +69,9 @@ module Unanet
       doc.xpath('//table//tr').each do |table_row|
         row_array = []
         table_row.xpath('td').each do |cell|
-            #row_array << %Q{"#{cell.text.gsub("\n", ' ').gsub('"', '\"').gsub(/(\s){2,}/m, '\1')}"}
-            #https://stackoverflow.com/questions/14534522/ruby-csv-parsing-string-with-escaped-quotes/14534628
-            row_array << %Q{"#{cell.text.gsub("\n", ' ').gsub('"', '""').gsub(/(\s){2,}/m, '\1')}"}
+          #row_array << %Q{"#{cell.text.gsub("\n", ' ').gsub('"', '\"').gsub(/(\s){2,}/m, '\1')}"}
+          #https://stackoverflow.com/questions/14534522/ruby-csv-parsing-string-with-escaped-quotes/14534628
+          row_array << %Q{"#{cell.text.gsub("\n", ' ').gsub('"', '""').gsub(/(\s){2,}/m, '\1')}"}
           #print '"', cell.text.gsub("\n", ' ').gsub('"', '\"').gsub(/(\s){2,}/m, '\1'), "\", "
         end
         data << row_array
@@ -94,6 +94,8 @@ module Unanet
   end
 
   module ClassMethods
+    include Unanet::Reports::Columns
+
     def get_start_of_week(date)
       dow = date.cwday
       ret = date
@@ -110,15 +112,18 @@ module Unanet
       buckets = {}
       headers = csv.headers
       csv.by_row.each do |row|
-        date = Unanet.get_start_of_week Date.strptime(row[TIMESHEET_CELL_WORK_DATE], '%m/%d/%Y')
+        next if row[PERSON_EMAIL_ID].nil?
+        row[PERSON_EMAIL_ID].downcase!
         person = row[PERSON_EMAIL_ID]
+        #if we don't have an email we are a metadata row.  Ignore....
+        date = Unanet.get_start_of_week Date.strptime(row[TIMESHEET_CELL_WORK_DATE], '%m/%d/%Y')
         buckets[[date, person]] ||= [headers]
         buckets[[date, person]] << row
       end
-      buckets.inject({}) do |h, (k,v)|
+      buckets.inject({}) do |h, (k, v)|
         $data = ''
         v.each do |row|
-          line =(row.is_a?(Array) ? row.join(',')  : row.to_s).chomp
+          line = (row.is_a?(Array) ? row.join(',') : row.to_s).chomp
           $data << (line + "\n")
         end
         h[k] = CSV.parse($data, headers: true)

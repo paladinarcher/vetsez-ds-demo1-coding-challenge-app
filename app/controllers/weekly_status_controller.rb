@@ -85,15 +85,27 @@ class WeeklyStatusController < ApplicationController
 
   def upload
       ws = WeeklyStatus.new
-
+      csv_holder = UnanetCsvUpload.new
       if !params[ :file ].nil?
         file = params[:file]
-        ws.weekly_csv.attach(io: file.tempfile, filename: file.original_filename )
-        ws.user = current_user
-        WeeklyStatus.transaction do
-          ws.save!
-          ws.local_details.each do |detail|
-            detail.save!
+        csv_holder.csv_upload.attach(io: file.tempfile, filename: file.original_filename )
+        csv_holder.user_email = current_user.email
+        csv_holder.save!
+
+        big_csv =  csv_holder.get_csv
+        buckets_of_csv = Unanet.bucket_csv big_csv
+        buckets_of_csv.keys.each do |bucket|
+          start_of_week = bucket.first
+          email = bucket.last
+          weekly_user_csv = buckets_of_csv[bucket]
+          ws = WeeklyStatus.where(user_email: email, week_start_date: start_of_week).first_or_initialize
+          ws.csv_data = weekly_user_csv
+
+          WeeklyStatus.transaction do
+            ws.save!
+            ws.local_details.each do |detail|
+              detail.save!
+            end
           end
         end
       else
