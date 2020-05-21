@@ -14,17 +14,19 @@
 <hr>
 <br>
 <h3>Previous Uploads</h3>
-<table class="table">
+<table class="table" style="width: fit-content">
   <thead>
   <tr>
     <th>Week Start Date</th>
-    <th colspan="3">Actions</th>
+    <th>Week End Date</th>
+    <th colspan="2" style="text-align: center">Actions</th>
   </tr>
   </thead>
   <tbody>
     <% @weekly_statuses.each do |weekly_status| %>
       <tr>
         <td><%= weekly_status.week_start_date %></td>
+        <td><%= weekly_status.week_start_date + 6 %></td>
         <td><%= link_to 'Edit Summary', weekly_status_path(weekly_status) %></td>
         <td><%= link_to "List Details", :controller => "weekly_status", :action => "details", :id => weekly_status %></td>
 <!--        <td><%#= link_to 'Download', rails_blob_path(weekly_status.weekly_csv, disposition: 'attachment') %></td>-->

@@ -6,53 +6,37 @@
 <div class="container">
   <div class="row">
     <div class="col-sm">
-      <span style="font-weight: bold">Project Code:</span><br>
-      <%= row.object.project_code %>---
-      <%= row.object.weekly_status.week_start_date %>
+      <%= span_label('Project Code') %>
+      <%= row.object.timesheet_cell_project_code %>
     </div>
     <div class="col-sm">
-      <span style="font-weight: bold">Project Title:</span><br>
-      <%= row.object.project_title %>
+      <%= span_label('Project Title') %>
+      <%= row.object.timesheet_cell_project_title %>
     </div>
     <div class="col-sm">
-      <span style="font-weight: bold">Project Type:</span><br>
-      <%= row.object.project_type %>
+      <%= span_label('Task Name') %>
+      <%= row.object.timesheet_cell_task_name %>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm">
-      <span style="font-weight: bold">Task Number:</span><br>
-      <%= row.object.task_number %>
-    </div>
-    <div class="col-sm">
-      <span style="font-weight: bold">Task Title:</span><br>
-      <%= row.object.task %>
-    </div>
-    <div class="col-sm">
-      <span style="font-weight: bold">Total Task Hours:</span><br>
-      <%= row.object.total_hours %>
-    </div>
-  </div>
+  <hr>
   <div id="toggle_<%=row.object.id %>">
     <div class="row">
       <div class="col-sm">
-        <%=label_tag :weekly_summary_comment, '>Weekly Summary Comment:' %>
-        <span style="font-weight: bold">Weekly Summary Comment:</span><br>
+        <%=label_tag :weekly_summary_comment, 'Weekly Summary Comment:' %>
         <%= row.text_area :weekly_summary_comment, class: 'summary-text-area'  %>
       </div>
     </div>
     <div class="row">
       <div class="col-sm">
-        <span style="font-weight: bold">Blockers:</span><br>
+        <%=label_tag :blockers, 'Blockers:' %>
         <%= row.text_area :blockers, class: 'summary-text-area' %>
       </div>
     </div>
     <div class="row">
       <div class="col-sm">
-        <span style="font-weight: bold">next Planned Activity:</span><br>
+        <%=label_tag :next_planned_activity, "Next Planned Activity:"  %>
         <%= row.text_area :next_planned_activity, class: 'summary-text-area' %>
       </div>
     </div>
   </div>
 </div>
-

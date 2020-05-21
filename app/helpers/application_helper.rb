@@ -4,4 +4,9 @@ module ApplicationHelper
   def image(img)
     RouteHelper::IMAGE_ROOT_PATH + img
   end
+
+  def span_label(label)
+    span = label.is_a?(Symbol) ? label.to_s.split('_').map(&:capitalize).join(' ') : label
+    "<span class='span_label'>#{span}:</span><br>".html_safe
+  end
 end

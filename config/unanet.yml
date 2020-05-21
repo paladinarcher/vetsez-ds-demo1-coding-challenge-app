@@ -1,6 +1,6 @@
 urls:
   validate_url: 'https://vetsez.unanet.biz/vetsez/action/login/validate'
-  report_url: 'https://vetsez.unanet.biz/vetsez/action/reports/adhoc/report?runFrom=A_79'
+  report_url: 'https://vetsez.unanet.biz/vetsez/action/reports/adhoc/report?runFrom=A_81'
 config:
   # pull the last x number of weeks
   lookback: 4

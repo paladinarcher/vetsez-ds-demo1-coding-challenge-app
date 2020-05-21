@@ -8,16 +8,17 @@ class WeeklyStatusController < ApplicationController
   def show
     ws_id = params[:id]
 
-    # if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
-    #   summaries = WeeklyStatus.weekly_summary(ws_id)
-    #   @summaries = []
-    #   summaries.each do |ws|
-    #     @summaries << WeeklySummary.new(ws)
-    #   end
-    #   WeeklySummary.transaction do
-    #     @summaries.each(&:save!)
-    #   end
-    # end
+    if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
+      summaries = WeeklyStatus.weekly_summary(ws_id)
+      @summaries = []
+      summaries.each do |ws|
+        @summaries << WeeklySummary.new(ws)
+      end
+      $log.error(@summaries.inspect)
+      WeeklySummary.transaction do
+        @summaries.each(&:save!)
+      end
+    end
     @weekly_status = WeeklyStatus.find(ws_id)
   end
 
@@ -101,7 +102,7 @@ class WeeklyStatusController < ApplicationController
   private
   def weekly_params
     params.require(:weekly_status).permit(
-        weekly_summaries_attributes: %w(id weekly_summary_comment blockers next_planned_activity)
+        weekly_summaries_attributes: %w(id reviewed weekly_summary_comment blockers next_planned_activity)
         # weekly_summaries_attributes: WeeklySummary.column_names
     )
   end

@@ -2,14 +2,15 @@ class CreateWeeklySummaries < ActiveRecord::Migration[5.2]
   def change
     create_table :weekly_summaries do |t|
       t.references :weekly_status, index: true
-      t.string :project_code
-      t.string :project_title
-      t.string :task_number
-      t.string :task
-      t.string :project_type
-      t.string :person
-      t.string :email
-      t.float :total_hours
+      t.string :person_last_name
+      t.string :person_first_name
+      t.string :person_email_id
+      t.string :person_timesheet_approval_group_name
+      t.string :person_default_pay_code
+      t.string :timesheet_cell_project_code
+      t.string :timesheet_cell_task_name
+      t.string :timesheet_cell_project_title
+      t.float :ttotal_hours
       t.string :weekly_summary_comment
       t.string :blockers
       t.string :next_planned_activity

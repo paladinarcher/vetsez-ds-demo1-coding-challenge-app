@@ -13,41 +13,49 @@ class WeeklyStatus < ApplicationRecord
   attr_accessor :csv_magic
   accepts_nested_attributes_for :weekly_summaries, allow_destroy: true
 
-
   def self.latest_start_of_week(start_of_week, user)
     WeeklyStatus.where("week_start_date = ? and user_id = ? and active = true", WeeklyStatus.get_start_of_week(start_of_week), user.id)
   end
 
-  # sr = WeeklyStatus.build_summary_row(f)
   def WeeklyStatus.build_summary_row(row)
+    # get the intersection of columns from details with the columns in the summary table
+    s = WeeklySummary.column_names
+    d = WeeklyStatusDetail.column_names
+    cols = d & s - ['id']
+
+    # get the detail row data as json and include the intersection columns so that it maps like the summary table
     summary_row = row.as_json
-    summary_row.tap {|hs| hs.delete('id') && hs.delete('task_date') && hs.delete('hours') && hs.delete('comments') && hs.delete('created_at') && hs.delete('updated_at')}
-    summary_row['weekly_summary_comment'] = "#{row.task_date.to_s}: #{row.comments}\n"
-    summary_row['total_hours'] = row.hours
+    summary_row.slice!(*cols)
+
+    # aggregate the comments and return the summary row
+    summary_row['weekly_summary_comment'] = "#{row.timesheet_cell_work_date.to_s}: #{row.timesheet_cell_comments}\n"
     summary_row
+
   end
 
-  # dets = WeeklyStatus.gb
   def WeeklyStatus.weekly_summary(weekly_status_id)
-    # ws = WeeklyStatus.latest_start_of_week('04/30/2020', 4)
-    sql = "select * from weekly_status_details where weekly_status_details.weekly_status_id = #{weekly_status_id} order by project_code, task_number, task_date"
-    details = WeeklyStatusDetail.find_by_sql(sql)
+    sql = %Q{
+      select *
+      from weekly_status_details
+      where weekly_status_details.weekly_status_id = ?
+      order by timesheet_cell_project_code, timesheet_cell_project_title, timesheet_cell_task_name, timesheet_cell_work_date
+    }
+
+    details = WeeklyStatusDetail.find_by_sql [sql, weekly_status_id]
     summary = []
     summary_row = {}
 
     if details.count > 0
       details.each do |row|
-        pc = row.project_code
-        tn = row.task_number
-        hr = row.hours
-        daily_comment = "#{row.task_date.to_s}: #{row.comments}\n"
+        pc = row.timesheet_cell_project_code
+        tn = row.timesheet_cell_task_name
+        daily_comment = "#{row.timesheet_cell_work_date.to_s}: #{row.timesheet_cell_comments}\n"
 
         if summary_row.empty?
           summary_row = build_summary_row(row)
         else
-          # sum the hours and append comments if the project_code and task number is the same as the summary row
-          if summary_row['project_code'].eql?(pc) && summary_row['task_number'].eql?(tn)
-            summary_row['total_hours'] = summary_row['total_hours'] + hr
+          # append comments if the project_code and task number is the same as the summary row
+          if summary_row['timesheet_cell_project_code'].eql?(pc) && summary_row['timesheet_cell_task_name'].eql?(tn)
             summary_row['weekly_summary_comment'] << daily_comment
           # add the summary_row to the array and build a new summary_row and continue looping
           else
@@ -56,6 +64,8 @@ class WeeklyStatus < ApplicationRecord
           end
         end
       end
+      # append on the last summary_row that was built
+      summary << summary_row
     else
     #  no details?!
     end
@@ -126,8 +136,9 @@ class WeeklyStatus < ApplicationRecord
   end
 =end
 
+=begin
   # summary_rows = WeeklyStatus.calc_summary(result)
-  def WeeklyStatus.calc_summary(result)
+  def WeeklyStatus.calc_summary2(result)
     summary = nil
 
     if result.count > 0
@@ -154,6 +165,7 @@ class WeeklyStatus < ApplicationRecord
     end
     summary
   end
+=end
 
   def create_details
     @local_details = []
