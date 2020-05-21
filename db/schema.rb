@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_04_193650) do
+ActiveRecord::Schema.define(version: 2020_05_21_152853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,12 @@ ActiveRecord::Schema.define(version: 2020_05_04_193650) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "unanet_csv_uploads", force: :cascade do |t|
+    t.string "user_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -51,27 +57,20 @@ ActiveRecord::Schema.define(version: 2020_05_04_193650) do
   end
 
   create_table "weekly_status_details", force: :cascade do |t|
-    t.string "person_code"
+    t.bigint "weekly_status_id"
     t.string "person_last_name"
     t.string "person_first_name"
     t.string "person_email_id"
-    t.string "person_active"
+    t.string "person_timesheet_approval_group_name"
     t.string "person_default_pay_code"
-    t.string "person_time_entry_increment"
-    t.string "person_time_period_type"
-    t.string "person_time_period_name"
     t.string "timesheet_cell_project_code"
     t.string "timesheet_cell_task_name"
     t.string "timesheet_cell_project_title"
-    t.date "timesheet_time_period_begin_date"
-    t.date "timesheet_time_period_end_date"
     t.date "timesheet_cell_work_date"
-    t.string "timesheet_status"
     t.float "timesheet_cell_hours"
-    t.string "timesheet_cell_classification"
-    t.string "timesheet_cell_labor_category_name"
     t.string "timesheet_cell_comments"
-    t.bigint "weekly_status_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["weekly_status_id"], name: "index_weekly_status_details_on_weekly_status_id"
   end
 
@@ -85,12 +84,15 @@ ActiveRecord::Schema.define(version: 2020_05_04_193650) do
 
   create_table "weekly_summaries", force: :cascade do |t|
     t.bigint "weekly_status_id"
-    t.string "timesheet_cell_project_code"
-    t.string "timesheet_cell_project_title"
-    t.string "timesheet_cell_task_name"
     t.string "person_last_name"
     t.string "person_first_name"
     t.string "person_email_id"
+    t.string "person_timesheet_approval_group_name"
+    t.string "person_default_pay_code"
+    t.string "timesheet_cell_project_code"
+    t.string "timesheet_cell_task_name"
+    t.string "timesheet_cell_project_title"
+    t.float "total_hours"
     t.string "weekly_summary_comment"
     t.string "blockers"
     t.string "next_planned_activity"
