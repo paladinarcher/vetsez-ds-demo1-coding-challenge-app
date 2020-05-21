@@ -10,7 +10,7 @@ class CreateWeeklySummaries < ActiveRecord::Migration[5.2]
       t.string :timesheet_cell_project_code
       t.string :timesheet_cell_task_name
       t.string :timesheet_cell_project_title
-      t.float :ttotal_hours
+      t.float :total_hours
       t.string :weekly_summary_comment
       t.string :blockers
       t.string :next_planned_activity
