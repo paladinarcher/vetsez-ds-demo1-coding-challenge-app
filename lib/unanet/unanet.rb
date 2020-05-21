@@ -88,7 +88,20 @@ module Unanet
       # open('d:\temp\poop3.csv', 'w') { |f|
       #   f.puts csv
       # }
-      bucket_csv CSV.parse(csv, headers: true)
+      Unanet.bucket_csv CSV.parse(csv, headers: true)
+    end
+
+  end
+
+  module ClassMethods
+    def get_start_of_week(date)
+      dow = date.cwday
+      ret = date
+
+      if dow > 0
+        ret = (date - dow)
+      end
+      ret
     end
 
     #converts big csv report into weekly 'buckets'.
@@ -113,18 +126,6 @@ module Unanet
       end
     end
 
-  end
-
-  module ClassMethods
-    def get_start_of_week(date)
-      dow = date.cwday
-      ret = date
-
-      if dow > 0
-        ret = (date - dow)
-      end
-      ret
-    end
   end
   extend ClassMethods
 end
