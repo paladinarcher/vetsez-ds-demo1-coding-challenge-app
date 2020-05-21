@@ -1,94 +1,96 @@
-<h3>Weekly Status Uploads for <%=current_user.email %></h3>
-<%= form_tag weekly_status_upload_path, method: :post, multipart: true do %>
-  <div class="form-group">
-    <label for="file">Select CSV File to Upload:</label>
-    <%= file_field_tag "file", class: 'form-control-file' %><br>
-    <%= submit_tag("Upload CSV File", :id=>"button", :class=>"btn btn-primary", :name=>"submit") %>
-  </div>
-<% end %>
-<hr>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Magic Upload from Unanet
-</button>
-<hr>
-<br>
-<h3>Previous Uploads</h3>
-<table class="table" style="width: fit-content">
-  <thead>
-  <tr>
-    <th>Week Start Date</th>
-    <th>Week End Date</th>
-    <th colspan="2" style="text-align: center">Actions</th>
-  </tr>
-  </thead>
-  <tbody>
+<div class="container">
+  <h3>Weekly Status Uploads for <%= current_user.email %></h3>
+  <%= form_tag weekly_status_upload_path, method: :post, multipart: true do %>
+    <div class="form-group">
+      <label for="file">Select CSV File to Upload:</label>
+      <%= file_field_tag "file", class: 'form-control-file' %><br>
+      <%= submit_tag("Upload CSV File", :id => "button", :class => "btn btn-primary", :name => "submit") %>
+    </div>
+  <% end %>
+  <hr>
+  <!-- Button trigger modal -->
+<!--
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Magic Upload from Unanet
+  </button>
+  <hr>
+-->
+  <br>
+  <h3>Previous Uploads</h3>
+  <table class="table" style="width: fit-content">
+    <thead>
+    <tr>
+      <th>Week Start Date</th>
+      <th>Week End Date</th>
+      <th colspan="2" style="text-align: center">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
     <% @weekly_statuses.each do |weekly_status| %>
       <tr>
         <td><%= weekly_status.week_start_date %></td>
         <td><%= weekly_status.week_start_date + 6 %></td>
         <td><%= link_to 'Edit Summary', weekly_status_path(weekly_status) %></td>
         <td><%= link_to "List Details", :controller => "weekly_status", :action => "details", :id => weekly_status %></td>
-<!--        <td><%#= link_to 'Download', rails_blob_path(weekly_status.weekly_csv, disposition: 'attachment') %></td>-->
+        <!--        <td><%#= link_to 'Download', rails_blob_path(weekly_status.weekly_csv, disposition: 'attachment') %></td>-->
       </tr>
     <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Retrieve Unanet Timecard Data</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Retrieve Unanet Timecard Data</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= form_tag magic_upload_path, method: 'post' do %>
+            <div class="form-group">
+              <label for="unanet-username-input">Unanet Username:</label>
+              <input type="text" id="unanet-username-input" name="unanet-username-input" placeholder="Enter your Unanet username">
+            </div>
+            <div class="form-group">
+              <label for="unanet-password-input">Unanet Password</label>
+              <input type="password" name="unanet-password-input" id="unanet-password-input" placeholder="Enter your Unanet password">
+            </div>
+            <div class="form-group">
+              <label for="unanet-url-input">Unanet Report URL</label><br>
+              <input type="url" name="unanet-url-input" id="unanet-url-input" placeholder="Enter your Unanet report url">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" id='btn-submit-form' class="btn btn-primary">Retrieve Unanet Timecards</button>
+            </div>
+          <% end %>
+        </div>
       </div>
-      <div class="modal-body">
-        <%=form_tag magic_upload_path, method: 'post' do %>
-          <div class="form-group">
-            <label for="unanet-username-input">Unanet Username:</label>
-            <input type="text" id="unanet-username-input" name="unanet-username-input" placeholder="Enter your Unanet username">
-          </div>
-          <div class="form-group">
-            <label for="unanet-password-input">Unanet Password</label>
-            <input type="password" name="unanet-password-input" id="unanet-password-input" placeholder="Enter your Unanet password">
-          </div>
-          <div class="form-group">
-            <label for="unanet-url-input">Unanet Report URL</label><br>
-            <input type="url" name="unanet-url-input" id="unanet-url-input" placeholder="Enter your Unanet report url">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" id='btn-submit-form' class="btn btn-primary">Retrieve Unanet Timecards</button>
-          </div>
-        <% end %>
     </div>
   </div>
-</div>
-<script type="text/javascript" charset="utf-8">
-    $("#btn-submit-form").click(function() {
-        let data = $("#unanet-login").serialize();
-        const token = $('meta[name="csrf-token"]').attr('content');
-        console.log("data is ", data);
-        $.ajax({
-            url : gon.routes['magic_upload_path'],
-            type: "POST",
-            data : data,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-Token': token
-            },
-            success: function(data, textStatus, jqXHR)
-            {
-                console.log("response with ", data);
-                $('#ajax_results').text(data);
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-                console.log("error response", textStatus);
-            }
-        });
-    });
-</script>
+<!--  <script type="text/javascript" charset="utf-8">-->
+<!--      $("#btn-submit-form").click(function () {-->
+<!--          let data = $("#unanet-login").serialize();-->
+<!--          const token = $('meta[name="csrf-token"]').attr('content');-->
+<!--          console.log("data is ", data);-->
+<!--          $.ajax({-->
+<!--              url: gon.routes['magic_upload_path'],-->
+<!--              type: "POST",-->
+<!--              data: data,-->
+<!--              headers: {-->
+<!--                  'X-Requested-With': 'XMLHttpRequest',-->
+<!--                  'X-CSRF-Token': token-->
+<!--              },-->
+<!--              success: function (data, textStatus, jqXHR) {-->
+<!--                  console.log("response with ", data);-->
+<!--                  $('#ajax_results').text(data);-->
+<!--              },-->
+<!--              error: function (jqXHR, textStatus, errorThrown) {-->
+<!--                  console.log("error response", textStatus);-->
+<!--              }-->
+<!--          });-->
+<!--      });-->
+<!--  </script>-->

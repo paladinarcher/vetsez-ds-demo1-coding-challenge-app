@@ -6,26 +6,31 @@ class WeeklyStatusController < ApplicationController
     @weekly_statuses = WeeklyStatus.where('user_email = ?', current_user.email).order(week_start_date: :desc)
   end
 
-  def show
-    ws_id = params[:id]
-
+  private def init_weekly_summary(ws_id)
     if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
       summaries = WeeklyStatus.weekly_summary(ws_id)
       @summaries = []
       summaries.each do |ws|
         @summaries << WeeklySummary.new(ws)
       end
-      $log.error(@summaries.inspect)
       WeeklySummary.transaction do
         @summaries.each(&:save!)
       end
+    end
+  end
+
+  def show
+    ws_id = params[:id]
+
+    if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
+      init_weekly_summary ws_id
     end
     @weekly_status = WeeklyStatus.find(ws_id)
   end
 
   def details
     ws_id = params[:id]
-    @details = WeeklyStatus.find(ws_id).weekly_status_details .order(timesheet_cell_project_code: :asc, timesheet_cell_task_name: :asc, timesheet_cell_work_date: :asc)
+    @details = WeeklyStatus.find(ws_id).weekly_status_details.order(timesheet_cell_project_code: :asc, timesheet_cell_task_name: :asc, timesheet_cell_work_date: :asc)
   end
 
   def update
@@ -84,7 +89,6 @@ class WeeklyStatusController < ApplicationController
 
 
   def upload
-      ws = WeeklyStatus.new
       csv_holder = UnanetCsvUpload.new
       if !params[ :file ].nil?
         file = params[:file]
@@ -109,15 +113,10 @@ class WeeklyStatusController < ApplicationController
           end
         end
       else
-        ws = nil
+        flash[:alert] = "Please select a file to upload"
       end
 
-    if ws.nil?
-      redirect_to weekly_status_path
-    else
-      @weekly_status = ws
-      redirect_to @weekly_status
-    end
+      redirect_to weekly_status_index_path
   end
 
   private

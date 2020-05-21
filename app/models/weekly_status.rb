@@ -6,9 +6,11 @@ class WeeklyStatus < ApplicationRecord
   include Unanet::Reports::Columns
 
   before_save :create_details
+  # after_save :create_summaries
   has_many :weekly_status_details, dependent: :destroy
   has_many :weekly_summaries, dependent: :destroy
   attr_accessor :local_details
+  # attr_accessor :local_summaries
   attr_accessor :csv_data
   accepts_nested_attributes_for :weekly_summaries, allow_destroy: true
 
@@ -56,8 +58,8 @@ class WeeklyStatus < ApplicationRecord
           # append comments if the project_code and task number is the same as the summary row
           if summary_row['timesheet_cell_project_code'].eql?(pc) && summary_row['timesheet_cell_task_name'].eql?(tn)
             summary_row['weekly_summary_comment'] << daily_comment
-            # add the summary_row to the array and build a new summary_row and continue looping
           else
+            # add the summary_row to the array and build a new summary_row and continue looping
             summary << summary_row
             summary_row = build_summary_row(row)
           end
@@ -65,8 +67,6 @@ class WeeklyStatus < ApplicationRecord
       end
       # append on the last summary_row that was built
       summary << summary_row
-    else
-      #  no details?!
     end
     summary
   end
@@ -165,6 +165,10 @@ class WeeklyStatus < ApplicationRecord
     summary
   end
 =end
+
+  def create_summaries
+    @local_summaries = self.weekly_summary(self.id)
+  end
 
   def create_details
     @local_details = []
