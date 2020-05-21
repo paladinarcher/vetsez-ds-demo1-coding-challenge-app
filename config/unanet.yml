@@ -3,4 +3,4 @@ urls:
   report_url: 'https://vetsez.unanet.biz/vetsez/action/reports/adhoc/report?runFrom=A_81'
 config:
   # pull the last x number of weeks
-  lookback: 4
+  lookback: 8

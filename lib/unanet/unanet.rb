@@ -14,10 +14,15 @@ module Unanet
 
     VALIDATE_URL = CONFIG['urls']['validate_url']
     REPORT_URL = CONFIG['urls']['report_url']
-    LOOKBACK = CONFIG['config']['lookback']
+    LOOKBACK_WEEKS = CONFIG['config']['lookback']
 
 
-    def initialize(user:, password:)
+    def initialize(user, password)
+
+      unless (user && password)
+        raise ArgumentError.new('A user and password must be set.')
+      end
+
       @user = user
       @password = password
       @connection = Faraday.new do |req|
@@ -64,7 +69,9 @@ module Unanet
       doc.xpath('//table//tr').each do |table_row|
         row_array = []
         table_row.xpath('td').each do |cell|
-          row_array << %Q{"#{cell.text.gsub("\n", ' ').gsub('"', '\"').gsub(/(\s){2,}/m, '\1')}"}
+            #row_array << %Q{"#{cell.text.gsub("\n", ' ').gsub('"', '\"').gsub(/(\s){2,}/m, '\1')}"}
+            #https://stackoverflow.com/questions/14534522/ruby-csv-parsing-string-with-escaped-quotes/14534628
+            row_array << %Q{"#{cell.text.gsub("\n", ' ').gsub('"', '""').gsub(/(\s){2,}/m, '\1')}"}
           #print '"', cell.text.gsub("\n", ' ').gsub('"', '\"').gsub(/(\s){2,}/m, '\1'), "\", "
         end
         data << row_array
@@ -78,25 +85,30 @@ module Unanet
         csv << row.join(',')
         csv << "\n"
       end
+      # open('d:\temp\poop3.csv', 'w') { |f|
+      #   f.puts csv
+      # }
       bucket_csv CSV.parse(csv, headers: true)
     end
 
     #converts big csv report into weekly 'buckets'.
-    # Hash will have a sunday 'start of week bucket' pointing to a smaller csv
+    # Hash will have an array two tuple [sunday 'start of week bucket', email address] pointing to a smaller csv
     def bucket_csv(csv)
       buckets = {}
       headers = csv.headers
       csv.by_row.each do |row|
         date = Unanet.get_start_of_week Date.strptime(row[TIMESHEET_CELL_WORK_DATE], '%m/%d/%Y')
-        buckets[date] ||= [headers]
-        buckets[date] << row
+        person = row[PERSON_EMAIL_ID]
+        buckets[[date, person]] ||= [headers]
+        buckets[[date, person]] << row
       end
       buckets.inject({}) do |h, (k,v)|
-        data = ''
+        $data = ''
         v.each do |row|
-          data << (row.is_a?(Array) ? row.join(',') + "\n" : row.to_s + "\n")
+          line =(row.is_a?(Array) ? row.join(',')  : row.to_s).chomp
+          $data << (line + "\n")
         end
-        h[k] = CSV.parse(data, headers: true)
+        h[k] = CSV.parse($data, headers: true)
         h
       end
     end
