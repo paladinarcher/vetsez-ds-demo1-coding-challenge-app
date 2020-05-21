@@ -1,6 +1,7 @@
 require './lib/unanet/unanet.rb' # move to initializer
 
 class WeeklyStatusController < ApplicationController
+
   def index
     @weekly_statuses = WeeklyStatus.where('user_email = ?', current_user.email).order(week_start_date: :desc)
   end
@@ -42,23 +43,31 @@ class WeeklyStatusController < ApplicationController
     username = params['unanet-username-input']
     pwd = params['unanet-password-input']
     url = params['unanet-url-input']
-    fetcher = Unanet::FetchSummaries.new(user: username, password: pwd)
-    summaries = fetcher.get_report
+    begin
+      fetcher = Unanet::FetchSummaries.new(username, pwd)
+      summaries = fetcher.get_report
+    rescue => e
+      $log.error(LEX('Failed to instantiate FetchSummaries', e))
+      summaries = nil
+    end
+
     @result = 'sad'
     @headers = []
     @rows = []
 
-    if summaries.success
+    if (summaries&.success)
       @result = 'happy'
       @headers = summaries.csv[summaries.csv.keys[-3]].headers
       @rows = summaries.csv[summaries.csv.keys[-3]].by_row
 
-      summaries.csv.keys.each do |weekly_bucket|
-        csv = summaries.csv[weekly_bucket]
-          # ws = WeeklyStatus.where(user_email: 'greg.bowman@vetsez.com', week_start_date: '').first_or_initialize
-
-        ws = WeeklyStatus.new
-        ws.user_email = 'greg.bowman@vetsez.com'
+      summaries.csv.keys.each do |weekly_person_bucket|
+        start_of_week = weekly_person_bucket.first
+        start_process_date = Unanet::FetchSummaries::LOOKBACK_WEEKS.weeks.ago
+        next if start_of_week < start_process_date
+        next if start_of_week > Unanet.get_start_of_week(Time.now.to_date)
+        email = weekly_person_bucket.last
+        csv = summaries.csv[weekly_person_bucket]
+        ws = WeeklyStatus.where(user_email: email, week_start_date: start_of_week).first_or_initialize
         ws.csv_magic = csv
 
         WeeklyStatus.transaction do
