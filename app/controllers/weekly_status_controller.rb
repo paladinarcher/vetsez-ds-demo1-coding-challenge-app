@@ -26,11 +26,13 @@ class WeeklyStatusController < ApplicationController
       init_weekly_summary ws_id
     end
     @weekly_status = WeeklyStatus.find(ws_id)
+    verify_authorized(@weekly_status.user_email)
   end
 
   def details
     ws_id = params[:id]
     @details = WeeklyStatus.find(ws_id).weekly_status_details.order(timesheet_cell_project_code: :asc, timesheet_cell_task_name: :asc, timesheet_cell_work_date: :asc)
+    verify_authorized(@details.first.person_email_id)
   end
 
   def update

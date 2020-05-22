@@ -14,4 +14,8 @@ class ApplicationController < ActionController::Base
     gon.user = ""
     gon.js = {}
   end
+
+  def verify_authorized(email)
+    raise "You are not authorized to view these details!" unless current_user.email.eql?(email)
+  end
 end
