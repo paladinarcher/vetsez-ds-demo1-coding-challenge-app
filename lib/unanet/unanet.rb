@@ -121,12 +121,12 @@ module Unanet
         buckets[[date, person]] << row
       end
       buckets.inject({}) do |h, (k, v)|
-        $data = ''
+        data = ''
         v.each do |row|
           line = (row.is_a?(Array) ? row.join(',') : row.to_s).chomp
-          $data << (line + "\n")
+          data << (line + "\n")
         end
-        h[k] = CSV.parse($data, headers: true)
+        h[k] = CSV.parse(data, headers: true)
         h
       end
     end
