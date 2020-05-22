@@ -109,6 +109,8 @@ GEM
     parallel (1.19.1)
     parser (2.7.0.2)
       ast (~> 2.4.0)
+    pundit (2.1.0)
+      activesupport (>= 3.0.0)
     rack (2.0.7)
     rack-proxy (0.6.5)
       rack
@@ -149,6 +151,7 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.4)
+    rolify (5.2.0)
     rubocop (0.80.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -226,7 +229,9 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   logging
   nokogiri
+  pundit
   rails (~> 5.2.2)
+  rolify
   rubocop
   sass-rails (~> 5.0)
   simplecov

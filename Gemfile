@@ -41,3 +41,6 @@ gem 'gon'
 gem 'faraday'
 gem 'faraday-cookie_jar'
 gem 'nokogiri'
+
+gem 'pundit'
+gem 'rolify'

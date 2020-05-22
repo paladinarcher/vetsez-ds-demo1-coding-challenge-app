@@ -1,0 +1,12 @@
+#role strings can be found in './lib/roles/roles'
+#contributor role automatically added to all users (no need to specify here)
+cristopher.shupp@vetsez.com:
+  - 'pm'
+  - 'admin'
+gregory.bowman@vetsez.com:
+  - 'pm'
+  - 'admin'
+jeff.udell@vetsez.com:
+  - 'pm'
+ken.price@vetsez.com:
+  - 'pm'
