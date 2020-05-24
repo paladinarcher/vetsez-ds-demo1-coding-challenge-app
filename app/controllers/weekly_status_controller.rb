@@ -44,7 +44,7 @@ class WeeklyStatusController < ApplicationController
     else
       $log.error("I failed to update the weekly summaries for #{ws_id}")
     end
-    render 'weekly_status/show'
+    redirect_to weekly_status_index_path
   end
 
   def magic_upload
@@ -91,7 +91,7 @@ class WeeklyStatusController < ApplicationController
 
 
   def upload
-      csv_holder = UnanetCsvUpload.new
+    csv_holder = UnanetCsvUpload.new
       if !params[ :file ].nil?
         file = params[:file]
         csv_holder.csv_upload.attach(io: file.tempfile, filename: file.original_filename )

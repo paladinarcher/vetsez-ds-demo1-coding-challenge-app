@@ -1,6 +1,6 @@
 <div style="background-color: #3f57a6; color: white; border: #8b8b8b solid thin">
   <div style="float: right; color: navy">
-    <a onclick="gon.js.UIHelper.toggle_div('toggle_<%=row.object.id %>')">Show/Hide</a>
+    <a onclick="show_summary('weekly_status_weekly_summaries_attributes_<%= index %>_reviewed', <%= row.object.id %>)">Show/Hide Comments</a>
   </div>
 </div>
 <div class="container">
@@ -19,7 +19,7 @@
     </div>
   </div>
   <hr>
-  <div id="toggle_<%=row.object.id %>">
+  <div id="toggle_<%=row.object.id %>" class="comments-edit">
     <div class="row">
       <div class="col-sm">
         <%=label_tag :weekly_summary_comment, 'Weekly Summary Comment:' %>
@@ -40,3 +40,13 @@
     </div>
   </div>
 </div>
+<script type="text/javascript" charset="utf-8">
+    function show_summary(selector, id) {
+        $('#' + selector).val(true);
+        $('#toggle_'+ id).toggle();
+    }
+  // initially hide all comment fields so the act of showing will allow us to set the reviewed hidden field to true
+  $(document).ready(function(){
+      $('.comments-edit').hide();
+  });
+</script>

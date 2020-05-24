@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   post  "magic_upload" =>'weekly_status#magic_upload'
   post  "weekly_status_upload" =>'weekly_status#upload'
 
-  post  "weekly_summary_update" =>'weekly_status#weekly_summary_update'
+  patch  "weekly_summary_update" =>'weekly_status#update'
 
   devise_for :users
   post 'fetch_time' => 'react_component#fetch_time'

@@ -14,8 +14,30 @@ class WeeklyStatus < ApplicationRecord
   attr_accessor :csv_data
   accepts_nested_attributes_for :weekly_summaries, allow_destroy: true
 
+  # SUMMARY REVIEW STATUSES
+  NOT_STARTED = {status: 'Not Started', image: 'bolt', color: 'red'} # not yet looked at - no rows in summary
+  IN_PROCESS = {status: 'In Process', image: 'edit', color: 'green'} # some but not all summaries have been reviewed
+  COMPLETED = {status: 'Completed', image: 'check', color: 'black'}  # all summaries are reviewed
+
   def self.latest_start_of_week(start_of_week, user)
     WeeklyStatus.where("week_start_date = ? and user_id = ? and active = true", WeeklyStatus.get_start_of_week(start_of_week), user.id)
+  end
+
+  def reviewed_status
+    status = NOT_STARTED
+    weekly_summaries = self.weekly_summaries
+
+    unless weekly_summaries.empty?
+      all_reviewed = true
+      weekly_summaries.each do |summary|
+        unless summary.reviewed
+          all_reviewed = false
+          break
+        end
+      end
+      status = all_reviewed ? COMPLETED : IN_PROCESS
+    end
+    status
   end
 
   def WeeklyStatus.build_summary_row(row)
@@ -171,6 +193,7 @@ class WeeklyStatus < ApplicationRecord
   end
 
   def create_details
+    return unless self.weekly_status_details.empty?
     @local_details = []
     earliest_date = 10.years.from_now.to_date
 
