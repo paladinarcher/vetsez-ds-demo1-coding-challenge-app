@@ -92,40 +92,41 @@ class WeeklyStatusController < ApplicationController
 
   def upload
     csv_holder = UnanetCsvUpload.new
-      if !params[ :file ].nil?
-        file = params[:file]
-        csv_holder.csv_upload.attach(io: file.tempfile, filename: file.original_filename )
-        csv_holder.user_email = current_user.email
-        csv_holder.save!
+    if !params[:file].nil?
+      file = params[:file]
+      csv_holder.csv_upload.attach(io: file.tempfile, filename: file.original_filename)
+      csv_holder.user_email = current_user.email
+      csv_holder.save!
 
-        big_csv =  csv_holder.get_csv
-        buckets_of_csv = Unanet.bucket_csv big_csv
-        buckets_of_csv.keys.each do |bucket|
-          start_of_week = bucket.first
-          email = bucket.last
-          weekly_user_csv = buckets_of_csv[bucket]
-          ws = WeeklyStatus.where(user_email: email, week_start_date: start_of_week).first_or_initialize
-          ws.csv_data = weekly_user_csv
+      big_csv = csv_holder.get_csv
+      buckets_of_csv = Unanet.bucket_csv big_csv
+      buckets_of_csv.keys.each do |bucket|
+        start_of_week = bucket.first
+        email = bucket.last
+        weekly_user_csv = buckets_of_csv[bucket]
+        ws = WeeklyStatus.where(user_email: email, week_start_date: start_of_week).first_or_initialize
+        ws.csv_data = weekly_user_csv
 
-          WeeklyStatus.transaction do
-            ws.save!
-            ws.local_details.each do |detail|
-              detail.save!
-            end
+        WeeklyStatus.transaction do
+          ws.save!
+          ws.local_details.each do |detail|
+            detail.save!
           end
         end
-      else
-        flash[:alert] = "Please select a file to upload"
       end
+    else
+      flash[:alert] = "Please select a file to upload"
+    end
 
-      redirect_to weekly_status_index_path
+    redirect_to weekly_status_index_path
   end
 
   private
+
   def weekly_params
     params.require(:weekly_status).permit(
         weekly_summaries_attributes: %w(id reviewed weekly_summary_comment blockers next_planned_activity)
-        # weekly_summaries_attributes: WeeklySummary.column_names
+    # weekly_summaries_attributes: WeeklySummary.column_names
     )
   end
 
