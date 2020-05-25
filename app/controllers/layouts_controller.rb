@@ -4,7 +4,6 @@ class LayoutsController < ApplicationController
   end
 
   def form_inputs
-    $log.always("Received " + params.inspect)
     render json: {recieved: params}
   end
 end
