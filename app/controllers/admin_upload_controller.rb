@@ -56,10 +56,12 @@ class AdminUploadController < ApplicationController
   private
   # If the user is not authorized, just throw the exception.
   def check_authorization
-    # raise User::NotAuthorized unless current_user.has_role? Roles::RoleTags::ADMIN_ROLE
+    # raise User::NotAuthorized unless current_user.has_role? Roles::RoleTags::ADMIN_ROLE cris
+    unless current_user.has_role? Roles::RoleTags::ADMIN_ROLE
+      flash[:error] = "You don't have access to this section."
+      redirect_to root_path
+    end
 
-    flash[:error] = "You don't have access to this section."
-    redirect_to root_path
     # redirect_back(fallback_location: root_path)
   end
 end
