@@ -1,15 +1,14 @@
-<% unless current_user %>
-  <div>
-    <h2>Landing Page</h2>
-    <p>not logged in</p>
-  </div>
-<% end %>
+<div class="container p-4">
+  <% if current_user %>
+    <div>
+      <h2>Welcome <%= current_user.email %></h2>
+      <p>Please use the navigation menu above to enter your weekly status summaries.</p>
+    </div>
 
-<script type="text/javascript" charset="utf-8">
-    function gotoAccount(path) {
-        window.location.replace(path)
-    }
-    <% if current_user %>
-      gotoAccount('<%= weekly_status_index_path %>');
-    <% end %>
-</script>
+  <% else %>
+    <div>
+      <h2>Landing Page</h2>
+      <p>not logged in</p>
+    </div>
+  <% end %>
+</div>

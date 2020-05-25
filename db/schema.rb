@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 2020_05_22_181538) do
 
   create_table "unanet_csv_uploads", force: :cascade do |t|
     t.string "user_email"
+    t.date "start_date"
+    t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

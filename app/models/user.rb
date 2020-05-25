@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  # NotAuthorized = 'NotAuthorized' cris
   include Roles
   rolify
   after_create :assign_default_roles
@@ -11,7 +12,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   def assign_default_roles
-    self.add_role(RoleTags::CONTRIBUTOR) if self.roles.blank?
+    self.add_role(RoleTags::CONTRIBUTOR_ROLE) if self.roles.blank?
     add_defined_defaults
   end
 
@@ -30,7 +31,7 @@ class User < ApplicationRecord
 
 end
 =begin
-  #user.has_role? RoleTags::CONTRIBUTOR
+  current_user.has_role? RoleTags::CONTRIBUTOR
   # must
   # include Roles
   # to see RoleTags

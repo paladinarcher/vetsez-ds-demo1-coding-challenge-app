@@ -12,5 +12,7 @@
     <% idx +=1 %>
   <% end %>
   <br>
-  <div><%= submit_tag 'Save Summary', class: 'btn btn-primary' %></div>
+  <div>
+    <%= link_to 'Cancel', weekly_status_index_path, class: 'btn btn-secondary' %>
+    <%= submit_tag 'Save Summary', class: 'btn btn-primary' %></div>
 <% end %>

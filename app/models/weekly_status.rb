@@ -5,12 +5,10 @@ require './lib/unanet/UnanetReports'
 class WeeklyStatus < ApplicationRecord
   include Unanet::Reports::Columns
 
-  before_save :create_details
-  # after_save :create_summaries
+  before_create :create_details
   has_many :weekly_status_details, dependent: :destroy
   has_many :weekly_summaries, dependent: :destroy
   attr_accessor :local_details
-  # attr_accessor :local_summaries
   attr_accessor :csv_data
   accepts_nested_attributes_for :weekly_summaries, allow_destroy: true
 
@@ -193,13 +191,10 @@ class WeeklyStatus < ApplicationRecord
   end
 
   def create_details
-    return unless self.weekly_status_details.empty?
     @local_details = []
     earliest_date = 10.years.from_now.to_date
 
     @csv_data.by_row.each do |row|
-      # keep_going = row[PERSON_CODE] rescue false
-      # next unless keep_going
       wsd = WeeklyStatusDetail.new
       wsd.person_timesheet_approval_group_name = row[PERSON_TIMESHEET_APPROVAL_GROUP_NAME].to_s.strip
       wsd.send(:person_last_name=, row[PERSON_LAST_NAME].to_s.strip)

@@ -1,29 +1,23 @@
 <% flash.each do |key, value| %>
-  <% if key == 'alert' %>
-    <div class="container flash_alert" role="alert">
-      <div class="row">
-      <div class="col">
-        <h3>Error <%= key.capitalize %></h3>
-        <p><%= value %></p>
-      </div>
+  <!-- we are only displaying errors (flash.error on access issues. All other flashes are using $.notify below -->
+  <% if key == 'error' %>
+    <div class="container" role="alert">
+      <div id="error_explanation" class="usa-alert usa-alert-error" role="alert">
+        <div class="usa-alert-body">
+          <h3 class="usa-alert-heading"><%= key.capitalize %> </h3>
+          <p><%= value %></p>
+        </div>
       </div>
     </div>
-    <%# else %>
-<!--      <div class="container flash_notice">-->
-<!--        <div class="row">-->
-<!--          <h3 class="col">Success  <%#= key.capitalize %></h3>-->
-<!--          <p><%#=value %></p>-->
-<!--        </div>-->
-<!--      </div>-->
-    <% end %>
+  <% end %>
 <% end %>
 <script type="text/javascript" charset="utf-8">
-  $(document).ready(function() {
-    //  cris
+  $(document).ready(function () {
     <% flash.each do |key, value| %>
-      let type = '<%= key.eql?('notice') ? 'success' : 'danger'  %>'
-      <% if key != 'alert' %>
-        $.notify('<%=value %>', {type: 'success'});
+      let type = '<%= key.eql?('notice') ? 'success' : 'danger'  %>';
+
+      <% if key != 'error' %>
+        $.notify('<%=value %>', {type: type});
       <% end %>
     <% end %>
   });

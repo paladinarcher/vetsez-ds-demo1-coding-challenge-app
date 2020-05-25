@@ -6,19 +6,6 @@ class WeeklyStatusController < ApplicationController
     @weekly_statuses = WeeklyStatus.where('user_email = ?', current_user.email).order(week_start_date: :desc)
   end
 
-  private def init_weekly_summary(ws_id)
-    if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
-      summaries = WeeklyStatus.weekly_summary(ws_id)
-      @summaries = []
-      summaries.each do |ws|
-        @summaries << WeeklySummary.new(ws)
-      end
-      WeeklySummary.transaction do
-        @summaries.each(&:save!)
-      end
-    end
-  end
-
   def show
     ws_id = params[:id]
 
@@ -92,27 +79,41 @@ class WeeklyStatusController < ApplicationController
 
   def upload
     csv_holder = UnanetCsvUpload.new
+    upload_start_date, upload_end_date = nil, nil
+
     if !params[:file].nil?
       file = params[:file]
       csv_holder.csv_upload.attach(io: file.tempfile, filename: file.original_filename)
       csv_holder.user_email = current_user.email
-      csv_holder.save!
 
       big_csv = csv_holder.get_csv
       buckets_of_csv = Unanet.bucket_csv big_csv
-      buckets_of_csv.keys.each do |bucket|
-        start_of_week = bucket.first
-        email = bucket.last
-        weekly_user_csv = buckets_of_csv[bucket]
-        ws = WeeklyStatus.where(user_email: email, week_start_date: start_of_week).first_or_initialize
-        ws.csv_data = weekly_user_csv
 
-        WeeklyStatus.transaction do
+      WeeklyStatus.transaction do
+        buckets_of_csv.keys.each do |bucket|
+          start_of_week = bucket.first
+          email = bucket.last
+          weekly_user_csv = buckets_of_csv[bucket]
+
+          # set the  upload_start_date and upload_end_date based on the user bucket being processed
+          upload_start_date ||= start_of_week
+          upload_end_date = start_of_week
+
+          # create or update the WeeklyStatus record and their associate detail records
+          ws = WeeklyStatus.where(user_email: email, week_start_date: start_of_week).first_or_initialize
+          ws.csv_data = weekly_user_csv
+
           ws.save!
-          ws.local_details.each do |detail|
-            detail.save!
+          if ws.local_details
+            ws.local_details.each do |detail|
+              detail.save!
+            end
           end
         end
+        # save the upload record
+        csv_holder.start_date = upload_start_date
+        csv_holder.end_date = upload_end_date
+        csv_holder.save!
       end
     else
       flash[:alert] = "Please select a file to upload"
@@ -122,6 +123,19 @@ class WeeklyStatusController < ApplicationController
   end
 
   private
+
+  def init_weekly_summary(ws_id)
+    if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
+      summaries = WeeklyStatus.weekly_summary(ws_id)
+      @summaries = []
+      summaries.each do |ws|
+        @summaries << WeeklySummary.new(ws)
+      end
+      WeeklySummary.transaction do
+        @summaries.each(&:save!)
+      end
+    end
+  end
 
   def weekly_params
     params.require(:weekly_status).permit(

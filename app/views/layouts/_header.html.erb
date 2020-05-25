@@ -1,20 +1,60 @@
 <div class="header-container">
   <header>
-    <div aria-label="VetsEZ Works Logo" style="padding: 15px">
-      <img style="vertical-align: middle" src="<%= asset_pack_path image('vetsez-logo.png') %>"  alt="VetsEZ Logo"/>
-      <div style="float: right; display: inline;">
-        <% if (current_user) %>
-          <h5>Welcome <%= current_user&.email %>!<br></h5>
-          <div style="float: right">
-            <%= link_to 'Logout', destroy_user_session_path %>
-          </div>
-        <% else %>
-          <div style="float: right">
-            <%= link_to 'Login', new_user_session_path %>&nbsp;|&nbsp;
-            <%= link_to 'Signup', new_user_registration_path %>
-          </div>
-        <% end %>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="navbar-brand" href="#">
+        <img style="vertical-align: middle" src="<%= asset_pack_path image('vetsez-logo.png') %>" alt="VetsEZ Logo"/>
       </div>
-    </div>
+      <!--        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+      <!--          <span class="navbar-toggler-icon">what!</span>-->
+      <!--        </button>  ??? what does this do?  -->
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <%= link_to 'Home', root_path, class: 'nav-link' %>
+          </li>
+          <% if current_user&.has_role? Roles::RoleTags::CONTRIBUTOR_ROLE %>
+            <li class="nav-item">
+              <%= link_to 'Weekly Summaries', weekly_status_index_path, class: 'nav-link' %>
+            </li>
+          <% end %>
+          <% if current_user&.has_role? Roles::RoleTags::ADMIN_ROLE %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Administration
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link_to "CSV Upload", admin_upload_index_path, class: 'dropdown-item' %>
+                <!--                <div class="dropdown-divider"></div>-->
+              </div>
+            </li>
+          <% end %>
+
+          <% if current_user&.has_role? Roles::RoleTags::PM_ROLE %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                PM Menu
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link_to "WSR Summary", admin_upload_index_path, class: 'dropdown-item' %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+        <form class="my-2 my-lg-0">
+          <% if (current_user) %>
+            <h5>Welcome <%= current_user&.email %>!<br></h5>
+            <div style="float: right">
+              <%= link_to 'Logout', destroy_user_session_path %>
+            </div>
+          <% else %>
+            <div style="float: right">
+              <%= link_to 'Login', new_user_session_path %>&nbsp;|&nbsp;
+              <%= link_to 'Signup', new_user_registration_path %>
+            </div>
+          <% end %>
+        </form>
+      </div>
+    </nav>
   </header>
 </div>

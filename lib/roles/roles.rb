@@ -1,8 +1,8 @@
 module Roles
   module RoleTags
-    CONTRIBUTOR = :contributor
-    PM = :pm
-    ADMIN = :admin
+    CONTRIBUTOR_ROLE = :contributor
+    PM_ROLE = :pm
+    ADMIN_ROLE = :admin
   end
   ALL_ROLES = RoleTags.constants.map do |constant|
     Roles::RoleTags.const_get(constant)

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'admin_upload/index'
+  post  "admin_upload" =>'admin_upload#upload'
   resources :recipes
   resources :weekly_status
 
