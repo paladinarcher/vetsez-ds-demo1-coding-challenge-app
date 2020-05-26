@@ -2,7 +2,6 @@ require 'faraday'
 require 'faraday-cookie_jar'
 require 'nokogiri'
 require 'yaml'
-require 'csv'
 require_relative 'UnanetReports'
 
 module Unanet

@@ -1,5 +1,4 @@
 require 'date'
-require 'csv'
 require './lib/unanet/UnanetReports'
 
 class WeeklyStatus < ApplicationRecord
