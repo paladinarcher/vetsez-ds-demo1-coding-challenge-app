@@ -41,7 +41,8 @@
   </div>
 </div>
 <script type="text/javascript" charset="utf-8">
-    function show_summary(selector, id) {
+    function  show_summary(selector, id) {
+        console.log("selector", selector);
         $('#' + selector).val(true);
         $('#toggle_'+ id).toggle();
     }

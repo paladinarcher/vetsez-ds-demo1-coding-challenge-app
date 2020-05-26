@@ -1,15 +1,13 @@
 <h1>Weekly Summary for <%= @weekly_status.week_start_date %></h1>
-<%= form_for(@weekly_status, :url => { :controller => "weekly_status", :action => "update" }) do |f| %>
+<%= form_for(@weekly_status, :url => {:controller => "weekly_status", :action => "update"}) do |f| %>
   <%= f.fields_for :weekly_summaries, f.object.weekly_summaries.order(:timesheet_cell_project_code, :timesheet_cell_task_name) do |builder| %>
-      <%@count ||=0; @count +=1%>
-    <% idx ||=0 %>
+    <% @count ||= -1; @count += 1 %>
 
-    <div  style="background-color: <%= (@count % 2).odd? ? 'lightblue' : 'cornsilk' %>">
-        <%= builder.hidden_field :reviewed %>
-        <%= render partial: "weekly_status/wsr_row", locals: {row: builder, index: idx} %>
-        <br>
-      </div>
-    <% idx +=1 %>
+    <div style="background-color: <%= (@count % 2).odd? ? 'lightblue' : 'cornsilk' %>">
+      <%= builder.hidden_field :reviewed %>
+      <%= render partial: "weekly_status/wsr_row", locals: {row: builder, index: @count} %>
+      <br>
+    </div>
   <% end %>
   <br>
   <div>
