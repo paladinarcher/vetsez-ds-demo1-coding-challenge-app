@@ -38,6 +38,7 @@ namespace :devops do
   $maven_version = env('PROJECT_VERSION', $UNVERSIONED)
   ENV['RAILS_RELATIVE_URL_ROOT'] = env('RAILS_RELATIVE_URL_ROOT', "/#{default_name}")
   ENV['RAILS_ENV'] = version_to_rails_mode()
+  Rails.env= ENV['RAILS_ENV']
   ENV['NODE_ENV'] = 'production'
 
   slash = java.io.File.separator #or FILE::ALT_SEPARATOR
@@ -122,10 +123,15 @@ namespace :devops do
   #running in devops.rake ensures the rails environment is test for snapshost builds and production for releases
   desc 'run seeds'
   task :seed => :environment do |task|
-    p task.comment
-    ActiveRecord::Base.establish_connection(:test)
-    puts "Running seeds for test"
-    Rake::Task['db:seed'].invoke() #rake db:migrate RAILS_ENV=test
+    if Rails.env.production?
+      puts "Skipping the seeding as we are doing a production build."
+    else
+      puts "Running seeds for #{Rails.env}"
+      p task.comment
+      ActiveRecord::Base.establish_connection(:test)
+      puts "Running seeds for test"
+      Rake::Task['db:seed'].invoke() #rake db:migrate RAILS_ENV=test
+    end
   end
 
   desc 'put jruby in debug mode'
@@ -153,7 +159,7 @@ namespace :devops do
   task :db_setup_for_docker => :environment do |task|
     p "rails env in db_setup_for_docker is #{ENV['RAILS_ENV']}"
     Rake::Task['db:migrate'].invoke()
-    Rake::Task['db:seed'].invoke()
+    Rake::Task['db:seed'].invoke() unless Rails.env.production?
   end
 
   desc 'compile and lint assets/ruby'
