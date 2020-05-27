@@ -4,10 +4,12 @@ require './lib/unanet/UnanetReports'
 class WeeklyStatus < ApplicationRecord
   include Unanet::Reports::Columns
 
-  enum summary_status: {not_started: 0, in_process: 1, completed: 2}
+  NOT_STARTED = :not_started
+  IN_PROCESS = :in_process
+  COMPLETED = :completed
+  enum summary_status: {NOT_STARTED => 0, IN_PROCESS => 1, COMPLETED => 2}
 
   before_create :create_details
-  # after_create :create_summaries
   has_many :weekly_status_details, dependent: :destroy
   has_many :weekly_summaries, dependent: :destroy
   attr_accessor :local_details
