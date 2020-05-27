@@ -12,7 +12,7 @@ module ApplicationHelper
 
   def select_options_concat_key(data, delimiter, all_option_text, *cols)
     ret = []
-    ret << [all_option_text, ''] if all_option_text
+    ret << [all_option_text, 'all'] if all_option_text
 
     data.each do |row|
       key, option_text = '', ''

@@ -25,22 +25,21 @@
     <h3>Weekly Summary Results</h3>
     <%= @summaries.as_json %>
 
-    <table class="table" style="width: fit-content">
+    <table class="table w-100" style="width: fit-content">
       <thead class="thead-light">
       <tr>
         <th>Person Email</th>
-        <th>Weekly Summary</th>
-        <th>Blockers</th>
-        <th>Next Planned Activity</th>
+        <th class="w-75">Summaries</th>
       </tr>
       </thead>
       <tbody>
       <% @summaries.each do |summary| %>
         <tr>
           <td><%= summary.person_email_id %></td>
-          <td><%= summary.weekly_summary_comment.html_safe %></td>
-          <td><%= summary.blockers%></td>
-          <td><%= summary.next_planned_activity%></td>
+          <td>weekly summary:<br><%= text_area_tag 'weekly_summary_comment', summary.weekly_summary_comment, class: 'summary-text-area', disabled: true %>
+            <br>blockers:<br><%= text_area_tag 'weekly_summary_blockers', summary.blockers, class: 'summary-text-area', disabled: true %>
+            <br>next planned activity:<br><%= text_area_tag 'weekly_summary_next_planned_activity', summary.next_planned_activity, class: 'summary-text-area', disabled: true %>
+          </td>
         </tr>
       <% end %>
       </tbody>
