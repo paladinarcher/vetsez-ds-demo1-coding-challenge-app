@@ -114,3 +114,21 @@ module FileHelper
     rVal
   end
 end
+
+module CallChain #https://grosser.it/2009/07/01/getting-the-caller-method-in-ruby/
+  def self.caller_method(depth=1)
+    parse_caller(caller(depth+1).first).last
+  end
+
+  private
+
+  # Copied from ActionMailer
+  def self.parse_caller(at)
+    if /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
+      file   = Regexp.last_match[1]
+      line   = Regexp.last_match[2].to_i
+      method = Regexp.last_match[3]
+      [file, line, method]
+    end
+  end
+end
