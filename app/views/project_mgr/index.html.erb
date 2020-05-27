@@ -8,11 +8,13 @@
       </div>
       <div class="form-group">
         <label for="task_name">Task Name:</label>
-        <%= select_tag "task_name", options_for_select(select_options_concat_key(@task_names, '|', '--- All Tasks ---', :timesheet_cell_project_title, :timesheet_cell_task_name)), {:class => 'form-control'} %>
+        <%= select_tag "task_name", options_for_select(
+            select_options_concat_key(@task_names, '|', '--- All Tasks ---', :timesheet_cell_project_title, :timesheet_cell_task_name), @task_name),
+                       {:class => 'form-control'} %>
       </div>
       <div class="form-group">
         <label for="week_start_date">Week Start/End:</label>
-        <%= select_tag "week_start_date", options_for_select(@wsd_options), {:class => 'form-control'} %>
+        <%= select_tag "week_start_date", options_for_select(@wsd_options, @wsd), {:class => 'form-control'} %>
       </div>
       <%= submit_tag("Retrieve Weekly Summaries", :id => "button", :class => "btn btn-primary", :name => "submit") %>
     <% end %>

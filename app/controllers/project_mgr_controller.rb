@@ -22,10 +22,10 @@ class ProjectMgrController < ApplicationController
       ret << ["#{wsd['week_start_date']} to #{wsd['week_start_date'] + 6}", wsd['week_start_date']]; ret
     end
 
-    project_title = params[:project_title]
-    task_name = params[:task_name]
-    wsd = params[:week_start_date]
-    @summaries = WeeklySummary.retrieve_pm_summaries(project_title: project_title, task_name: task_name, week_start_date: wsd)
+    @project_title = params[:project_title]
+    @task_name = params[:task_name]
+    @wsd = params[:week_start_date]
+    @summaries = WeeklySummary.retrieve_pm_summaries(project_title: @project_title, task_name: @task_name.split('|').last, week_start_date: @wsd)
     render project_mgr_index_path
   end
 
