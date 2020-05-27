@@ -2,7 +2,7 @@ class ProjectMgrController < ApplicationController
   # Check that the user has the right authorization to access clients.
   before_action :verify_user_in_role!
 
-  index_roles(RoleTags::PM_ROLE)
+  index_roles(RoleTags::PM_ROLE, RoleTags::SENIOR_PM_ROLE)
   def index
     @summaries = nil
     @project_titles = WeeklyStatusDetail.distinct_project_titles
@@ -15,7 +15,7 @@ class ProjectMgrController < ApplicationController
     @selected_task_name = 'all'
   end
 
-  summaries_roles(RoleTags::PM_ROLE)
+  summaries_roles(RoleTags::PM_ROLE, RoleTags::SENIOR_PM_ROLE)
   def summaries
     @project_titles = WeeklyStatusDetail.distinct_project_titles
     @task_names = WeeklyStatusDetail.distinct_task_names

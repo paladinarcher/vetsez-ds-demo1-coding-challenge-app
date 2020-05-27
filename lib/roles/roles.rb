@@ -2,6 +2,7 @@ module Roles
   module RoleTags
     CONTRIBUTOR_ROLE = :contributor
     PM_ROLE = :pm
+    SENIOR_PM_ROLE = :senior_pm
     ADMIN_ROLE = :admin
   end
   ALL_ROLES = RoleTags.constants.map do |constant|
