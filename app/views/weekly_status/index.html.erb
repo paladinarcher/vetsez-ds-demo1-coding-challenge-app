@@ -13,11 +13,12 @@
     </thead>
     <tbody>
     <% @weekly_statuses.each do |weekly_status| %>
-      <% icon = "fas fa-#{weekly_status.reviewed_status[:image]}" %>
+    <%status = fetch_summary_status weekly_status %>
+      <% icon = "fas fa-#{status[:image]}" %>
       <tr>
         <td><%= weekly_status.week_start_date %></td>
         <td><%= weekly_status.week_start_date + 6 %></td>
-        <td><i class="<%= icon %>"></i>&nbsp;&nbsp;<span style="font-weight: bold; <%= "color: #{weekly_status.reviewed_status[:color]}" %>"><%= weekly_status.reviewed_status[:status] %></span></td>
+        <td><i class="<%= icon %>"></i>&nbsp;&nbsp;<span style="font-weight: bold; <%= "color: #{status[:color]}" %>"><%= status[:status] %></span></td>
         <td><%= link_to 'Edit Summary', weekly_status_path(weekly_status) %></td>
         <td><%= link_to "List Details", :controller => "weekly_status", :action => "details", :id => weekly_status %></td>
       </tr>

@@ -22,6 +22,7 @@ module Roles
   def verify_user_in_role!
     method = self.action_name + '_roles' #CallChain.caller_method + '_roles'
     has_role = false
+    Annotate.methods_and_roles[self.class] ||= {}
     if Roles::Annotate.methods_and_roles[self.class][method].nil?
       #we assume we only care about CONTRIBUTOR_ROLE
       has_role = has_role || current_user.has_role?(RoleTags::CONTRIBUTOR_ROLE)

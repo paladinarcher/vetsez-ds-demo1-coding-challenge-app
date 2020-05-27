@@ -4,6 +4,8 @@ require './lib/unanet/UnanetReports'
 class WeeklyStatus < ApplicationRecord
   include Unanet::Reports::Columns
 
+  enum summary_status: {not_started: 0, in_process: 1, completed: 2}
+
   before_create :create_details
   # after_create :create_summaries
   has_many :weekly_status_details, dependent: :destroy
@@ -14,32 +16,21 @@ class WeeklyStatus < ApplicationRecord
 
   # scope to get the list of weekly status weeks (pass :asc or :desc for sort order)
   # example:  WeeklyStatus.distinct_start_of_week(:asc)
-  scope :distinct_start_of_week, -> (order_asc_desc) {select(:week_start_date).distinct.order(week_start_date: order_asc_desc)}
-
-  # SUMMARY REVIEW STATUSES
-  NOT_STARTED = {status: 'Not Started', image: 'bolt', color: 'red'} # not yet looked at - no rows in summary
-  IN_PROCESS = {status: 'In Process', image: 'edit', color: 'green'} # some but not all summaries have been reviewed
-  COMPLETED = {status: 'Completed', image: 'check', color: 'black'}  # all summaries are reviewed
+  scope :distinct_start_of_week, -> (order_asc_desc) { select(:week_start_date).distinct.order(week_start_date: order_asc_desc) }
 
   def self.latest_start_of_week(start_of_week, user)
     WeeklyStatus.where("week_start_date = ? and user_id = ? and active = true", WeeklyStatus.get_start_of_week(start_of_week), user.id)
   end
 
-  def reviewed_status
-    status = NOT_STARTED
-    weekly_summaries = self.weekly_summaries
-
-    unless weekly_summaries.empty?
-      all_reviewed = true
-      weekly_summaries.each do |summary|
-        unless summary.reviewed
-          all_reviewed = false
-          break
-        end
+  def reviewed_status!
+    all_reviewed = true
+    weekly_summaries.each do |summary|
+      unless summary.reviewed
+        all_reviewed = false
+        break
       end
-      status = all_reviewed ? COMPLETED : IN_PROCESS
     end
-    status
+    all_reviewed ? completed! : in_process!
   end
 
   def WeeklyStatus.build_summary_row(row)
@@ -67,7 +58,7 @@ class WeeklyStatus < ApplicationRecord
     }
 
     details = WeeklyStatusDetail.find_by_sql [sql, weekly_status_id]
-    $log.error("in weekly summary with details #{details.to_a.count}")
+    $log.debug("in weekly summary with details #{details.to_a.count}")
     summary = []
     summary_row = {}
 
@@ -173,7 +164,7 @@ class WeeklyStatus < ApplicationRecord
       )
     }
     wsd = Date.strptime(week_start_date, '%m/%d/%Y')
-    args = { week_start_date: wsd }
+    args = {week_start_date: wsd}
     binds = WeeklyStatus.resolve_sql_bindings(args)
     result = ApplicationRecord.connection.exec_query(sql, 'weekly_summaries_to_create', binds)
     result.to_hash

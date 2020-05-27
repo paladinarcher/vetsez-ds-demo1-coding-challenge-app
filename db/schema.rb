@@ -97,9 +97,11 @@ ActiveRecord::Schema.define(version: 2020_05_22_181538) do
   create_table "weekly_statuses", force: :cascade do |t|
     t.string "user_email"
     t.date "week_start_date"
+    t.integer "summary_status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_email", "week_start_date"], name: "idx_weekly_statuses", unique: true
+    t.index ["user_email", "week_start_date"], name: "idx_week_start_date_user_email", unique: true
+    t.index ["week_start_date"], name: "idx_week_start_date"
   end
 
   create_table "weekly_summaries", force: :cascade do |t|
@@ -119,6 +121,7 @@ ActiveRecord::Schema.define(version: 2020_05_22_181538) do
     t.boolean "reviewed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["timesheet_cell_project_title", "timesheet_cell_task_name"], name: "idx_project_title_task_name"
     t.index ["weekly_status_id"], name: "index_weekly_summaries_on_weekly_status_id"
   end
 

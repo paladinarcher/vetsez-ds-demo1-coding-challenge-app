@@ -17,5 +17,6 @@ class CreateWeeklySummaries < ActiveRecord::Migration[5.2]
       t.boolean :reviewed, default: false
       t.timestamps
     end
+    add_index :weekly_summaries, [:timesheet_cell_project_title, :timesheet_cell_task_name], :name=>'idx_project_title_task_name'
   end
 end
