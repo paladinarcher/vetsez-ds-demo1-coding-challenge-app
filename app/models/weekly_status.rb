@@ -5,11 +5,16 @@ class WeeklyStatus < ApplicationRecord
   include Unanet::Reports::Columns
 
   before_create :create_details
+  # after_create :create_summaries
   has_many :weekly_status_details, dependent: :destroy
   has_many :weekly_summaries, dependent: :destroy
   attr_accessor :local_details
   attr_accessor :csv_data
   accepts_nested_attributes_for :weekly_summaries, allow_destroy: true
+
+  # scope to get the list of weekly status weeks (pass :asc or :desc for sort order)
+  # example:  WeeklyStatus.distinct_start_of_week(:asc)
+  scope :distinct_start_of_week, -> (order_asc_desc) {select(:week_start_date).distinct.order(week_start_date: order_asc_desc)}
 
   # SUMMARY REVIEW STATUSES
   NOT_STARTED = {status: 'Not Started', image: 'bolt', color: 'red'} # not yet looked at - no rows in summary
@@ -62,6 +67,7 @@ class WeeklyStatus < ApplicationRecord
     }
 
     details = WeeklyStatusDetail.find_by_sql [sql, weekly_status_id]
+    $log.error("in weekly summary with details #{details.to_a.count}")
     summary = []
     summary_row = {}
 
@@ -127,6 +133,7 @@ class WeeklyStatus < ApplicationRecord
     result = ApplicationRecord.connection.exec_query(sql, 'user_weekly_summary', binds)
     result.to_hash
   end
+=end
   def self.resolve_sql_bindings(**args)
     bindings = []
     idx = 0
@@ -152,38 +159,25 @@ class WeeklyStatus < ApplicationRecord
     end
     bindings
   end
-=end
 
-=begin
-  # summary_rows = WeeklyStatus.calc_summary(result)
-  def WeeklyStatus.calc_summary2(result)
-    summary = nil
-
-    if result.count > 0
-      summary_row = {}
-
-      result.each do |row|
-        if summary.nil?
-          summary = []
-          summary_row = row.clone
-        else
-          # the project and task are the same as the summary row so sum the hours and combine the summary comments
-          if row['project_code'].eql?(summary_row['project_code']) && row['task_number'].eql?(summary_row['task_number'])
-            summary_row['hr'] = summary_row['hr'] + row['hr']
-            summary_row['summary_comment'] = summary_row['summary_comment'] << "\n" << row['summary_comment']
-            # this is a break so push the summary row on to the summary stack and clone this new record
-          else
-            summary << summary_row
-            summary_row = row.clone
-          end
-        end
-      end
-    else
-      puts 'results not found!'
-    end
-    summary
+  # result = WeeklyStatus.check_for_summaries(week_start_date: '04/12/2020')
+  #    load './app/models/weekly_status.rb'
+  def self.check_for_summaries
+    sql = %Q{
+      select id as weekly_status_id
+      from weekly_statuses a
+      where a.week_start_date = ?
+      and not exists (
+        select * from weekly_summaries b
+        where a.id = b.weekly_status_id
+      )
+    }
+    wsd = Date.strptime(week_start_date, '%m/%d/%Y')
+    args = { week_start_date: wsd }
+    binds = WeeklyStatus.resolve_sql_bindings(args)
+    result = ApplicationRecord.connection.exec_query(sql, 'weekly_summaries_to_create', binds)
+    result.to_hash
   end
-=end
 
   def create_summaries
     @local_summaries = self.weekly_summary(self.id)

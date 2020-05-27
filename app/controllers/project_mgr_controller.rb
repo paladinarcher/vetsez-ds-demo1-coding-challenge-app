@@ -1,0 +1,43 @@
+class ProjectMgrController < ApplicationController
+  # Check that the user has the right authorization to access clients.
+  before_action :check_authorization
+
+  def index
+    @summaries = nil
+    @project_titles = WeeklyStatusDetail.distinct_project_titles
+    @task_names = WeeklyStatusDetail.distinct_task_names
+    week_start_dates = WeeklyStatus.distinct_start_of_week(:desc)
+    @wsd_options = week_start_dates.inject([]) do |ret,wsd|
+      ret << ["#{wsd['week_start_date']} to #{wsd['week_start_date'] + 6}", wsd['week_start_date']]; ret
+    end
+
+    @selected_task_name = 'all'
+  end
+
+  def summaries
+    @project_titles = WeeklyStatusDetail.distinct_project_titles
+    @task_names = WeeklyStatusDetail.distinct_task_names
+    week_start_dates = WeeklyStatus.distinct_start_of_week(:desc)
+    @wsd_options = week_start_dates.inject([]) do |ret,wsd|
+      ret << ["#{wsd['week_start_date']} to #{wsd['week_start_date'] + 6}", wsd['week_start_date']]; ret
+    end
+
+    project_title = params[:project_title]
+    task_name = params[:task_name]
+    wsd = params[:week_start_date]
+    @summaries = WeeklySummary.retrieve_pm_summaries(project_title: project_title, task_name: task_name, week_start_date: wsd)
+    render project_mgr_index_path
+  end
+
+  private
+  # If the user is not authorized, just throw the exception.
+  def check_authorization
+    # raise User::NotAuthorized unless current_user.has_role? Roles::RoleTags::ADMIN_ROLE cris
+    unless current_user.has_role? Roles::RoleTags::PM_ROLE
+      flash[:error] = "You don't have access to this section."
+      redirect_to root_path
+    end
+
+    # redirect_back(fallback_location: root_path)
+  end
+end

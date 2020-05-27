@@ -9,4 +9,20 @@ module ApplicationHelper
     span = label.is_a?(Symbol) ? label.to_s.split('_').map(&:capitalize).join(' ') : label
     "<span class='span_label'>#{span}:</span><br>".html_safe
   end
+
+  def select_options_concat_key(data, delimiter, all_option_text, *cols)
+    ret = []
+    ret << [all_option_text, ''] if all_option_text
+
+    data.each do |row|
+      key, option_text = '', ''
+
+      cols.each do |col|
+        key << row[col] << delimiter
+        option_text = row[col]
+      end
+      ret << [option_text, key.split(delimiter).join(delimiter)]
+    end
+    ret
+  end
 end

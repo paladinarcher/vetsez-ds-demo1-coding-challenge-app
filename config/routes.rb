@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
-  get 'admin_upload/index'
-  post  "admin_upload" =>'admin_upload#upload'
   resources :recipes
   resources :weekly_status
+
+  get 'admin_upload/index'
+  post  "admin_upload" =>'admin_upload#upload'
+
+  get 'project_mgr/index'
+  post  "project_mgr/summaries" =>'project_mgr#summaries'
+
 
   get  "weekly_status_index" =>'weekly_status#index'
 

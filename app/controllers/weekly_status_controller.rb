@@ -1,6 +1,7 @@
 require './lib/unanet/unanet.rb' # move to initializer
 
 class WeeklyStatusController < ApplicationController
+  # after_action :build_summaries, only: [:upload, :magic_upload]
 
   def index
     @weekly_statuses = WeeklyStatus.where('user_email = ?', current_user.email).order(week_start_date: :desc)
@@ -76,7 +77,6 @@ class WeeklyStatusController < ApplicationController
     redirect_to weekly_status_index_path
   end
 
-
   def upload
     csv_holder = UnanetCsvUpload.new
     upload_start_date, upload_end_date = nil, nil
@@ -102,14 +102,18 @@ class WeeklyStatusController < ApplicationController
           # create or update the WeeklyStatus record and their associate detail records
           ws = WeeklyStatus.where(user_email: email, week_start_date: start_of_week).first_or_initialize
           ws.csv_data = weekly_user_csv
-
           ws.save!
+
+          # save the local details todo why the if statement?
           if ws.local_details
-            ws.local_details.each do |detail|
-              detail.save!
-            end
+            ws.local_details.each(&:save!)
           end
+
+          $log.error("**********************************************")
+          # create the summary record based on the newly saved details
+          init_weekly_summary(ws.id)
         end
+
         # save the upload record
         csv_holder.start_date = upload_start_date
         csv_holder.end_date = upload_end_date
@@ -125,7 +129,8 @@ class WeeklyStatusController < ApplicationController
   private
 
   def init_weekly_summary(ws_id)
-    if WeeklySummary.find_by_weekly_status_id(ws_id).nil?
+    # if WeeklySummary.find_by_weekly_status_id(ws_id).nil? # remove this conditional?!
+    $log.error("-------------- in init ----------------")
       summaries = WeeklyStatus.weekly_summary(ws_id)
       @summaries = []
       summaries.each do |ws|
@@ -134,7 +139,21 @@ class WeeklyStatusController < ApplicationController
       WeeklySummary.transaction do
         @summaries.each(&:save!)
       end
-    end
+    # end
+  end
+
+  def build_summaries
+    WeeklyStatus.find_by_sql
+    sql = %Q{
+      select id as weekly_status_id
+      from weekly_statuses a
+      where a.week_start_date = '2020-04-12'
+      and not exists (
+        select * from weekly_summaries b
+        where a.id = b.weekly_status_id
+      )
+    }
+
   end
 
   def weekly_params
