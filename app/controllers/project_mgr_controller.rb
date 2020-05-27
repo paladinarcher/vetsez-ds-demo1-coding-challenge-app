@@ -1,7 +1,8 @@
 class ProjectMgrController < ApplicationController
   # Check that the user has the right authorization to access clients.
-  before_action :check_authorization
+  before_action :verify_user_in_role!
 
+  index_roles(RoleTags::PM_ROLE)
   def index
     @summaries = nil
     @project_titles = WeeklyStatusDetail.distinct_project_titles
@@ -14,6 +15,7 @@ class ProjectMgrController < ApplicationController
     @selected_task_name = 'all'
   end
 
+  summaries_roles(RoleTags::PM_ROLE)
   def summaries
     @project_titles = WeeklyStatusDetail.distinct_project_titles
     @task_names = WeeklyStatusDetail.distinct_task_names
@@ -27,17 +29,5 @@ class ProjectMgrController < ApplicationController
     wsd = params[:week_start_date]
     @summaries = WeeklySummary.retrieve_pm_summaries(project_title: project_title, task_name: task_name, week_start_date: wsd)
     render project_mgr_index_path
-  end
-
-  private
-  # If the user is not authorized, just throw the exception.
-  def check_authorization
-    # raise User::NotAuthorized unless current_user.has_role? Roles::RoleTags::ADMIN_ROLE cris
-    unless current_user.has_role? Roles::RoleTags::PM_ROLE
-      flash[:error] = "You don't have access to this section."
-      redirect_to root_path
-    end
-
-    # redirect_back(fallback_location: root_path)
   end
 end

@@ -1,11 +1,14 @@
 class AdminUploadController < ApplicationController
   # Check that the user has the right authorization to access clients.
-  before_action :check_authorization
+  before_action :verify_user_in_role!
 
+  index_roles(RoleTags::ADMIN_ROLE)
   def index
     @uploads = UnanetCsvUpload.all.order(created_at: :desc, end_date: :desc)
   end
 
+  #upload_roles(RoleTags::ADMIN_ROLE, RoleTags::PM_ROLE)
+  upload_roles(RoleTags::ADMIN_ROLE)
   def upload
     csv_holder = UnanetCsvUpload.new
     upload_start_date, upload_end_date = nil, nil
@@ -51,17 +54,5 @@ class AdminUploadController < ApplicationController
     end
 
     redirect_to admin_upload_index_path
-  end
-
-  private
-  # If the user is not authorized, just throw the exception.
-  def check_authorization
-    # raise User::NotAuthorized unless current_user.has_role? Roles::RoleTags::ADMIN_ROLE cris
-    unless current_user.has_role? Roles::RoleTags::ADMIN_ROLE
-      flash[:error] = "You don't have access to this section."
-      redirect_to root_path
-    end
-
-    # redirect_back(fallback_location: root_path)
   end
 end
