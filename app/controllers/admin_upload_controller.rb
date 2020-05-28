@@ -3,14 +3,12 @@ class AdminUploadController < ApplicationController
   before_action :verify_user_in_role!
 
   index_roles(RoleTags::ADMIN_ROLE)
-
   def index
     @uploads = UnanetCsvUpload.all.order(created_at: :desc, end_date: :desc)
   end
 
   #upload_roles(RoleTags::ADMIN_ROLE, RoleTags::PM_ROLE)
   upload_roles(RoleTags::ADMIN_ROLE)
-
   def upload
     csv_holder = UnanetCsvUpload.new
     upload_start_date, upload_end_date = nil, nil
@@ -19,7 +17,7 @@ class AdminUploadController < ApplicationController
       file = params[:file]
       csv_holder.csv_upload.attach(io: file.tempfile, filename: file.original_filename)
       csv_holder.user_email = current_user.email
-      # csv_holder.save!
+
       WeeklyStatus.transaction do
         big_csv = csv_holder.get_csv
         buckets_of_csv = Unanet.trim_future(Unanet.bucket_csv big_csv)
@@ -38,6 +36,7 @@ class AdminUploadController < ApplicationController
           ws.save!
           if ws.local_details
             ws.local_details.each(&:save!)
+
             # create the summary record based on the newly saved details
             summaries = init_weekly_summary(ws.id)
             summaries.each(&:save!)
@@ -49,6 +48,10 @@ class AdminUploadController < ApplicationController
         csv_holder.end_date = upload_end_date
         csv_holder.save!
         flash[:notice] = "CSV uploaded successfully!"
+
+        #  blank out the project titles and weekly start dates (used to load drop downs on pm page)
+        ProjectHelper.distinct_project_titles = WeeklyStatusDetail.distinct_project_titles
+        ProjectHelper.distinct_weekly_start_dates = WeeklyStatus.distinct_start_of_week(:desc)
       end
     else
       flash[:alert] = "Please select a file to upload"
@@ -60,8 +63,6 @@ class AdminUploadController < ApplicationController
   private
 
   def init_weekly_summary(ws_id)
-    # if WeeklySummary.find_by_weekly_status_id(ws_id).nil? # remove this conditional?!
-    $log.debug("-------------- in init ----------------")
     summaries = WeeklyStatus.weekly_summary(ws_id)
     summaries_array = []
     summaries.each do |ws|

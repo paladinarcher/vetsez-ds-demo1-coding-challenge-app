@@ -1,20 +1,26 @@
 <div class="container">
-  <h3>PM Weekly Summaries Filter</h3>
+  <h4>PM Weekly Summaries Filter</h4>
   <div class="w-50">
     <%= form_tag project_mgr_summaries_path, method: :post do %>
       <div class="form-group">
         <label for="project_title">Project Title:</label>
-        <%= select_tag "project_title", options_from_collection_for_select(@project_titles, :timesheet_cell_project_title, :timesheet_cell_project_title), {:class => 'form-control'} %>
+        <%= select_tag "project_title",
+                       options_for_select(
+                           select_options(
+                               ProjectHelper.distinct_project_titles,
+                               default_text: '--- Select a project ---',
+                               default_value: '',
+                               value_prop: :timesheet_cell_project_title,
+                               text_prop: :timesheet_cell_project_title),
+            @project_title), {:class => 'form-control', :onchange => 'filter_change()'} %>
       </div>
       <div class="form-group">
         <label for="task_name">Task Name:</label>
-        <%= select_tag "task_name", options_for_select(
-            select_options_concat_key(@task_names, '|', '--- All Tasks ---', :timesheet_cell_project_title, :timesheet_cell_task_name), @task_name),
-                       {:class => 'form-control'} %>
+        <%= select_tag "task_name", options_for_select([], @task_name), {:class => 'form-control'} %>
       </div>
       <div class="form-group">
         <label for="week_start_date">Week Start/End:</label>
-        <%= select_tag "week_start_date", options_for_select(@wsd_options, @wsd), {:class => 'form-control'} %>
+        <%= select_tag "week_start_date", options_for_select(week_start_date_options, @wsd), {:class => 'form-control'} %>
       </div>
       <%= submit_tag("Retrieve Weekly Summaries", :id => "button", :class => "btn btn-primary", :name => "submit") %>
     <% end %>
@@ -37,16 +43,16 @@
         <tr>
           <td><%= summary.person_email_id %></td>
           <td>
-          <%
-            summary_status = summary.weekly_status.summary_status
-            if summary_status.eql?(WeeklyStatus::COMPLETED.to_s)
-          %>
+            <%
+              summary_status = summary.weekly_status.summary_status
+              if summary_status.eql?(WeeklyStatus::COMPLETED.to_s)
+            %>
               weekly summary:<br><%= text_area_tag 'weekly_summary_comment', summary.weekly_summary_comment, class: 'summary-text-area', disabled: true %>
               <br>blockers:<br><%= text_area_tag 'weekly_summary_blockers', summary.blockers, class: 'summary-text-area', disabled: true %>
               <br>next planned activity:<br><%= text_area_tag 'weekly_summary_next_planned_activity', summary.next_planned_activity, class: 'summary-text-area', disabled: true %>
-          <% else %>
+            <% else %>
               <%= summary_status %>
-          <% end %>
+            <% end %>
           </td>
         </tr>
       <% end %>
@@ -54,3 +60,47 @@
     </table>
   <% end %>
 </div>
+<script type="text/javascript" charset="utf-8">
+    let filter_change = () => {
+        const {target} = event;
+        const value = target.value;
+        let disable_submit = false;
+
+        if (target.id === 'project_title') {
+            filter_tasks(value);
+            if (value === '') { disable_submit = true; }
+        }
+    };
+
+    let filter_tasks = (project_title) => {
+        let dropdown = $('#task_name');
+        let default_option = '<option disabled selected value="all">--- Select a Project to Filter By ---</option>';
+        if (project_title !== '') {
+            default_option = '<option value="all">--- All Tasks ---</option>';
+        }
+        dropdown.empty();
+        dropdown.append(default_option);
+
+        if (project_title !== '') {
+            // Populate dropdown with list of provinces
+            $.getJSON('<%= get_project_tasks_path %>', {project_title: project_title}, function (data) {
+                $.each(data, function (key, entry) {
+                    const val = entry['timesheet_cell_task_name'];
+                    const selected = (val === '<%=@task_name %>');
+                    let o = "<option " + (selected ? 'selected' : '') + " value='" + val + "'>" + val + "</option>";
+
+                    let option = $('<option></option>').attr('value', val).text(val);
+
+                    if (val === '<%=@task_name %>') {
+                        option = $('<option></option>').attr('value', val).text(val).attr('selected','selected');
+                    }
+                    dropdown.append(o);
+                });
+<!--                $("select#task_name option[value='<%=@task_name %>']").attr('selected','selected');-->
+            });
+        }
+    };
+    $(document).ready(function () {
+        filter_tasks('<%= @project_title %>');
+    });
+</script>

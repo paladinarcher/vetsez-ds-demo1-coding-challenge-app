@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   post  "admin_upload" =>'admin_upload#upload'
 
   get 'project_mgr/index'
+  get 'get_project_tasks' => 'project_mgr#get_project_tasks'
   post  "project_mgr/summaries" =>'project_mgr#summaries'
 
 

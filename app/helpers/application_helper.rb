@@ -10,6 +10,18 @@ module ApplicationHelper
     "<span class='span_label'>#{span}:</span><br>".html_safe
   end
 
+  def select_options(data, **options)
+    ret = []
+    ret << [options[:default_text], options[:default_value]] if options.has_key? :default_value
+
+    data.each do|row|
+      value = row[options[:value_prop]]
+      text = row[options[:text_prop]]
+      ret << [text, value]
+    end
+    ret
+  end
+
   def select_options_concat_key(data, delimiter, all_option_text, *cols)
     ret = []
     ret << [all_option_text, 'all'] if all_option_text
