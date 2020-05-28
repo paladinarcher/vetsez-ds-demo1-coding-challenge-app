@@ -130,6 +130,16 @@ module Unanet
       end
     end
 
+    def trim_future(bucket_csv)
+      time = Time.now.to_date
+      start_of_week = get_start_of_week time
+      trimmed = bucket_csv.reject do |k|
+        date = k.first
+        date >= start_of_week
+      end
+      trimmed
+    end
+
   end
   extend ClassMethods
 end

@@ -22,7 +22,7 @@ class AdminUploadController < ApplicationController
       # csv_holder.save!
       WeeklyStatus.transaction do
         big_csv = csv_holder.get_csv
-        buckets_of_csv = Unanet.bucket_csv big_csv
+        buckets_of_csv = Unanet.trim_future(Unanet.bucket_csv big_csv)
         buckets_of_csv.keys.each do |bucket|
           start_of_week = bucket.first
           email = bucket.last
