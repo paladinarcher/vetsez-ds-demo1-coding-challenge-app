@@ -3,18 +3,13 @@ class ProjectMgrController < ApplicationController
   before_action :verify_user_in_role!, except: [:get_project_tasks]
   before_action :init_dropdown_defaults
 
+  init_dropdown_defaults_roles(RoleTags::PM_ROLE, RoleTags::SENIOR_PM_ROLE)
   def init_dropdown_defaults
     @project_title = params[:project_title] ||= ''
     @task_name = params[:task_name] ||= 'all'
     @wsd = params[:week_start_date] ||= ''
   end
 
-  def get_project_tasks
-    puts params
-    project_title = params[:project_title]
-    task_names = WeeklyStatusDetail.project_task_names(project_title).as_json
-    render json: task_names
-  end
 
   index_roles(RoleTags::PM_ROLE, RoleTags::SENIOR_PM_ROLE)
   def index

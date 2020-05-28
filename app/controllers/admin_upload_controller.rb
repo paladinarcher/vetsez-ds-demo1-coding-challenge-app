@@ -52,6 +52,7 @@ class AdminUploadController < ApplicationController
         #  blank out the project titles and weekly start dates (used to load drop downs on pm page)
         ProjectHelper.distinct_project_titles = WeeklyStatusDetail.distinct_project_titles
         ProjectHelper.distinct_weekly_start_dates = WeeklyStatus.distinct_start_of_week(:desc)
+        ProjectHelper.distinct_task_names = WeeklyStatusDetail.distinct_task_names
       end
     else
       flash[:alert] = "Please select a file to upload"

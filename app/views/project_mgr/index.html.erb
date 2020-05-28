@@ -12,7 +12,7 @@
                                default_value: '',
                                value_prop: :timesheet_cell_project_title,
                                text_prop: :timesheet_cell_project_title),
-                           @project_title), {:class => 'form-control', :onchange => 'filter_change()'} %>
+                           @project_title), {:class => 'form-control', :onchange => 'project_title_change()'} %>
       </div>
       <div class="form-group">
         <label for="task_name">Task Name:</label>
@@ -32,7 +32,7 @@
     <%#= @summaries.as_json %>
     <% @summaries.each do |summary| %>
       <% summary_status = summary.weekly_status.summary_status %>
-      <%status = fetch_summary_status summary.weekly_status %>
+      <% status = fetch_summary_status summary.weekly_status %>
       <% icon = "fas fa-#{status[:image]}" %>
 
       <div class="container">
@@ -44,9 +44,11 @@
           </div>
           <div class="col-sm-6">
             <% if summary_status.eql?(WeeklyStatus::COMPLETED.to_s) %>
-              <b>Weekly Summary:</b><br><%= text_area_tag 'weekly_summary_comment', summary.weekly_summary_comment, class: 'summary-text-area', disabled: true %>
+              <b>Weekly
+                Summary:</b><br><%= text_area_tag 'weekly_summary_comment', summary.weekly_summary_comment, class: 'summary-text-area', disabled: true %>
               <br><b>Blockers:</b><br><%= text_area_tag 'weekly_summary_blockers', summary.blockers, class: 'summary-text-area', disabled: true %>
-              <br><b>Next Planned Activity:</b><br><%= text_area_tag 'weekly_summary_next_planned_activity', summary.next_planned_activity, class: 'summary-text-area', disabled: true %>
+              <br><b>Next Planned
+            Activity:</b><br><%= text_area_tag 'weekly_summary_next_planned_activity', summary.next_planned_activity, class: 'summary-text-area', disabled: true %>
             <% end %>
           </div>
         </div>
@@ -56,21 +58,21 @@
   <% end %>
 </div>
 <script type="text/javascript" charset="utf-8">
-    let filter_change = () => {
+    var project_titles_to_tasks = <%= raw convert_distinct_tasks.to_json%>;
+
+    let project_title_change = () => {
         const {target} = event;
         const value = target.value;
         let disable_submit = false;
-
-        if (target.id === 'project_title') {
-            filter_tasks(value);
-            if (value === '') {
-                disable_submit = true;
-            }
+        filter_tasks(value);
+        if (value === '') {
+            disable_submit = true;
         }
         $('#submit_button').prop('disabled', disable_submit);
     };
 
     let filter_tasks = (project_title) => {
+        let tasks = project_titles_to_tasks[project_title];
         let dropdown = $('#task_name');
         let default_option = '<option disabled selected value="all">--- Select a Project to Filter By ---</option>';
 
@@ -81,19 +83,16 @@
         dropdown.append(default_option);
 
         if (project_title !== '') {
-            $.getJSON('<%= get_project_tasks_path %>', {project_title: project_title}, function (data) {
-                $.each(data, function (key, entry) {
-                    const val = entry['timesheet_cell_task_name'];
-                    dropdown.append($('<option></option>').attr('value', val).text(val));
-                });
+            tasks.forEach(function (task) {
+                dropdown.append($('<option></option>').attr('value', task).text(task));
                 $("select#task_name option[value='<%=@task_name %>']").attr('selected', 'selected');
-            });
+            })
         }
     };
+
     $(document).ready(function () {
         filter_tasks('<%= @project_title %>');
         const disable_submit = $('#project_title').val() === '';
         $('#submit_button').prop('disabled', disable_submit);
-
     });
 </script>
