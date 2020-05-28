@@ -22,7 +22,7 @@
         <label for="week_start_date">Week Start/End:</label>
         <%= select_tag "week_start_date", options_for_select(week_start_date_options, @wsd), {:class => 'form-control'} %>
       </div>
-      <%= submit_tag("Retrieve Weekly Summaries", :id => "button", :class => "btn btn-primary", :name => "submit") %>
+      <%= submit_tag("Retrieve Weekly Summaries", :id => "submit_button", :class => "btn btn-primary", :name => "submit_button") %>
     <% end %>
   </div>
   <hr>
@@ -70,11 +70,13 @@
             filter_tasks(value);
             if (value === '') { disable_submit = true; }
         }
+        $('#submit_button').prop('disabled',  disable_submit);
     };
 
     let filter_tasks = (project_title) => {
         let dropdown = $('#task_name');
         let default_option = '<option disabled selected value="all">--- Select a Project to Filter By ---</option>';
+
         if (project_title !== '') {
             default_option = '<option value="all">--- All Tasks ---</option>';
         }
@@ -82,25 +84,19 @@
         dropdown.append(default_option);
 
         if (project_title !== '') {
-            // Populate dropdown with list of provinces
             $.getJSON('<%= get_project_tasks_path %>', {project_title: project_title}, function (data) {
                 $.each(data, function (key, entry) {
                     const val = entry['timesheet_cell_task_name'];
-                    const selected = (val === '<%=@task_name %>');
-                    let o = "<option " + (selected ? 'selected' : '') + " value='" + val + "'>" + val + "</option>";
-
-                    let option = $('<option></option>').attr('value', val).text(val);
-
-                    if (val === '<%=@task_name %>') {
-                        option = $('<option></option>').attr('value', val).text(val).attr('selected','selected');
-                    }
-                    dropdown.append(o);
+                    dropdown.append($('<option></option>').attr('value', val).text(val));
                 });
-<!--                $("select#task_name option[value='<%=@task_name %>']").attr('selected','selected');-->
+                $("select#task_name option[value='<%=@task_name %>']").attr('selected','selected');
             });
         }
     };
     $(document).ready(function () {
         filter_tasks('<%= @project_title %>');
+        const disable_submit = $('#project_title').val() === '';
+        $('#submit_button').prop('disabled',  disable_submit);
+
     });
 </script>
