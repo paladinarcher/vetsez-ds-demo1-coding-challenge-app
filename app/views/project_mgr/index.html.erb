@@ -12,7 +12,7 @@
                                default_value: '',
                                value_prop: :timesheet_cell_project_title,
                                text_prop: :timesheet_cell_project_title),
-            @project_title), {:class => 'form-control', :onchange => 'filter_change()'} %>
+                           @project_title), {:class => 'form-control', :onchange => 'filter_change()'} %>
       </div>
       <div class="form-group">
         <label for="task_name">Task Name:</label>
@@ -30,34 +30,29 @@
   <% if @summaries %>
     <h3>Weekly Summary Results</h3>
     <%#= @summaries.as_json %>
+    <% @summaries.each do |summary| %>
+      <% summary_status = summary.weekly_status.summary_status %>
+      <%status = fetch_summary_status summary.weekly_status %>
+      <% icon = "fas fa-#{status[:image]}" %>
 
-    <table class="table w-100" style="width: fit-content">
-      <thead class="thead-light">
-      <tr>
-        <th>Person Email</th>
-        <th class="w-75">Summaries</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @summaries.each do |summary| %>
-        <tr>
-          <td><%= summary.person_email_id %></td>
-          <td>
-            <%
-              summary_status = summary.weekly_status.summary_status
-              if summary_status.eql?(WeeklyStatus::COMPLETED.to_s)
-            %>
-              weekly summary:<br><%= text_area_tag 'weekly_summary_comment', summary.weekly_summary_comment, class: 'summary-text-area', disabled: true %>
-              <br>blockers:<br><%= text_area_tag 'weekly_summary_blockers', summary.blockers, class: 'summary-text-area', disabled: true %>
-              <br>next planned activity:<br><%= text_area_tag 'weekly_summary_next_planned_activity', summary.next_planned_activity, class: 'summary-text-area', disabled: true %>
-            <% else %>
-              <%= summary_status %>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6">
+            <%= summary.person_email_id %><br>
+            <%= summary.timesheet_cell_task_name %><br>
+            <i class="<%= icon %>"></i>&nbsp;&nbsp;<span style="font-weight: bold; <%= "color: #{status[:color]}" %>"><%= status[:status] %></span><br>
+          </div>
+          <div class="col-sm-6">
+            <% if summary_status.eql?(WeeklyStatus::COMPLETED.to_s) %>
+              <b>Weekly Summary:</b><br><%= text_area_tag 'weekly_summary_comment', summary.weekly_summary_comment, class: 'summary-text-area', disabled: true %>
+              <br><b>Blockers:</b><br><%= text_area_tag 'weekly_summary_blockers', summary.blockers, class: 'summary-text-area', disabled: true %>
+              <br><b>Next Planned Activity:</b><br><%= text_area_tag 'weekly_summary_next_planned_activity', summary.next_planned_activity, class: 'summary-text-area', disabled: true %>
             <% end %>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+          </div>
+        </div>
+      </div>
+      <hr>
+    <% end %>
   <% end %>
 </div>
 <script type="text/javascript" charset="utf-8">
@@ -68,9 +63,11 @@
 
         if (target.id === 'project_title') {
             filter_tasks(value);
-            if (value === '') { disable_submit = true; }
+            if (value === '') {
+                disable_submit = true;
+            }
         }
-        $('#submit_button').prop('disabled',  disable_submit);
+        $('#submit_button').prop('disabled', disable_submit);
     };
 
     let filter_tasks = (project_title) => {
@@ -89,14 +86,14 @@
                     const val = entry['timesheet_cell_task_name'];
                     dropdown.append($('<option></option>').attr('value', val).text(val));
                 });
-                $("select#task_name option[value='<%=@task_name %>']").attr('selected','selected');
+                $("select#task_name option[value='<%=@task_name %>']").attr('selected', 'selected');
             });
         }
     };
     $(document).ready(function () {
         filter_tasks('<%= @project_title %>');
         const disable_submit = $('#project_title').val() === '';
-        $('#submit_button').prop('disabled',  disable_submit);
+        $('#submit_button').prop('disabled', disable_submit);
 
     });
 </script>
