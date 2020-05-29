@@ -8,7 +8,6 @@ module ProjectMgrHelper
 
   def convert_distinct_tasks
     titles = {}
-    #WeeklyStatusDetail.distinct_task_names.each do |e|
     ProjectHelper.distinct_task_names.each do |e|
       titles[e.timesheet_cell_project_title] ||= []
       titles[e.timesheet_cell_project_title] << e.timesheet_cell_task_name

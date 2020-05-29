@@ -16,7 +16,7 @@
       </div>
       <div class="form-group">
         <label for="task_name">Task Name:</label>
-        <%= select_tag "task_name", options_for_select([], @task_name), {:class => 'form-control'} %>
+        <%= select_tag "task_name", options_for_select(@task_options, @task_name), {:class => 'form-control'} %>
       </div>
       <div class="form-group">
         <label for="week_start_date">Week Start/End:</label>
@@ -29,7 +29,7 @@
   <br>
   <% if @summaries %>
     <h3>Weekly Summary Results</h3>
-    <%#= @summaries.as_json %>
+    <%= "No results found." if @summaries.empty? %>
     <% @summaries.each do |summary| %>
       <% summary_status = summary.weekly_status.summary_status %>
       <% status = fetch_summary_status summary.weekly_status %>
@@ -63,11 +63,9 @@
     let project_title_change = () => {
         const {target} = event;
         const value = target.value;
-        let disable_submit = false;
+        const disable_submit = (value === '');
+
         filter_tasks(value);
-        if (value === '') {
-            disable_submit = true;
-        }
         $('#submit_button').prop('disabled', disable_submit);
     };
 
@@ -89,10 +87,13 @@
             })
         }
     };
+    $(document).ready(function(){
+        $('#submit_button').prop('disabled', ($('#project_title').val() === ''));
+        <% if @project_title.empty? %>
+        let dropdown = $('#task_name');
+        let default_option = '<option disabled selected value="all">--- Select a Project to Filter By ---</option>';
+        dropdown.append(default_option);
+        <% end %>
 
-    $(document).ready(function () {
-        filter_tasks('<%= @project_title %>');
-        const disable_submit = $('#project_title').val() === '';
-        $('#submit_button').prop('disabled', disable_submit);
     });
 </script>
